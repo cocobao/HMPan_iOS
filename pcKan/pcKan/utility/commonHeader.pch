@@ -1,0 +1,56 @@
+//
+//  commonHeader.pch
+//  iosBasis
+//
+//  Created by admin on 2016/9/23.
+//  Copyright © 2016年 ybz. All rights reserved.
+//
+
+#ifndef commonHeader_pch
+#define commonHeader_pch
+#import "UIFont_Color.h"
+#import "pSSCommodMethod.h"
+#import "comMarcoDefine.h"
+#import "MBProgressHUD+pSSAddition.h"
+
+
+typedef void(^callBackFinishBlock)(NSDictionary *receData, NSError *error);
+
+#define WeakSelf(weakSelf)  __weak __typeof(&*self)weakSelf = self
+#define StrongSelf(strongSelf, s)  __strong __typeof(&*self)strongSelf = s;
+
+#define kNavigationBarHeight 44
+#define kStatusBarHeight 20
+#define kTopBarHeight 64
+#define kToolBarHeight 44
+#define kTabBarHeight 49
+#define NAVBAR_H  [pSSCommodMethod getNavBarHight]
+
+#define MarginW(X) [pSSCommodMethod adjustGapW:X]
+#define MarginH(X) [pSSCommodMethod adjustGapH:X]
+
+/***  当前屏幕宽度 */
+#define kScreenWidth  [[UIScreen mainScreen] bounds].size.width
+/***  当前屏幕高度 */
+#define kScreenHeight  [[UIScreen mainScreen] bounds].size.height
+
+#define kViewHeight (kScreenHeight - NAVBAR_H-kTabBarHeight)
+
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+#define TEXTSIZE(text, font) [text length] > 0 ? [text \
+sizeWithAttributes:@{NSFontAttributeName:font}] : CGSizeZero;
+#else
+#define TEXTSIZE(text, font) [text length] > 0 ? [text sizeWithFont:font] : CGSizeZero;
+#endif
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+#define MB_MULTILINE_TEXTSIZE(text, font, maxSize, mode) [text length] > 0 ? [text \
+boundingRectWithSize:maxSize options:(NSStringDrawingUsesLineFragmentOrigin) \
+attributes:@{NSFontAttributeName:font} context:nil].size : CGSizeZero;
+#else
+#define MB_MULTILINE_TEXTSIZE(text, font, maxSize, mode) [text length] > 0 ? [text \
+sizeWithFont:font constrainedToSize:maxSize lineBreakMode:mode] : CGSizeZero;
+#endif
+
+#endif /* commonHeader_pch */
