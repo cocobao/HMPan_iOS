@@ -11,6 +11,8 @@
 #import "pssUserInfo.h"
 #import "RCETimmerHandler.h"
 
+#define PRO_VERSION 1
+
 @interface pssLinkObj()<pssUdpLinkDelegate>
 @property (nonatomic, strong) RCETimmerHandler *mTimer;
 @end
@@ -135,7 +137,7 @@ __strong static id sharedInstance = nil;
     head->head[1] = HEADER_1;
     head->head[2] = HEADER_2;
     head->head[3] = HEADER_3;
-    head->version = 0x1;
+    head->version = PRO_VERSION;
     head->msgId = htonl(msgId);
     head->type = type;
     head->uid = [UserInfo uid];
@@ -161,7 +163,7 @@ __strong static id sharedInstance = nil;
     head->head[1] = HEADER_1;
     head->head[2] = HEADER_2;
     head->head[3] = HEADER_3;
-    head->version = 0x1;
+    head->version = PRO_VERSION;
     head->msgId = htonl(msgId);
     head->type = type;
     head->uid = [UserInfo uid];
@@ -170,6 +172,23 @@ __strong static id sharedInstance = nil;
         memcpy((void *)(data.bytes + sizeof(stPssProtocolHead)), jsonBody.bytes, jsonBody.length);
     }
     pssHSMmsg *pack = [[pssHSMmsg alloc] initWithData:data msgId:msgId block:block];
+    return pack;
+}
+
+-(pssHSMmsg *)setProtocolHead:(NSData *)data type:(NSInteger)type
+{
+    stPssProtocolHead *protoHead = (stPssProtocolHead *)data.bytes;
+    protoHead->head[0] = HEADER_0;
+    protoHead->head[1] = HEADER_1;
+    protoHead->head[2] = HEADER_2;
+    protoHead->head[3] = HEADER_3;
+    protoHead->version = PRO_VERSION;
+    protoHead->msgId = 0;
+    protoHead->type = type;
+    protoHead->uid = [UserInfo uid];
+    protoHead->bodyLength = htonl((int)data.length - sizeof(stPssProtocolHead));
+    
+    pssHSMmsg *pack = [[pssHSMmsg alloc] initWithData:data msgId:0 block:nil];
     return pack;
 }
 @end

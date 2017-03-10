@@ -43,6 +43,7 @@
             [self.m_delegate didRecvFileFinish:self.fileId];
         }
         [_fileHandle closeFile];
+        usleep(300000);
     }else{
         _persent = ((double)_seek/_fileSize)*100;
     }

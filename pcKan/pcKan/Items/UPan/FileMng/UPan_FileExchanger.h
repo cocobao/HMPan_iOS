@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "UPan_File.h"
 
-#define FileRecver [UPan_FileRecvMgr shareInstance]
+#define FileExchanger [UPan_FileExchanger shareInstance]
 
-@interface UPan_FileRecvMgr : NSObject
+@interface UPan_FileExchanger : NSObject
+@property (nonatomic, strong) NSString *mNowPath;
 + (id)shareInstance;
 -(void)addFileRecver:(UPan_File *)file fileSize:(NSInteger)fileSize;
 @end

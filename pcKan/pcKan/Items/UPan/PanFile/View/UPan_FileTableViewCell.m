@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UILabel *mPerPersentlabel;
 @property (nonatomic, strong) UIView *mLine;
 @property (nonatomic, strong) CALayer *mPersentLayer;
+@property (nonatomic, strong) CALayer *mPersentBackLayer;
 @end
 
 @implementation UPan_FileTableViewCell
@@ -61,18 +62,24 @@
     NSInteger fileId = [dict[ptl_fileId] integerValue];
     if (fileId == self.mFile.fileId) {
         CGFloat persent = [dict[ptl_persent] floatValue];
-//        NSLog(@"file persent:%0.3f", persent);
         _mFile.fileSize = [dict[ptl_seek] longLongValue];
         WeakSelf(weakSelf);
         dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf setFileDateAndSize];
+            
             if (persent<100) {
                 weakSelf.mPerPersentlabel.text = [NSString stringWithFormat:@"%0.0f%%", persent];
                 [weakSelf updatePersentLine:persent];
             }else{
                 weakSelf.mPerPersentlabel.text = @"";
-                weakSelf.mPersentLayer.backgroundColor = [UIColor clearColor].CGColor;
+                [weakSelf.mPersentLayer removeFromSuperlayer];
+                [weakSelf.mPersentBackLayer removeFromSuperlayer];
+                
+                [weakSelf.mFile ifMediaType];
+                if (weakSelf.mFile.fileType != UPan_FT_UnKnownFile) {
+                    [weakSelf.tableView reloadData];
+                }
             }
-            [weakSelf setFileDateAndSize];
         });
     }
 }
@@ -81,6 +88,9 @@
 {
     CGFloat width = persent/100*CGRectGetWidth(self.mCreateDateLabel.frame);
     if (!_mPersentLayer) {
+        self.mPersentBackLayer.frame = CGRectMake(CGRectGetMinX(self.mCreateDateLabel.frame),
+                                                  CGRectGetMaxY(self.mCreateDateLabel.frame)+3,
+                                                  CGRectGetWidth(self.mCreateDateLabel.frame), 1);
         self.mPersentLayer.frame = CGRectMake(CGRectGetMinX(self.mCreateDateLabel.frame),
                                               CGRectGetMaxY(self.mCreateDateLabel.frame)+3,
                                               width, 1);
@@ -97,6 +107,17 @@
     NSString *muString = [NSString stringWithFormat:@"%@  %@", _mFile.createDate, [pSSCommodMethod exchangeSize:fileSize]];
     
     self.mCreateDateLabel.text = muString;
+}
+
+-(CALayer *)mPersentBackLayer
+{
+    if (!_mPersentBackLayer) {
+        CALayer *layer = [CALayer layer];
+        layer.backgroundColor = Color_828282.CGColor;
+        [self.contentView.layer addSublayer:layer];
+        _mPersentBackLayer = layer;
+    }
+    return _mPersentBackLayer;
 }
 
 -(CALayer *)mPersentLayer

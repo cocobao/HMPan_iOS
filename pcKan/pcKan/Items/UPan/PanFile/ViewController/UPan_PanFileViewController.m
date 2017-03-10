@@ -12,9 +12,8 @@
 #import "UPan_File.h"
 #import "pssLocalMoviePlayViewController.h"
 #import "pssLinkObj.h"
-#import "UIAlertView+RWBlock.h"
 #import "pssLinkObj+Api.h"
-#import "UPan_FileRecvMgr.h"
+#import "UPan_FileExchanger.h"
 
 @interface UPan_PanFileViewController ()<UPanFileDelegate, NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
@@ -34,11 +33,6 @@
     return self;
 }
 
--(void)dealloc
-{
-    
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -51,8 +45,10 @@
     }];
     [self setupFileSource];
     
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:self.mLinkBtn];
-    self.navigationItem.rightBarButtonItem = leftItem;
+//    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:self.mLinkBtn];
+//    self.navigationItem.rightBarButtonItem = leftItem;
+    
+    [self.navigationController.navigationBar addSubview:self.mLinkBtn];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -66,25 +62,27 @@
     }else{
         self.mLinkBtn.backgroundColor = [UIColor redColor];
     }
+    
+    NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
+    [ntf addObserver:self selector:@selector(ntfCreateNewFile:) name:kNotificationFileCreate object:nil];
+    
+    [FileExchanger setMNowPath:self.mCurDir];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [pssLink removeTcpDelegate:self];
+    
+    NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
+    [ntf removeObserver:self];
 }
 
 -(void)setupFileSource
 {
     //生成主路径
     NSString *rootPath = nil;
-    if (_mCurDir.length > 0) {
-        rootPath = _mCurDir;
-    }else{
-        _mCurDir = [[UPan_FileMng dirCache] stringByAppendingPathComponent:UPAN_SRC_PATH];
-        [UPan_FileMng createDir:rootPath];
-        rootPath = _mCurDir;
-    }
+    rootPath = self.mCurDir;
 
     //获取路径下所有文件
     NSArray *arr = [UPan_FileMng ContentOfPath:rootPath];
@@ -118,29 +116,19 @@
     [self.mTableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-//生成文件
--(UPan_File *)createFile:(NSString *)fileName
+-(void)ntfCreateNewFile:(NSNotification *)ntf
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.fileName BEGINSWITH %@", fileName];
-    NSArray *arrTmp = [_mDataSource filteredArrayUsingPredicate:predicate];
-    if (arrTmp.count > 0) {
-        //创建副本文件
-        fileName = [NSString stringWithFormat:@"%@-副本%zd", fileName, arrTmp.count];
+    UPan_File *uFile = ntf.object;
+    if (!uFile) {
+        [self addHub:@"创建文件失败" hide:YES];
+        return;
     }
-    
-    NSString *createPath = [_mCurDir stringByAppendingPathComponent:fileName];
-    [UPan_FileMng createFile:createPath];
-    NSDictionary *fileAtts = [UPan_FileMng fileAttriutes:createPath];
-    if (!fileAtts) {
-        return nil;
-    }
-    
-    UPan_File *uFile = [[UPan_File alloc] initWithPath:createPath Atts:fileAtts];
-    return uFile;
+    [_mDataSource addObject:uFile];
+    WeakSelf(weakSelf);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:weakSelf.mDataSource.count-1 inSection:0];
+        [weakSelf.mTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    });
 }
 
 #pragma mark - NetTcpCallback
@@ -154,51 +142,6 @@
             weakSelf.mLinkBtn.backgroundColor = [UIColor redColor];
         }
     });
-}
-
-- (void)NetTcpCallback:(NSDictionary *)receData error:(NSError *)error
-{
-    NSInteger comType = [receData[PSS_CMD_TYPE] integerValue];
-    if (comType == emPssProtocolType_ApplySendFile) {
-        NSString *fileName = receData[ptl_fileName];
-        NSString *filePath = receData[ptl_filePath];
-        NSInteger fileSize = [receData[ptl_fileSize] integerValue];
-        NSString *strSize = [pSSCommodMethod exchangeSize:fileSize];
-        
-        UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                       message:[NSString stringWithFormat:@"请求接收文件:%@,大小:%@", fileName, strSize]
-                                                      delegate:nil
-                                             cancelButtonTitle:@"取消"
-                                             otherButtonTitles:@"确定", nil];
-        WeakSelf(weakSelf);
-        [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
-            if (btnIndex == 1) {
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    //这里待实现内存空间判断
-                    
-                    //生成文件
-                    UPan_File *uFile = [weakSelf createFile:fileName];
-                    if (!uFile) {
-                        [weakSelf addHub:@"创建文件失败" hide:YES];
-                        return;
-                    }
-
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [weakSelf.mDataSource addObject:uFile];
-                        [weakSelf.mTableView reloadData];
-                    });
-                    
-                    NSLog(@"create fileId:%zd, fileSize:%zd", uFile.fileId, fileSize);
-                
-                    [FileRecver addFileRecver:uFile fileSize:fileSize];
-                    [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
-                });
-            }
-        }];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [view show];
-        });
-    }
 }
 
 #pragma mark - UPanFileDelegate
@@ -244,9 +187,18 @@
 {
     if (!_mLinkBtn) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(0, 0, 30, 30);
+        btn.frame = CGRectMake(60, kTabBarHeight-40, 30, 30);
         _mLinkBtn = btn;
     }
     return _mLinkBtn;
+}
+
+-(NSString *)mCurDir
+{
+    if (!_mCurDir) {
+        _mCurDir = [UPan_FileMng hmPath];
+        [UPan_FileMng createDir:_mCurDir];
+    }
+    return _mCurDir;
 }
 @end

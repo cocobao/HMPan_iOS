@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "pSSMainTabbarViewController.h"
+#import "UPan_FileExchanger.h"
 
 @interface AppDelegate ()
 
@@ -22,6 +23,8 @@
     pSSMainTabbarViewController *tabbar = [[pSSMainTabbarViewController alloc] init];
     self.window.rootViewController = tabbar;
     [self.window makeKeyWindow];
+    
+    FileExchanger;
     return YES;
 }
 

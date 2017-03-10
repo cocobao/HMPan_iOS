@@ -63,4 +63,11 @@
     pssHSMmsg *pack = [self packDataType:emPssProtocolType_ApplySendFile body:dict block:nil];
     [self.tcp_link sendData:pack];
 }
+
+//发送文件数据
+-(void)sendFileData:(NSData *)data
+{
+    pssHSMmsg *pack = [self setProtocolHead:data type:emPssProtocolType_SendFile];
+    [self.tcp_link sendData:pack];
+}
 @end

@@ -25,4 +25,5 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UIImage *mIcon;
 
 -(instancetype)initWithPath:(NSString *)path Atts:(NSDictionary *)atts;
+-(void)ifMediaType;
 @end

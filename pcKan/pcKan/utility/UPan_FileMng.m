@@ -9,6 +9,11 @@
 #import "UPan_FileMng.h"
 
 @implementation UPan_FileMng
++(NSString *)hmPath
+{
+    return [[UPan_FileMng dirCache] stringByAppendingPathComponent:UPAN_SRC_PATH];
+}
+
 +(NSString *)dirDocument
 {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];

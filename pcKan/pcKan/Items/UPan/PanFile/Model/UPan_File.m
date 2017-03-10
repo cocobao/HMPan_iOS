@@ -29,21 +29,26 @@
         if (type == NSFileTypeDirectory) {
             _fileType = UPan_FT_Dir;
         }else{
-            HBImageType t = [HBImageTypeSizeUtil imageTypeOfFilePath:path];
-            if (t == HBImageTypeJPG ||
-                t == HBImageTypePNG ||
-                t == HBImageTypeBMP) {
-                _fileType = UPan_FT_Img;
-            }else{
-                AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", path]]
-                                                     options:nil];
-                NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
-                if ([tracks count] > 0) {
-                    _fileType = UPan_FT_Mov;
-                }
-            }
+            [self ifMediaType];
         }
     }
     return self;
+}
+
+-(void)ifMediaType
+{
+    HBImageType t = [HBImageTypeSizeUtil imageTypeOfFilePath:_filePath];
+    if (t == HBImageTypeJPG ||
+        t == HBImageTypePNG ||
+        t == HBImageTypeBMP) {
+        _fileType = UPan_FT_Img;
+    }else{
+        AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", _filePath]]
+                                             options:nil];
+        NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+        if ([tracks count] > 0) {
+            _fileType = UPan_FT_Mov;
+        }
+    }
 }
 @end

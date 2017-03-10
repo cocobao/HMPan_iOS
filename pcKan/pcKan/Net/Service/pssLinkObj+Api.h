@@ -16,4 +16,5 @@
 -(void)NetApi_VideoInfoAckWithMsgId:(int)msgId;
 -(void)NetApi_BoardCastIp;
 -(void)NetApi_ApplySendFileAck:(NSString *)filePath fileId:(NSInteger)fileId;
+-(void)sendFileData:(NSData *)data;
 @end

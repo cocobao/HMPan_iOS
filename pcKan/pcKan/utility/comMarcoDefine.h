@@ -13,8 +13,6 @@
 #define PSS_CMD_TYPE @"PSS_CMD_TYPE"
 #define UPAN_SRC_PATH @"HMPan"
 
-#define kNotificationFilePersent @"kNotificationFilePersent"
-
 #define ptl_key @"key"
 #define ptl_ofo @"ofo"
 #define ptl_ofoadd @"ofoadd"
@@ -50,5 +48,9 @@
 #define ptl_fileId @"fileId"
 #define ptl_persent @"persent"
 #define ptl_seek @"seek"
+
+/*Notification*/
+#define kNotificationFilePersent @"kNotificationFilePersent"
+#define kNotificationFileCreate @"kNotificationFileCreate"
 
 #endif /* comMarcoDefine_h */

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface UPan_FileMng : NSObject
++(NSString *)hmPath;
+
 +(NSString *)dirDocument;
 
 +(NSString *)dirHome;
