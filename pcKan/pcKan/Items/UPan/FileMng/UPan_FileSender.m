@@ -14,7 +14,7 @@ static const NSInteger MaxReadSize = (1024*1024);
 
 @interface UPan_FileSender ()
 @property (nonatomic, strong) NSString *filePath;
-@property (nonatomic, assign) NSInteger persent;
+@property (nonatomic, assign) NSInteger sendLength;
 @property (nonatomic, assign) NSInteger mFileId;
 @property (nonatomic, strong) NSThread *mThread;
 @end
@@ -41,12 +41,20 @@ static const NSInteger MaxReadSize = (1024*1024);
     [_mThread cancel];
 }
 
+-(void)postNotification:(CGFloat)persent fileId:(NSInteger)fileId
+{
+    NSNotificationCenter *nofity = [NSNotificationCenter defaultCenter];
+    [nofity postNotificationName:kNotificationFileSendPersent
+                          object:@{ptl_fileId:@(fileId), ptl_persent:@(persent)}];
+}
+
 -(void)mvThread:(id)obj
 {
     __weak UPan_FileSender *fileSender = (UPan_FileSender *)obj;
     
     NSDictionary *info = [UPan_FileMng fileAttriutes:fileSender.filePath];
     NSInteger fileSize = [info[NSFileSize] integerValue];
+    NSInteger fileId = [info[NSFileSystemFileNumber] integerValue];
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:fileSender.filePath];
     NSInteger offset = 0;
     NSThread *currentThread = [NSThread currentThread];
@@ -64,8 +72,13 @@ static const NSInteger MaxReadSize = (1024*1024);
             break;
         }
         offset += data.length;
+        _sendLength = offset;
+        CGFloat persent = _sendLength*100/fileSize;
+        [self postNotification:persent fileId:fileId];
+        
         NSData *reData = [self resetForSendData:data fid:fileSender.mFileId];
         [pssLink sendFileData:reData];
+//        NSLog(@"send size:%zd", reData.length);
         usleep(50000);
     }
     

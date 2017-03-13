@@ -39,10 +39,10 @@
     _seek += data.length;
     if (_seek >= _fileSize) {
         _persent = 100;
+        [_fileHandle closeFile];
         if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didRecvFileFinish:)]) {
             [self.m_delegate didRecvFileFinish:self.fileId];
         }
-        [_fileHandle closeFile];
         usleep(300000);
     }else{
         _persent = ((double)_seek/_fileSize)*100;
@@ -50,7 +50,7 @@
     if ((_persent - lastPostPersent > 1) || _persent >= 100) {
         lastPostPersent = _persent;
         NSNotificationCenter *nofity = [NSNotificationCenter defaultCenter];
-        [nofity postNotificationName:kNotificationFilePersent
+        [nofity postNotificationName:kNotificationFileRecvPersent
                               object:@{ptl_fileId:@(_fileId), ptl_persent:@(_persent), ptl_seek:@(_seek)}];
     }
 }

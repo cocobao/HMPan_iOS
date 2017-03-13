@@ -39,7 +39,7 @@
     
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:self.url withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-    self.player.view.frame = self.view.bounds;
+    self.player.view.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*9/16+kNavigationBarHeight);
     //设置播放视图的缩放模式
     self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
     self.player.shouldAutoplay = YES;

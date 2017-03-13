@@ -13,7 +13,7 @@
 @property (nonatomic, strong) UIView *backView;
 @property (nonatomic, strong) UIColor *lastColor;
 -(id)initWithFrame:(CGRect)frame arr:(NSArray*)arrData;
--(void)showModifyNamePageView;
+-(void)show;
 @property (nonatomic, strong) void (^didSelectIndex)(NSInteger index);
 @property (nonatomic, strong) void (^didSelectIndexWithText)(NSInteger index, NSString *indexText);
 -(void)setCellWithImage:(UIImage *)image index:(NSInteger)index;

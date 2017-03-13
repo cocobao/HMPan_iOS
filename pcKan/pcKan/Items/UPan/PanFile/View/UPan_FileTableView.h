@@ -11,6 +11,7 @@
 
 @protocol UPanFileDelegate <NSObject>
 -(void)didDeleteFile:(UPan_File *)file;
+-(void)accessButtonWithIndex:(NSIndexPath *)indexPath;
 @optional
 -(NSArray *)UPanFileDataSource;
 -(void)didSelectFile:(UPan_File *)file;

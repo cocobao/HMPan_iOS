@@ -95,6 +95,11 @@
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
     NSLog(@"did disconnect");
+    for (pssHSMmsg *msg in _mMessageQueue) {
+        NSError *error = [NSError errorWithDomain:@"网络错误" code:404 userInfo:nil];
+        msg.sendBlock(nil, error);
+    }
+    [_mMessageQueue removeAllObjects];
     [self setConnectState:tcpConnect_ConnectNotOk];
 }
 

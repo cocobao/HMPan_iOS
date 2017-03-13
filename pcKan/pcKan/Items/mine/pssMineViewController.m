@@ -7,7 +7,6 @@
 //
 
 #import "pssMineViewController.h"
-#import "pssLocalFoldViewController.h"
 #import "pSSURLVideoViewController.h"
 #import "pSSHlsWebViewController.h"
 #import "pSSLiveViewController.h"
@@ -47,8 +46,7 @@
     if (indexPath.row == 0) {
 
     }else if (indexPath.row == 1){
-        pssLocalFoldViewController *vc = [[pssLocalFoldViewController alloc] init];
-        [self pushVc:vc];
+
     }else if (indexPath.row == 2){
         pSSURLVideoViewController *vc = [[pSSURLVideoViewController alloc] init];
         [self pushVc:vc];

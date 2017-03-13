@@ -50,7 +50,8 @@
 #define ptl_seek @"seek"
 
 /*Notification*/
-#define kNotificationFilePersent @"kNotificationFilePersent"
+#define kNotificationFileRecvPersent @"kNotificationFileRecvPersent"
+#define kNotificationFileSendPersent @"kNotificationFileSendPersent"
 #define kNotificationFileCreate @"kNotificationFileCreate"
 
 #endif /* comMarcoDefine_h */

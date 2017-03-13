@@ -67,7 +67,7 @@
     return _mTableView;
 }
 
--(void)showModifyNamePageView
+-(void)show
 {
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     _mTableView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, self.frame.size.height);

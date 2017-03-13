@@ -11,6 +11,11 @@
 		8421FF6F1E69540D0054E8CA /* UPan_PanFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */; };
 		8421FF761E695DD00054E8CA /* UPan_File.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF751E695DD00054E8CA /* UPan_File.m */; };
 		8421FF7D1E696C120054E8CA /* UPan_FileTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */; };
+		8465B6B01E7642B400EC0186 /* UPan_FileMng.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */; };
+		8465B6BD1E76B42300EC0186 /* pssLocalMoviePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6BC1E76B42300EC0186 /* pssLocalMoviePlayViewController.m */; };
+		8465B6C41E76BE3900EC0186 /* LZHButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6C31E76BE3900EC0186 /* LZHButton.m */; };
+		8465B6C71E76BE6A00EC0186 /* LZHProgressSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6C61E76BE6A00EC0186 /* LZHProgressSlider.m */; };
+		8465B6CA1E76BE9700EC0186 /* XYVideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6C91E76BE9700EC0186 /* XYVideoModel.m */; };
 		848E774C1E5B082D005A724A /* AQPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848E774B1E5B082D005A724A /* AQPlayer.mm */; };
 		848E775C1E5BDC9B005A724A /* kanItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E775B1E5BDC9B005A724A /* kanItemView.m */; };
 		84904EFB1E70F1BE00392FD4 /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 84904EF81E70F1BE00392FD4 /* MGSwipeButton.m */; };
@@ -72,15 +77,12 @@
 		84A24E9F1E5ABA7500B96A36 /* EHScSetDefendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E121E5ABA7500B96A36 /* EHScSetDefendView.m */; };
 		84A24EA01E5ABA7500B96A36 /* pSSFlatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E141E5ABA7500B96A36 /* pSSFlatButton.m */; };
 		84A24EA11E5ABA7500B96A36 /* pssPCFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E1A1E5ABA7500B96A36 /* pssPCFileViewController.m */; };
-		84A24EA21E5ABA7500B96A36 /* pssLocalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E1E1E5ABA7500B96A36 /* pssLocalViewController.m */; };
 		84A24EA31E5ABA7500B96A36 /* pSSAVCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E231E5ABA7500B96A36 /* pSSAVCapture.m */; };
 		84A24EA41E5ABA7500B96A36 /* pSSAVConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E251E5ABA7500B96A36 /* pSSAVConfig.m */; };
 		84A24EA51E5ABA7500B96A36 /* pSSSystemACCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E271E5ABA7500B96A36 /* pSSSystemACCapture.m */; };
 		84A24EA61E5ABA7500B96A36 /* pSSHlsWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E2A1E5ABA7500B96A36 /* pSSHlsWebViewController.m */; };
 		84A24EA71E5ABA7500B96A36 /* pSSLiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E2C1E5ABA7500B96A36 /* pSSLiveViewController.m */; };
 		84A24EA81E5ABA7500B96A36 /* pSSURLVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E2E1E5ABA7500B96A36 /* pSSURLVideoViewController.m */; };
-		84A24EA91E5ABA7500B96A36 /* pssLocalFoldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E311E5ABA7500B96A36 /* pssLocalFoldViewController.m */; };
-		84A24EAA1E5ABA7500B96A36 /* pssLocalMoviePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E331E5ABA7500B96A36 /* pssLocalMoviePlayViewController.m */; };
 		84A24EAC1E5ABA7500B96A36 /* KxAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E391E5ABA7500B96A36 /* KxAudioManager.m */; };
 		84A24EAD1E5ABA7500B96A36 /* pssAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E3B1E5ABA7500B96A36 /* pssAudioQueue.m */; };
 		84A24EAE1E5ABA7500B96A36 /* pssGLRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24E3E1E5ABA7500B96A36 /* pssGLRender.m */; };
@@ -117,7 +119,6 @@
 		84A24EE41E5ABD0900B96A36 /* pssUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24EE31E5ABD0900B96A36 /* pssUserInfo.m */; };
 		84A24EEE1E5ABE9F00B96A36 /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A24EEB1E5ABE0D00B96A36 /* IJKMediaFramework.framework */; };
 		84A24EF31E5ABFD800B96A36 /* g711.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24EF21E5ABFD800B96A36 /* g711.m */; };
-		84CA18C41E7294E9000CFA9F /* UPan_FileMng.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA18C31E7294E9000CFA9F /* UPan_FileMng.m */; };
 		84CA18C91E729508000CFA9F /* UPan_FileSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA18C81E729508000CFA9F /* UPan_FileSender.m */; };
 		84CB87801E6FD32A00DCE909 /* UIAlertView+RWBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */; };
 		84CB878F1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB878E1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m */; };
@@ -151,6 +152,16 @@
 		8421FF751E695DD00054E8CA /* UPan_File.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_File.m; sourceTree = "<group>"; };
 		8421FF7B1E696C110054E8CA /* UPan_FileTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileTableView.h; sourceTree = "<group>"; };
 		8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileTableView.m; sourceTree = "<group>"; };
+		8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPan_FileMng.h; path = pcKan/Items/UPan/FileMng/UPan_FileMng.h; sourceTree = SOURCE_ROOT; };
+		8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPan_FileMng.m; path = pcKan/Items/UPan/FileMng/UPan_FileMng.m; sourceTree = SOURCE_ROOT; };
+		8465B6BB1E76B42300EC0186 /* pssLocalMoviePlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssLocalMoviePlayViewController.h; sourceTree = "<group>"; };
+		8465B6BC1E76B42300EC0186 /* pssLocalMoviePlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssLocalMoviePlayViewController.m; sourceTree = "<group>"; };
+		8465B6C21E76BE3900EC0186 /* LZHButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZHButton.h; sourceTree = "<group>"; };
+		8465B6C31E76BE3900EC0186 /* LZHButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZHButton.m; sourceTree = "<group>"; };
+		8465B6C51E76BE6A00EC0186 /* LZHProgressSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZHProgressSlider.h; sourceTree = "<group>"; };
+		8465B6C61E76BE6A00EC0186 /* LZHProgressSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZHProgressSlider.m; sourceTree = "<group>"; };
+		8465B6C81E76BE9700EC0186 /* XYVideoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYVideoModel.h; sourceTree = "<group>"; };
+		8465B6C91E76BE9700EC0186 /* XYVideoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYVideoModel.m; sourceTree = "<group>"; };
 		848E774A1E5B082D005A724A /* AQPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQPlayer.h; sourceTree = "<group>"; };
 		848E774B1E5B082D005A724A /* AQPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AQPlayer.mm; sourceTree = "<group>"; };
 		848E775A1E5BDC9B005A724A /* kanItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kanItemView.h; sourceTree = "<group>"; };
@@ -270,8 +281,6 @@
 		84A24E141E5ABA7500B96A36 /* pSSFlatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSFlatButton.m; sourceTree = "<group>"; };
 		84A24E191E5ABA7500B96A36 /* pssPCFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssPCFileViewController.h; sourceTree = "<group>"; };
 		84A24E1A1E5ABA7500B96A36 /* pssPCFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssPCFileViewController.m; sourceTree = "<group>"; };
-		84A24E1D1E5ABA7500B96A36 /* pssLocalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssLocalViewController.h; sourceTree = "<group>"; };
-		84A24E1E1E5ABA7500B96A36 /* pssLocalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssLocalViewController.m; sourceTree = "<group>"; };
 		84A24E221E5ABA7500B96A36 /* pSSAVCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAVCapture.h; sourceTree = "<group>"; };
 		84A24E231E5ABA7500B96A36 /* pSSAVCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAVCapture.m; sourceTree = "<group>"; };
 		84A24E241E5ABA7500B96A36 /* pSSAVConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAVConfig.h; sourceTree = "<group>"; };
@@ -284,10 +293,6 @@
 		84A24E2C1E5ABA7500B96A36 /* pSSLiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSLiveViewController.m; sourceTree = "<group>"; };
 		84A24E2D1E5ABA7500B96A36 /* pSSURLVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSURLVideoViewController.h; sourceTree = "<group>"; };
 		84A24E2E1E5ABA7500B96A36 /* pSSURLVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSURLVideoViewController.m; sourceTree = "<group>"; };
-		84A24E301E5ABA7500B96A36 /* pssLocalFoldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssLocalFoldViewController.h; sourceTree = "<group>"; };
-		84A24E311E5ABA7500B96A36 /* pssLocalFoldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssLocalFoldViewController.m; sourceTree = "<group>"; };
-		84A24E321E5ABA7500B96A36 /* pssLocalMoviePlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssLocalMoviePlayViewController.h; sourceTree = "<group>"; };
-		84A24E331E5ABA7500B96A36 /* pssLocalMoviePlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssLocalMoviePlayViewController.m; sourceTree = "<group>"; };
 		84A24E381E5ABA7500B96A36 /* KxAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxAudioManager.h; sourceTree = "<group>"; };
 		84A24E391E5ABA7500B96A36 /* KxAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxAudioManager.m; sourceTree = "<group>"; };
 		84A24E3A1E5ABA7500B96A36 /* pssAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssAudioQueue.h; sourceTree = "<group>"; };
@@ -351,8 +356,6 @@
 		84A24EE51E5ABE0D00B96A36 /* IJKMediaPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IJKMediaPlayer.xcodeproj; path = ijkPlayer/ios/IJKMediaPlayer/IJKMediaPlayer.xcodeproj; sourceTree = "<group>"; };
 		84A24EF21E5ABFD800B96A36 /* g711.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = g711.m; sourceTree = "<group>"; };
 		84A24EF41E5ABFE900B96A36 /* g711.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = g711.h; sourceTree = "<group>"; };
-		84CA18C21E7294E9000CFA9F /* UPan_FileMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileMng.h; sourceTree = "<group>"; };
-		84CA18C31E7294E9000CFA9F /* UPan_FileMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileMng.m; sourceTree = "<group>"; };
 		84CA18C71E729508000CFA9F /* UPan_FileSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileSender.h; sourceTree = "<group>"; };
 		84CA18C81E729508000CFA9F /* UPan_FileSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileSender.m; sourceTree = "<group>"; };
 		84CB877E1E6FD32A00DCE909 /* UIAlertView+RWBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+RWBlock.h"; sourceTree = "<group>"; };
@@ -446,6 +449,8 @@
 				8421FF751E695DD00054E8CA /* UPan_File.m */,
 				84F798A11E6D15C800CF871A /* UPan_CellMode.h */,
 				84F798A21E6D15C800CF871A /* UPan_CellMode.m */,
+				8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */,
+				8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -461,6 +466,28 @@
 				84CA18C81E729508000CFA9F /* UPan_FileSender.m */,
 			);
 			path = FileMng;
+			sourceTree = "<group>";
+		};
+		8465B6BA1E76B42300EC0186 /* localPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				8465B6BB1E76B42300EC0186 /* pssLocalMoviePlayViewController.h */,
+				8465B6BC1E76B42300EC0186 /* pssLocalMoviePlayViewController.m */,
+			);
+			path = localPlayer;
+			sourceTree = "<group>";
+		};
+		8465B6C11E76BE1100EC0186 /* LZH_IJKPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				8465B6C21E76BE3900EC0186 /* LZHButton.h */,
+				8465B6C31E76BE3900EC0186 /* LZHButton.m */,
+				8465B6C51E76BE6A00EC0186 /* LZHProgressSlider.h */,
+				8465B6C61E76BE6A00EC0186 /* LZHProgressSlider.m */,
+				8465B6C81E76BE9700EC0186 /* XYVideoModel.h */,
+				8465B6C91E76BE9700EC0186 /* XYVideoModel.m */,
+			);
+			path = LZH_IJKPlayer;
 			sourceTree = "<group>";
 		};
 		848E77591E5BDC65005A724A /* View */ = {
@@ -554,6 +581,7 @@
 		84A24DA41E5ABA7500B96A36 /* 3partyLib */ = {
 			isa = PBXGroup;
 			children = (
+				8465B6C11E76BE1100EC0186 /* LZH_IJKPlayer */,
 				84904EF61E70F1BE00392FD4 /* MGSwipeTableCell */,
 				84A24DA51E5ABA7500B96A36 /* AFNetworking */,
 				84A24DCE1E5ABA7500B96A36 /* CocoaAsyncSocket */,
@@ -815,8 +843,6 @@
 		84A24E1C1E5ABA7500B96A36 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				84A24E1D1E5ABA7500B96A36 /* pssLocalViewController.h */,
-				84A24E1E1E5ABA7500B96A36 /* pssLocalViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -833,7 +859,7 @@
 			children = (
 				84A24E211E5ABA7500B96A36 /* Capture */,
 				84A24E281E5ABA7500B96A36 /* Live */,
-				84A24E2F1E5ABA7500B96A36 /* LocalFold */,
+				8465B6BA1E76B42300EC0186 /* localPlayer */,
 				84A24E341E5ABA7500B96A36 /* psMov */,
 				84A24E531E5ABA7500B96A36 /* pssMineViewController.h */,
 				84A24E541E5ABA7500B96A36 /* pssMineViewController.m */,
@@ -865,17 +891,6 @@
 				84A24E2E1E5ABA7500B96A36 /* pSSURLVideoViewController.m */,
 			);
 			path = Live;
-			sourceTree = "<group>";
-		};
-		84A24E2F1E5ABA7500B96A36 /* LocalFold */ = {
-			isa = PBXGroup;
-			children = (
-				84A24E301E5ABA7500B96A36 /* pssLocalFoldViewController.h */,
-				84A24E311E5ABA7500B96A36 /* pssLocalFoldViewController.m */,
-				84A24E321E5ABA7500B96A36 /* pssLocalMoviePlayViewController.h */,
-				84A24E331E5ABA7500B96A36 /* pssLocalMoviePlayViewController.m */,
-			);
-			path = LocalFold;
 			sourceTree = "<group>";
 		};
 		84A24E341E5ABA7500B96A36 /* psMov */ = {
@@ -992,8 +1007,6 @@
 		84A24E681E5ABA7500B96A36 /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				84CA18C21E7294E9000CFA9F /* UPan_FileMng.h */,
-				84CA18C31E7294E9000CFA9F /* UPan_FileMng.m */,
 				84CB877E1E6FD32A00DCE909 /* UIAlertView+RWBlock.h */,
 				84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */,
 				84A24E691E5ABA7500B96A36 /* comMarcoDefine.h */,
@@ -1171,6 +1184,7 @@
 				84A24E9C1E5ABA7500B96A36 /* pSSBaseTableViewCell.m in Sources */,
 				84A24EBE1E5ABA7500B96A36 /* pssLinkObj.m in Sources */,
 				84A24E7C1E5ABA7500B96A36 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
+				8465B6BD1E76B42300EC0186 /* pssLocalMoviePlayViewController.m in Sources */,
 				84A24E7A1E5ABA7500B96A36 /* README.md in Sources */,
 				84904EFC1E70F1BE00392FD4 /* MGSwipeTableCell.m in Sources */,
 				84A24E851E5ABA7500B96A36 /* README.markdown in Sources */,
@@ -1193,7 +1207,6 @@
 				84A24EA61E5ABA7500B96A36 /* pSSHlsWebViewController.m in Sources */,
 				84A24EB61E5ABA7500B96A36 /* pSSMovieViewController.m in Sources */,
 				84904F071E71087F00392FD4 /* UPan_FileExchanger.m in Sources */,
-				84A24EAA1E5ABA7500B96A36 /* pssLocalMoviePlayViewController.m in Sources */,
 				84A24E821E5ABA7500B96A36 /* UIWebView+AFNetworking.m in Sources */,
 				84A24E8D1E5ABA7500B96A36 /* NSObject+MJCoding.m in Sources */,
 				84A24EBD1E5ABA7500B96A36 /* pssLinkObj+Api.m in Sources */,
@@ -1210,6 +1223,7 @@
 				84A24E971E5ABA7500B96A36 /* UIView+Extension.m in Sources */,
 				84A24E9F1E5ABA7500B96A36 /* EHScSetDefendView.m in Sources */,
 				84A24E8E1E5ABA7500B96A36 /* NSObject+MJIvar.m in Sources */,
+				8465B6C71E76BE6A00EC0186 /* LZHProgressSlider.m in Sources */,
 				84A24EB91E5ABA7500B96A36 /* pSSMainTabbarViewController.m in Sources */,
 				84A24E991E5ABA7500B96A36 /* pSSBaseTableViewController.m in Sources */,
 				84A24E7D1E5ABA7500B96A36 /* UIAlertView+AFNetworking.m in Sources */,
@@ -1217,21 +1231,21 @@
 				84A24EA41E5ABA7500B96A36 /* pSSAVConfig.m in Sources */,
 				84A24EA81E5ABA7500B96A36 /* pSSURLVideoViewController.m in Sources */,
 				84904EFB1E70F1BE00392FD4 /* MGSwipeButton.m in Sources */,
+				8465B6B01E7642B400EC0186 /* UPan_FileMng.m in Sources */,
 				84904F041E71046F00392FD4 /* UPan_FileRecver.m in Sources */,
+				8465B6C41E76BE3900EC0186 /* LZHButton.m in Sources */,
 				84A24EB11E5ABA7500B96A36 /* pSSDecoder.m in Sources */,
 				84A24E721E5ABA7500B96A36 /* AFHTTPSessionManager.m in Sources */,
 				848E774C1E5B082D005A724A /* AQPlayer.mm in Sources */,
-				84A24EA21E5ABA7500B96A36 /* pssLocalViewController.m in Sources */,
 				8421FF6A1E694FDE0054E8CA /* UPan_AlbumViewController.m in Sources */,
 				84A24E911E5ABA7500B96A36 /* MJRefreshBaseView.m in Sources */,
 				84A24EC01E5ABA7500B96A36 /* pSSCommodMethod.m in Sources */,
 				84A24E7B1E5ABA7500B96A36 /* AFNetworkActivityIndicatorManager.m in Sources */,
-				84CA18C41E7294E9000CFA9F /* UPan_FileMng.m in Sources */,
 				84A24E711E5ABA7500B96A36 /* AFHTTPRequestOperationManager.m in Sources */,
 				84A24EA31E5ABA7500B96A36 /* pSSAVCapture.m in Sources */,
 				84A24E8B1E5ABA7500B96A36 /* MJIvar.m in Sources */,
+				8465B6CA1E76BE9700EC0186 /* XYVideoModel.m in Sources */,
 				84A24EA11E5ABA7500B96A36 /* pssPCFileViewController.m in Sources */,
-				84A24EA91E5ABA7500B96A36 /* pssLocalFoldViewController.m in Sources */,
 				84A24EBB1E5ABA7500B96A36 /* EHUdpLinkObj.m in Sources */,
 				84A24E731E5ABA7500B96A36 /* AFNetworkReachabilityManager.m in Sources */,
 				84A24D751E58522F00B96A36 /* main.m in Sources */,

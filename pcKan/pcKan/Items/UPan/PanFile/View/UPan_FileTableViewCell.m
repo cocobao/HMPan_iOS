@@ -44,10 +44,20 @@
             self.mIcon.image = [UIImage imageNamed:@"file"];
         }
     }
+    
+    if (mFile.fileType != UPan_FT_Dir) {
+        self.accessoryType = UITableViewCellAccessoryDetailButton;
+    }else{
+        self.accessoryType = UITableViewCellAccessoryNone;
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(filePersentNotify:)
-                                                 name:kNotificationFilePersent
+                                                 name:kNotificationFileRecvPersent
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(filePersentNotify:)
+                                                 name:kNotificationFileSendPersent
                                                object:nil];
 }
 
@@ -56,13 +66,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+//接收文件百分比
 -(void)filePersentNotify:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
     NSInteger fileId = [dict[ptl_fileId] integerValue];
     if (fileId == self.mFile.fileId) {
         CGFloat persent = [dict[ptl_persent] floatValue];
-        _mFile.fileSize = [dict[ptl_seek] longLongValue];
+        if (dict[ptl_seek]) {
+            _mFile.fileSize = [dict[ptl_seek] longLongValue];
+        }
         WeakSelf(weakSelf);
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf setFileDateAndSize];

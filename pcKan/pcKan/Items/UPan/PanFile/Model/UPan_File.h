@@ -23,6 +23,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, copy) NSString *filePath;
 @property (nonatomic, copy) NSString *createDate;
 @property (nonatomic, strong) UIImage *mIcon;
+@property (nonatomic, assign) BOOL enable;
 
 -(instancetype)initWithPath:(NSString *)path Atts:(NSDictionary *)atts;
 -(void)ifMediaType;

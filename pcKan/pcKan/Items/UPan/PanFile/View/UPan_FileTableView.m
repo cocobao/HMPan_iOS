@@ -109,6 +109,13 @@ MGSwipeTableCellDelegate
     }
 }
 
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(accessButtonWithIndex:)]){
+        [self.m_delegate accessButtonWithIndex:indexPath];
+    }
+}
+
 //点击删除
 -(BOOL)swipeTableCell:(MGSwipeTableCell *)cell tappedButtonAtIndex:(NSInteger)index direction:(MGSwipeDirection)direction fromExpansion:(BOOL)fromExpansion
 {

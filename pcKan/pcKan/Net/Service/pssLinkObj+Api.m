@@ -67,7 +67,14 @@
 //发送文件数据
 -(void)sendFileData:(NSData *)data
 {
-    pssHSMmsg *pack = [self setProtocolHead:data type:emPssProtocolType_SendFile];
+    pssHSMmsg *pack = [self setProtocolHead:data type:emPssProtocolType_RecvFile];
+    [self.tcp_link sendData:pack];
+}
+
+//请求接收文件
+-(void)NetApi_ApplyRecvFile:(NSDictionary *)info block:(msgSendBlock)block
+{
+    pssHSMmsg *pack = [self packDataType:emPssProtocolType_ApplyRecvFile body:info block:block];
     [self.tcp_link sendData:pack];
 }
 @end

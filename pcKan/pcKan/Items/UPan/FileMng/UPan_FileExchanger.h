@@ -15,4 +15,5 @@
 @property (nonatomic, strong) NSString *mNowPath;
 + (id)shareInstance;
 -(void)addFileRecver:(UPan_File *)file fileSize:(NSInteger)fileSize;
+-(void)addSendingFilePath:(NSString *)filePath fileId:(NSInteger)fileId;
 @end

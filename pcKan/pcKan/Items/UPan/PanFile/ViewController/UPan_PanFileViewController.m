@@ -14,6 +14,7 @@
 #import "pssLinkObj.h"
 #import "pssLinkObj+Api.h"
 #import "UPan_FileExchanger.h"
+#import "EHScSetDefendView.h"
 
 @interface UPan_PanFileViewController ()<UPanFileDelegate, NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
@@ -131,6 +132,26 @@
     });
 }
 
+-(void)applyRecvFile:(UPan_File *)file
+{
+    NSDictionary *dict = @{
+                           ptl_fileName:file.fileName,
+                           ptl_fileSize:@(file.fileSize),
+                           };
+    [pssLink NetApi_ApplyRecvFile:dict block:^(NSDictionary *message, NSError *error) {
+        if (error) {
+            return;
+        }
+        NSInteger code = [message[ptl_status] integerValue];
+        if (code != _SUCCESS_CODE) {
+            NSLog(@"%@", message);
+            return;
+        }
+        NSInteger fileId = [message[ptl_fileId] integerValue];
+        [FileExchanger addSendingFilePath:file.filePath fileId:fileId];
+    }];
+}
+
 #pragma mark - NetTcpCallback
 - (void)NetStatusChange:(tcpConnectState)state
 {
@@ -169,6 +190,24 @@
     [UPan_FileMng deleteFile:file.filePath];
     
     [self.mDataSource removeObject:file];
+}
+
+-(void)accessButtonWithIndex:(NSIndexPath *)indexPath
+{
+    EHScSetDefendView *view = [[EHScSetDefendView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)
+                                                                   arr:@[@"发送到电脑", @"取消"]];
+    [view show];
+    WeakSelf(weakSelf);
+    view.didSelectIndex = ^(NSInteger index){
+        if (index == 0) {
+            if ([pssLink tcpLinkStatus] != tcpConnect_ConnectOk) {
+                [weakSelf addHub:@"请先连接电脑客户端" hide:YES];
+                return;
+            }
+            UPan_File *file = [weakSelf.mDataSource objectAtIndex:indexPath.row];
+            [weakSelf applyRecvFile:file];
+        }
+    };
 }
 
 #pragma mark - views
