@@ -11,6 +11,7 @@
 @interface UPan_FileRecver ()
 {
     CGFloat lastPostPersent;
+    time_t startTime;
 }
 @property (nonatomic, strong) NSFileHandle *fileHandle;
 @end
@@ -27,6 +28,7 @@
         _persent = 0;
         lastPostPersent = 0;
         _fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
+        startTime = time(NULL);
     }
     return self;
 }
@@ -37,6 +39,9 @@
     [_fileHandle writeData:data];
     
     _seek += data.length;
+    time_t nowTime = time(NULL);
+    CGFloat speed = (CGFloat)_seek/(nowTime - startTime);
+    
     if (_seek >= _fileSize) {
         _persent = 100;
         [_fileHandle closeFile];
@@ -51,7 +56,10 @@
         lastPostPersent = _persent;
         NSNotificationCenter *nofity = [NSNotificationCenter defaultCenter];
         [nofity postNotificationName:kNotificationFileRecvPersent
-                              object:@{ptl_fileId:@(_fileId), ptl_persent:@(_persent), ptl_seek:@(_seek)}];
+                              object:@{ptl_fileId:@(_fileId),
+                                       ptl_persent:@(_persent),
+                                       ptl_seek:@(_seek),
+                                       ptl_speed:@(speed)}];
     }
 }
 @end

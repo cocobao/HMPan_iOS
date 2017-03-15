@@ -1086,7 +1086,7 @@
 				TargetAttributes = {
 					84A24D6F1E58522F00B96A36 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 8A5PVYVVZA;
+						DevelopmentTeam = JVD27LK93L;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1367,7 +1367,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8A5PVYVVZA;
+				DEVELOPMENT_TEAM = JVD27LK93L;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/pcKan/utility/commonHeader.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/ijkPlayer/ios/IJKMediaPlayer/IJKMediaPlayer/ijkmedia",
@@ -1377,7 +1377,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1386,7 +1386,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8A5PVYVVZA;
+				DEVELOPMENT_TEAM = JVD27LK93L;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/pcKan/utility/commonHeader.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/ijkPlayer/ios/IJKMediaPlayer/IJKMediaPlayer/ijkmedia",
@@ -1396,7 +1396,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -37,7 +37,7 @@
     _F_CreateDate = CGRectMake(minX, minY, width, height);
     
     minX = CGRectGetMaxX(_F_CreateDate);
-    width = MarginW(80);
+    width = MarginW(100);
     _F_Persent = CGRectMake(minX, minY, width, height);
     
     _cell_height = 5 + CGRectGetMaxY(_F_CreateDate)+10;

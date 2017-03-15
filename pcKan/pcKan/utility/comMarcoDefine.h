@@ -48,6 +48,7 @@
 #define ptl_fileId @"fileId"
 #define ptl_persent @"persent"
 #define ptl_seek @"seek"
+#define ptl_speed @"speed"
 
 /*Notification*/
 #define kNotificationFileRecvPersent @"kNotificationFileRecvPersent"

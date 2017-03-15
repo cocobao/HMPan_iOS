@@ -41,11 +41,13 @@ static const NSInteger MaxReadSize = (1024*1024);
     [_mThread cancel];
 }
 
--(void)postNotification:(CGFloat)persent fileId:(NSInteger)fileId
+-(void)postNotification:(CGFloat)persent fileId:(NSInteger)fileId speed:(CGFloat)speed
 {
     NSNotificationCenter *nofity = [NSNotificationCenter defaultCenter];
     [nofity postNotificationName:kNotificationFileSendPersent
-                          object:@{ptl_fileId:@(fileId), ptl_persent:@(persent)}];
+                          object:@{ptl_fileId:@(fileId),
+                                   ptl_persent:@(persent),
+                                   ptl_speed:@(speed)}];
 }
 
 -(void)mvThread:(id)obj
@@ -58,7 +60,7 @@ static const NSInteger MaxReadSize = (1024*1024);
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:fileSender.filePath];
     NSInteger offset = 0;
     NSThread *currentThread = [NSThread currentThread];
-    
+    time_t startTime = time(NULL);
     for(;;){
         if (currentThread.isCancelled) {
             NSLog(@"thread is cannel");
@@ -74,7 +76,9 @@ static const NSInteger MaxReadSize = (1024*1024);
         offset += data.length;
         _sendLength = offset;
         CGFloat persent = _sendLength*100/fileSize;
-        [self postNotification:persent fileId:fileId];
+        time_t nowTime = time(NULL);
+        CGFloat speed = (CGFloat)offset/(nowTime - startTime);
+        [self postNotification:persent fileId:fileId sp];
         
         NSData *reData = [self resetForSendData:data fid:fileSender.mFileId];
         [pssLink sendFileData:reData];

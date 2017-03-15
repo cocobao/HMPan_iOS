@@ -66,13 +66,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-//接收文件百分比
+//接收文件百分比以及速率
 -(void)filePersentNotify:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
     NSInteger fileId = [dict[ptl_fileId] integerValue];
     if (fileId == self.mFile.fileId) {
         CGFloat persent = [dict[ptl_persent] floatValue];
+        CGFloat speed = [dict[ptl_speed] floatValue];
         if (dict[ptl_seek]) {
             _mFile.fileSize = [dict[ptl_seek] longLongValue];
         }
@@ -81,7 +82,8 @@
             [weakSelf setFileDateAndSize];
             
             if (persent<100) {
-                weakSelf.mPerPersentlabel.text = [NSString stringWithFormat:@"%0.0f%%", persent];
+                NSString *sizeperSec = [pSSCommodMethod exchangeSize:speed];
+                weakSelf.mPerPersentlabel.text = [NSString stringWithFormat:@"%0.0f%%  %@/s", persent, sizeperSec];
                 [weakSelf updatePersentLine:persent];
             }else{
                 weakSelf.mPerPersentlabel.text = @"";

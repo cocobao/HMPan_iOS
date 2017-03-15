@@ -105,12 +105,11 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
-//    [_mRecvDataBuf appendData:data];
     memcpy(pRecvBuf, data.bytes, data.length);
     pRecvBuf += data.length;
-    
-    WeakSelf(weakSelf);
-    [weakSelf didReadData];
+    NSLog(@"recv data size:%zd", data.length);
+
+    [self didReadData];
     [_mGcdTcpSocket readDataWithTimeout:-1 tag:0];
 }
 
@@ -157,13 +156,11 @@
             return;
         }
 
-        NSData *pack = [[NSData alloc] initWithBytes:recvDataBuf length:packLen];
-        if (pack == nil) {
-            return;
-        }
+        NSData *pack = pack = [[NSData alloc] initWithBytes:recvDataBuf length:packLen];;
         NSInteger lastLen = lastDataSize-packLen;
         if (lastLen > 0) {
             memmove(recvDataBuf, recvDataBuf+packLen, lastLen);
+            pRecvBuf = recvDataBuf+lastLen;
         }else{
             pRecvBuf = recvDataBuf;
         }
@@ -172,7 +169,10 @@
         head->bodyLength = msgLen;
         head->msgId = ntohl(head->msgId);
         if (head->version == 0x1) {
-            [self packHandlerVer1:pack];
+            WeakSelf(weakSelf);
+            dispatch_async(_mSocketQueue, ^{
+                [weakSelf packHandlerVer1:pack];
+            });
         }
     }
 }
