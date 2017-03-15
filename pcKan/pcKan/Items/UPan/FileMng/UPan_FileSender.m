@@ -78,7 +78,7 @@ static const NSInteger MaxReadSize = (1024*1024);
         CGFloat persent = _sendLength*100/fileSize;
         time_t nowTime = time(NULL);
         CGFloat speed = (CGFloat)offset/(nowTime - startTime);
-        [self postNotification:persent fileId:fileId sp];
+        [self postNotification:persent fileId:fileId speed:speed];
         
         NSData *reData = [self resetForSendData:data fid:fileSender.mFileId];
         [pssLink sendFileData:reData];

@@ -56,7 +56,17 @@
     if (file.fileType == UPan_FT_Img) {
         file.mIcon = [pSSCommodMethod imageShotcutOfPath:file.filePath w:_F_Icon.size.width h:_F_Icon.size.height];
     }else if (file.fileType == UPan_FT_Mov){
-        UIImage *image = [pSSCommodMethod thumbnailImageForVideo:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", file.filePath]]];
+        NSString *strPath = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                  
+                                                                  (CFStringRef)file.filePath,
+                                                                  
+                                                                  (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]",
+                                                                  
+                                                                  NULL,
+                                                                  
+                                                                  kCFStringEncodingUTF8));
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", strPath]];
+        UIImage *image = [pSSCommodMethod thumbnailImageForVideo:url];
         file.mIcon = [pSSCommodMethod imageShotcutOfImage:image w:_F_Icon.size.width h:_F_Icon.size.height];
     }
 }

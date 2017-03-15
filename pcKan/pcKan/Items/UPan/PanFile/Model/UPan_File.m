@@ -21,7 +21,6 @@
         _fileSize = [atts[NSFileSize] longLongValue];
         _fileType = UPan_FT_UnKnownFile;
         _fileId = [atts[NSFileSystemFileNumber] integerValue];
-        
         NSDate *date = atts[NSFileCreationDate];
         _createDate = [pSSCommodMethod dateToString:date];
         
@@ -43,11 +42,18 @@
         t == HBImageTypeBMP) {
         _fileType = UPan_FT_Img;
     }else{
-        AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", _filePath]]
-                                             options:nil];
-        NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
-        if ([tracks count] > 0) {
+        if ([_fileName hasSuffix:@".mov"] ||
+            [_fileName hasSuffix:@".flv"] ||
+            [_fileName hasSuffix:@".mp4"] ||
+            [_fileName hasSuffix:@".mkv"]) {
             _fileType = UPan_FT_Mov;
+        }else{
+            AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", _filePath]]
+                                                 options:nil];
+            NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+            if ([tracks count] > 0) {
+                _fileType = UPan_FT_Mov;
+            }
         }
     }
 }

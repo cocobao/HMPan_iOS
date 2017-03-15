@@ -234,7 +234,9 @@
 +(UIImage*) thumbnailImageForVideo:(NSURL *)videoURL
 {
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
-    NSParameterAssert(asset);
+    if (!asset) {
+        return nil;
+    }
     AVAssetImageGenerator *assetImageGenerator =[[AVAssetImageGenerator alloc] initWithAsset:asset];
     assetImageGenerator.appliesPreferredTrackTransform = YES;
     assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
