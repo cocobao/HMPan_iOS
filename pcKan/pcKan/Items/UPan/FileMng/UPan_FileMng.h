@@ -51,4 +51,7 @@
 +(NSString *)fileNameByPath:(NSString *)path;
 
 +(BOOL)isFileExist:(NSString *)filePath;
+
+//文件重命名
++(BOOL)renameFileName:(NSString *)oldName toNewName:(NSString *)newName atPath:(NSString *)path;
 @end

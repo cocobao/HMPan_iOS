@@ -116,6 +116,7 @@ __strong static id sharedInstance = nil;
         if (error) {
             return;
         }
+        NSLog(@"login ok");
         [UserInfo setUserWithInfo:message];
     }];
 }

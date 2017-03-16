@@ -11,12 +11,14 @@
 @implementation UPan_CellMode
 -(void)setupModel:(UPan_File *)file
 {
+    //图标
     CGFloat minX = MarginW(16);
     CGFloat minY = 5;
     CGFloat width = MarginW(35);
     CGFloat height = MarginW(30);
     _F_Icon = CGRectMake(minX, minY, width, height);
     
+    //文件名
     minX = CGRectGetMaxX(_F_Icon)+5;
     minY = 5;
     CGFloat maxWidth = kScreenWidth-minX-MarginW(80);
@@ -31,17 +33,21 @@
     width = maxWidth;
     _F_FileName = CGRectMake(minX, minY, width, height);
     
+    //时间
     minY = CGRectGetMaxY(_F_FileName)+5;
     width = maxWidth-50;
     height = 18;
     _F_CreateDate = CGRectMake(minX, minY, width, height);
     
+    //百分比
     minX = CGRectGetMaxX(_F_CreateDate);
     width = MarginW(100);
     _F_Persent = CGRectMake(minX, minY, width, height);
     
+    //cell高度
     _cell_height = 5 + CGRectGetMaxY(_F_CreateDate)+10;
     
+    //底部线条
     minX = 0;
     minY = _cell_height-3;
     width = kScreenWidth;
@@ -56,16 +62,7 @@
     if (file.fileType == UPan_FT_Img) {
         file.mIcon = [pSSCommodMethod imageShotcutOfPath:file.filePath w:_F_Icon.size.width h:_F_Icon.size.height];
     }else if (file.fileType == UPan_FT_Mov){
-        NSString *strPath = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                  
-                                                                  (CFStringRef)file.filePath,
-                                                                  
-                                                                  (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]",
-                                                                  
-                                                                  NULL,
-                                                                  
-                                                                  kCFStringEncodingUTF8));
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", strPath]];
+        NSURL *url = [NSURL fileURLWithPath:file.filePath];
         UIImage *image = [pSSCommodMethod thumbnailImageForVideo:url];
         file.mIcon = [pSSCommodMethod imageShotcutOfImage:image w:_F_Icon.size.width h:_F_Icon.size.height];
     }

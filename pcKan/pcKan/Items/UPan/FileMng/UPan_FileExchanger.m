@@ -77,7 +77,9 @@ __strong static id sharedInstance = nil;
     NSArray *arrTmp = [arrSrcFile filteredArrayUsingPredicate:predicate];
     if (arrTmp.count > 0) {
         //创建副本文件
-        fileName = [NSString stringWithFormat:@"%@-副本%zd", fileName, arrTmp.count];
+        NSString *noExtenName = [fileName stringByDeletingPathExtension];
+        NSString *exten = [fileName pathExtension];
+        fileName = [NSString stringWithFormat:@"%@-副本%zd%@%@", noExtenName, arrTmp.count, (exten.length>0)?@".":@"",exten];
     }
     
     NSString *createPath = [_mNowPath stringByAppendingPathComponent:fileName];

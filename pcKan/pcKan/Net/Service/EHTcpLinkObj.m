@@ -107,7 +107,7 @@
 {
     memcpy(pRecvBuf, data.bytes, data.length);
     pRecvBuf += data.length;
-    NSLog(@"recv data size:%zd", data.length);
+//    NSLog(@"recv data size:%zd", data.length);
 
     [self didReadData];
     [_mGcdTcpSocket readDataWithTimeout:-1 tag:0];
@@ -182,6 +182,7 @@
     stPssProtocolHead *head = (stPssProtocolHead *)data.bytes;
     char *body = (char *)(data.bytes + sizeof(stPssProtocolHead));
     
+    //文件数据
     if (head->type == emPssProtocolType_SendFile) {
         int sizeSpace = sizeof(unsigned long long);
         NSData *fileData = [NSData dataWithBytes:body+sizeSpace length:(data.length - sizeof(stPssProtocolHead)-sizeSpace)];

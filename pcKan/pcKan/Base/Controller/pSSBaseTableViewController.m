@@ -39,7 +39,7 @@
 -(UITableView *)tableView
 {
     if (!_tableView) {
-        CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-kNavigationBarHeight);
+        CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
         UITableView *tableView = [[UITableView alloc] initWithFrame:frame style:_tableViewStyle];
         tableView.delegate = self;
         tableView.dataSource = self;

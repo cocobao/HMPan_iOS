@@ -15,12 +15,15 @@
 #import "pssLinkObj+Api.h"
 #import "UPan_FileExchanger.h"
 #import "EHScSetDefendView.h"
+#import "EHSuspensionFrameTextFieldView.h"
+#import "UPan_MoveToViewController.h"
 
 @interface UPan_PanFileViewController ()<UPanFileDelegate, NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
 @property (nonatomic, strong) NSMutableArray *mDataSource;
 @property (nonatomic, strong) NSString *mCurDir;
 @property (nonatomic, strong) UIButton *mLinkBtn;
+@property (nonatomic, strong) UIButton *mCreateFoldBtn;
 @end
 
 @implementation UPan_PanFileViewController
@@ -46,8 +49,8 @@
     }];
     [self setupFileSource];
     
-//    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:self.mLinkBtn];
-//    self.navigationItem.rightBarButtonItem = leftItem;
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:self.mCreateFoldBtn];
+    self.navigationItem.rightBarButtonItem = leftItem;
     
     [self.navigationController.navigationBar addSubview:self.mLinkBtn];
 }
@@ -73,6 +76,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    //页面消息的时候，注销tcp代理,以及通知，交给下一个页面
     [pssLink removeTcpDelegate:self];
     
     NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
@@ -117,6 +121,7 @@
     [self.mTableView reloadData];
 }
 
+//通知创建新文件
 -(void)ntfCreateNewFile:(NSNotification *)ntf
 {
     UPan_File *uFile = ntf.object;
@@ -132,6 +137,7 @@
     });
 }
 
+//请求pc端接收文件
 -(void)applyRecvFile:(UPan_File *)file
 {
     NSDictionary *dict = @{
@@ -152,7 +158,72 @@
     }];
 }
 
+//重命名文件
+-(void)reNameFile:(UPan_File *)file indexPath:(NSIndexPath *)indexPath
+{
+    EHSuspensionFrameTextFieldView *view = [[EHSuspensionFrameTextFieldView alloc] initWithTitle:@"重命名" placeholder:file.fileName];
+    [view show];
+    WeakSelf(weakSelf);
+    view.didSelectButton = ^(NSInteger index, NSString *text){
+        if (index == 1 && text.length > 0) {
+            if ([text isEqualToString:file.fileName]) {
+                return;
+            }
+            NSArray *arrSrcFile = [UPan_FileMng ContentOfPath:weakSelf.mCurDir];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", text];
+            NSArray *arrTmp = [arrSrcFile filteredArrayUsingPredicate:predicate];
+            if (arrTmp.count > 0){
+                [weakSelf addHub:@"文件名已存在" hide:YES];
+                return;
+            }
+            if (![UPan_FileMng renameFileName:file.fileName toNewName:text atPath:weakSelf.mCurDir]) {
+                [weakSelf addHub:@"重命名失败" hide:YES];
+            }
+            //刷新文件信息以及显示信息
+            file.fileName = text;
+            file.filePath = [weakSelf.mCurDir stringByAppendingPathComponent:text];
+            [weakSelf.mTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    };
+}
+
+//新建文件夹
+-(void)createFoldSction:(UIButton *)sender
+{
+    NSString *placeholder = @"新建文件夹";
+    NSArray *arrSrcFile = [UPan_FileMng ContentOfPath:_mCurDir];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH %@", placeholder];
+    NSArray *arrTmp = [arrSrcFile filteredArrayUsingPredicate:predicate];
+    if (arrTmp.count > 0) {
+        placeholder = [NSString stringWithFormat:@"%@%zd", placeholder, arrTmp.count];
+    }
+    
+    EHSuspensionFrameTextFieldView *view = [[EHSuspensionFrameTextFieldView alloc] initWithTitle:@"新建文件夹" placeholder:placeholder];
+    [view show];
+    WeakSelf(weakSelf);
+    view.didSelectButton = ^(NSInteger index, NSString *text){
+        if (index == 1 && text.length > 0) {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", text];
+            NSArray *arrTmp = [arrSrcFile filteredArrayUsingPredicate:predicate];
+            if (arrTmp.count > 0){
+                [weakSelf addHub:@"文件夹已存在" hide:YES];
+                return;
+            }
+            
+            if (![UPan_FileMng createDir:[weakSelf.mCurDir stringByAppendingPathComponent:text]]) {
+                [weakSelf addHub:@"创建文件夹失败" hide:YES];
+                return;
+            }
+            
+            //刷新文件信息以及显示信息
+            [weakSelf setupFileSource];
+        }
+    };
+
+}
+
 #pragma mark - NetTcpCallback
+//网络状态改变
 - (void)NetStatusChange:(tcpConnectState)state
 {
     WeakSelf(weakSelf);
@@ -171,6 +242,7 @@
     return _mDataSource;
 }
 
+//查看文件
 -(void)didSelectFile:(UPan_File *)file
 {
     if (file.fileType == UPan_FT_Dir) {
@@ -180,11 +252,12 @@
         
     }else if (file.fileType == UPan_FT_Mov){
         pssLocalMoviePlayViewController *vc = [[pssLocalMoviePlayViewController alloc] initWithURL:
-                                               [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", file.filePath]]];
+                                               [NSURL fileURLWithPath:file.filePath]];
         [self pushVc:vc];
     }
 }
 
+//删除文件
 -(void)didDeleteFile:(UPan_File *)file
 {
     [UPan_FileMng deleteFile:file.filePath];
@@ -194,18 +267,28 @@
 
 -(void)accessButtonWithIndex:(NSIndexPath *)indexPath
 {
+    NSArray *arrItems = @[@"重命名", @"发送到电脑", @"移动到", @"取消"];
     EHScSetDefendView *view = [[EHScSetDefendView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)
-                                                                   arr:@[@"发送到电脑", @"取消"]];
+                                                                   arr:arrItems];
     [view show];
     WeakSelf(weakSelf);
     view.didSelectIndex = ^(NSInteger index){
+        if (index == arrItems.count - 1) {
+            return;
+        }
+        
+        UPan_File *file = [weakSelf.mDataSource objectAtIndex:indexPath.row];
         if (index == 0) {
+            [weakSelf reNameFile:file indexPath:indexPath];
+        }else if (index == 1) {
             if ([pssLink tcpLinkStatus] != tcpConnect_ConnectOk) {
                 [weakSelf addHub:@"请先连接电脑客户端" hide:YES];
                 return;
             }
-            UPan_File *file = [weakSelf.mDataSource objectAtIndex:indexPath.row];
             [weakSelf applyRecvFile:file];
+        }else if (index == 2){
+            UPan_MoveToViewController *vc = [[UPan_MoveToViewController alloc] init];
+            [weakSelf presentVc:vc];
         }
     };
 }
@@ -230,6 +313,18 @@
         _mLinkBtn = btn;
     }
     return _mLinkBtn;
+}
+
+-(UIButton *)mCreateFoldBtn
+{
+    if (!_mCreateFoldBtn) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.backgroundColor = [UIColor orangeColor];
+        btn.frame = CGRectMake(0, 0, 30, 30);
+        [btn addTarget:self action:@selector(createFoldSction:) forControlEvents:UIControlEventTouchUpInside];
+        _mCreateFoldBtn = btn;
+    }
+    return _mCreateFoldBtn;
 }
 
 -(NSString *)mCurDir

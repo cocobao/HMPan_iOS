@@ -62,7 +62,7 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
                                                             message:@"请在iPhone的(设置-隐私-相机)设置允许使用摄像机"
                                                            delegate:self
-                                                  cancelButtonTitle:@"取消"
+                                                  cancelButtonTitle:@"确定"
                                                   otherButtonTitles:nil, nil];
         [alertView show];
         return NO;

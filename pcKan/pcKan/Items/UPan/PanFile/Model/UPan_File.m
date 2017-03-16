@@ -47,9 +47,10 @@
             [_fileName hasSuffix:@".mp4"] ||
             [_fileName hasSuffix:@".mkv"]) {
             _fileType = UPan_FT_Mov;
-        }else{
-            AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", _filePath]]
-                                                 options:nil];
+        }
+        else{
+            //文件是否有视频轨道
+            AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:_filePath] options:nil];
             NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
             if ([tracks count] > 0) {
                 _fileType = UPan_FT_Mov;

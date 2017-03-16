@@ -10,7 +10,7 @@
 #import "UPan_FileMng.h"
 #import "pssProtocolType.h"
 
-static const NSInteger MaxReadSize = (1024*1024);
+static const NSInteger MaxReadSize = (1024*512);
 
 @interface UPan_FileSender ()
 @property (nonatomic, strong) NSString *filePath;
@@ -83,7 +83,7 @@ static const NSInteger MaxReadSize = (1024*1024);
         NSData *reData = [self resetForSendData:data fid:fileSender.mFileId];
         [pssLink sendFileData:reData];
 //        NSLog(@"send size:%zd", reData.length);
-        usleep(50000);
+        usleep(80000);
     }
     
     [fileHandle closeFile];

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8421FF6A1E694FDE0054E8CA /* UPan_AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF691E694FDE0054E8CA /* UPan_AlbumViewController.m */; };
 		8421FF6F1E69540D0054E8CA /* UPan_PanFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */; };
 		8421FF761E695DD00054E8CA /* UPan_File.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF751E695DD00054E8CA /* UPan_File.m */; };
 		8421FF7D1E696C120054E8CA /* UPan_FileTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */; };
@@ -122,6 +121,15 @@
 		84CA18C91E729508000CFA9F /* UPan_FileSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA18C81E729508000CFA9F /* UPan_FileSender.m */; };
 		84CB87801E6FD32A00DCE909 /* UIAlertView+RWBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */; };
 		84CB878F1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB878E1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m */; };
+		84F65F9D1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65F9C1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m */; };
+		84F65FA21E7A5F6500F643EE /* UPan_MoveToViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FA11E7A5F6500F643EE /* UPan_MoveToViewController.m */; };
+		84F65FB61E7A7B3A00F643EE /* pSSAlbumDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FA71E7A7B3A00F643EE /* pSSAlbumDetailViewController.m */; };
+		84F65FB71E7A7B3A00F643EE /* pSSAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FA91E7A7B3A00F643EE /* pSSAlbumViewController.m */; };
+		84F65FB81E7A7B3A00F643EE /* pSSAlbumAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FAC1E7A7B3A00F643EE /* pSSAlbumAsset.m */; };
+		84F65FB91E7A7B3A00F643EE /* pSSAlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FAE1E7A7B3A00F643EE /* pSSAlbumModel.m */; };
+		84F65FBA1E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FB11E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.m */; };
+		84F65FBB1E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FB31E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.m */; };
+		84F65FBC1E7A7B3A00F643EE /* pSSAlbumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FB51E7A7B3A00F643EE /* pSSAlbumTableViewCell.m */; };
 		84F7989A1E6CFA1600CF871A /* UPan_FileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F798991E6CFA1600CF871A /* UPan_FileTableViewCell.m */; };
 		84F798A31E6D15C800CF871A /* UPan_CellMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F798A21E6D15C800CF871A /* UPan_CellMode.m */; };
 /* End PBXBuildFile section */
@@ -144,8 +152,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8421FF681E694FDE0054E8CA /* UPan_AlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_AlbumViewController.h; sourceTree = "<group>"; };
-		8421FF691E694FDE0054E8CA /* UPan_AlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_AlbumViewController.m; sourceTree = "<group>"; };
 		8421FF6D1E69540D0054E8CA /* UPan_PanFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_PanFileViewController.h; sourceTree = "<group>"; };
 		8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_PanFileViewController.m; sourceTree = "<group>"; };
 		8421FF741E695DD00054E8CA /* UPan_File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_File.h; sourceTree = "<group>"; };
@@ -362,6 +368,24 @@
 		84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+RWBlock.m"; sourceTree = "<group>"; };
 		84CB878D1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+pSSAddition.h"; sourceTree = "<group>"; };
 		84CB878E1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+pSSAddition.m"; sourceTree = "<group>"; };
+		84F65F9B1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EHSuspensionFrameTextFieldView.h; sourceTree = "<group>"; };
+		84F65F9C1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EHSuspensionFrameTextFieldView.m; sourceTree = "<group>"; };
+		84F65FA01E7A5F6500F643EE /* UPan_MoveToViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_MoveToViewController.h; sourceTree = "<group>"; };
+		84F65FA11E7A5F6500F643EE /* UPan_MoveToViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_MoveToViewController.m; sourceTree = "<group>"; };
+		84F65FA61E7A7B3A00F643EE /* pSSAlbumDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAlbumDetailViewController.h; sourceTree = "<group>"; };
+		84F65FA71E7A7B3A00F643EE /* pSSAlbumDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAlbumDetailViewController.m; sourceTree = "<group>"; };
+		84F65FA81E7A7B3A00F643EE /* pSSAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAlbumViewController.h; sourceTree = "<group>"; };
+		84F65FA91E7A7B3A00F643EE /* pSSAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAlbumViewController.m; sourceTree = "<group>"; };
+		84F65FAB1E7A7B3A00F643EE /* pSSAlbumAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAlbumAsset.h; sourceTree = "<group>"; };
+		84F65FAC1E7A7B3A00F643EE /* pSSAlbumAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAlbumAsset.m; sourceTree = "<group>"; };
+		84F65FAD1E7A7B3A00F643EE /* pSSAlbumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAlbumModel.h; sourceTree = "<group>"; };
+		84F65FAE1E7A7B3A00F643EE /* pSSAlbumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAlbumModel.m; sourceTree = "<group>"; };
+		84F65FB01E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAlbumDetailCollectionView.h; sourceTree = "<group>"; };
+		84F65FB11E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAlbumDetailCollectionView.m; sourceTree = "<group>"; };
+		84F65FB21E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAlbumDetailCollectionViewCell.h; sourceTree = "<group>"; };
+		84F65FB31E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAlbumDetailCollectionViewCell.m; sourceTree = "<group>"; };
+		84F65FB41E7A7B3A00F643EE /* pSSAlbumTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSAlbumTableViewCell.h; sourceTree = "<group>"; };
+		84F65FB51E7A7B3A00F643EE /* pSSAlbumTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSAlbumTableViewCell.m; sourceTree = "<group>"; };
 		84F798981E6CFA1600CF871A /* UPan_FileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileTableViewCell.h; sourceTree = "<group>"; };
 		84F798991E6CFA1600CF871A /* UPan_FileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileTableViewCell.m; sourceTree = "<group>"; };
 		84F798A11E6D15C800CF871A /* UPan_CellMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_CellMode.h; sourceTree = "<group>"; };
@@ -397,19 +421,9 @@
 			isa = PBXGroup;
 			children = (
 				8421FF771E69620F0054E8CA /* FileMng */,
-				8421FF5D1E694F960054E8CA /* Album */,
 				8421FF631E694F960054E8CA /* PanFile */,
 			);
 			path = UPan;
-			sourceTree = "<group>";
-		};
-		8421FF5D1E694F960054E8CA /* Album */ = {
-			isa = PBXGroup;
-			children = (
-				8421FF681E694FDE0054E8CA /* UPan_AlbumViewController.h */,
-				8421FF691E694FDE0054E8CA /* UPan_AlbumViewController.m */,
-			);
-			path = Album;
 			sourceTree = "<group>";
 		};
 		8421FF631E694F960054E8CA /* PanFile */ = {
@@ -425,6 +439,8 @@
 		8421FF6B1E69540D0054E8CA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				84F65F9B1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.h */,
+				84F65F9C1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m */,
 				8421FF7B1E696C110054E8CA /* UPan_FileTableView.h */,
 				8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */,
 				84F798981E6CFA1600CF871A /* UPan_FileTableViewCell.h */,
@@ -438,6 +454,8 @@
 			children = (
 				8421FF6D1E69540D0054E8CA /* UPan_PanFileViewController.h */,
 				8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */,
+				84F65FA01E7A5F6500F643EE /* UPan_MoveToViewController.h */,
+				84F65FA11E7A5F6500F643EE /* UPan_MoveToViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -536,16 +554,15 @@
 				84A24D771E58522F00B96A36 /* AppDelegate.m */,
 				84A24EE11E5ABD0900B96A36 /* User */,
 				84A24E591E5ABA7500B96A36 /* Net */,
-				84A24DFE1E5ABA7500B96A36 /* Base */,
-				84A24E0B1E5ABA7500B96A36 /* Base.lproj */,
-				84A24E101E5ABA7500B96A36 /* comViews */,
 				84A24E151E5ABA7500B96A36 /* Items */,
 				84A24E551E5ABA7500B96A36 /* Main */,
 				84A24E681E5ABA7500B96A36 /* utility */,
+				84A24E101E5ABA7500B96A36 /* comViews */,
+				84A24DFE1E5ABA7500B96A36 /* Base */,
+				84A24E0B1E5ABA7500B96A36 /* Base.lproj */,
 				84A24D7F1E58522F00B96A36 /* Assets.xcassets */,
 				84A24D841E58522F00B96A36 /* Info.plist */,
 				84A24D731E58522F00B96A36 /* Supporting Files */,
-				84A24EC21E5ABB4000B96A36 /* Other */,
 			);
 			path = pcKan;
 			sourceTree = "<group>";
@@ -798,6 +815,7 @@
 		84A24E151E5ABA7500B96A36 /* Items */ = {
 			isa = PBXGroup;
 			children = (
+				84F65FA41E7A7B3A00F643EE /* Album */,
 				8421FF5C1E694F960054E8CA /* UPan */,
 				84A24E201E5ABA7500B96A36 /* mine */,
 				84A24E161E5ABA7500B96A36 /* Local */,
@@ -1022,21 +1040,6 @@
 			path = utility;
 			sourceTree = "<group>";
 		};
-		84A24EC21E5ABB4000B96A36 /* Other */ = {
-			isa = PBXGroup;
-			children = (
-				84A24EC31E5ABB4000B96A36 /* Category */,
-			);
-			path = Other;
-			sourceTree = "<group>";
-		};
-		84A24EC31E5ABB4000B96A36 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Category;
-			sourceTree = "<group>";
-		};
 		84A24EE11E5ABD0900B96A36 /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -1053,6 +1056,51 @@
 				84A24EED1E5ABE0D00B96A36 /* IJKMediaFrameworkTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		84F65FA41E7A7B3A00F643EE /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				84F65FA51E7A7B3A00F643EE /* Controller */,
+				84F65FAA1E7A7B3A00F643EE /* Model */,
+				84F65FAF1E7A7B3A00F643EE /* Views */,
+			);
+			path = Album;
+			sourceTree = "<group>";
+		};
+		84F65FA51E7A7B3A00F643EE /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				84F65FA61E7A7B3A00F643EE /* pSSAlbumDetailViewController.h */,
+				84F65FA71E7A7B3A00F643EE /* pSSAlbumDetailViewController.m */,
+				84F65FA81E7A7B3A00F643EE /* pSSAlbumViewController.h */,
+				84F65FA91E7A7B3A00F643EE /* pSSAlbumViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		84F65FAA1E7A7B3A00F643EE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				84F65FAB1E7A7B3A00F643EE /* pSSAlbumAsset.h */,
+				84F65FAC1E7A7B3A00F643EE /* pSSAlbumAsset.m */,
+				84F65FAD1E7A7B3A00F643EE /* pSSAlbumModel.h */,
+				84F65FAE1E7A7B3A00F643EE /* pSSAlbumModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		84F65FAF1E7A7B3A00F643EE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				84F65FB01E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.h */,
+				84F65FB11E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.m */,
+				84F65FB21E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.h */,
+				84F65FB31E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.m */,
+				84F65FB41E7A7B3A00F643EE /* pSSAlbumTableViewCell.h */,
+				84F65FB51E7A7B3A00F643EE /* pSSAlbumTableViewCell.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1154,17 +1202,21 @@
 			files = (
 				84A24EBA1E5ABA7500B96A36 /* EHTcpLinkObj.m in Sources */,
 				84A24E761E5ABA7500B96A36 /* AFURLRequestSerialization.m in Sources */,
+				84F65FB61E7A7B3A00F643EE /* pSSAlbumDetailViewController.m in Sources */,
 				84A24E7F1E5ABA7500B96A36 /* UIImageView+AFNetworking.m in Sources */,
 				84A24EF31E5ABFD800B96A36 /* g711.m in Sources */,
 				84A24E751E5ABA7500B96A36 /* AFURLConnectionOperation.m in Sources */,
+				84F65FBC1E7A7B3A00F643EE /* pSSAlbumTableViewCell.m in Sources */,
 				84A24E741E5ABA7500B96A36 /* AFSecurityPolicy.m in Sources */,
 				84A24E8F1E5ABA7500B96A36 /* NSObject+MJKeyValue.m in Sources */,
 				84A24EB21E5ABA7500B96A36 /* pssMovieConfig.m in Sources */,
 				84A24E801E5ABA7500B96A36 /* UIProgressView+AFNetworking.m in Sources */,
+				84F65FBB1E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.m in Sources */,
 				84A24EA51E5ABA7500B96A36 /* pSSSystemACCapture.m in Sources */,
 				84A24E701E5ABA7500B96A36 /* AFHTTPRequestOperation.m in Sources */,
 				84A24E951E5ABA7500B96A36 /* UIScrollView+Extension.m in Sources */,
 				84A24E961E5ABA7500B96A36 /* UIScrollView+MJRefresh.m in Sources */,
+				84F65FB71E7A7B3A00F643EE /* pSSAlbumViewController.m in Sources */,
 				84A24E871E5ABA7500B96A36 /* AsyncUdpSocket.m in Sources */,
 				84A24EA71E5ABA7500B96A36 /* pSSLiveViewController.m in Sources */,
 				84A24EB31E5ABA7500B96A36 /* pssMovieView.m in Sources */,
@@ -1176,6 +1228,7 @@
 				84A24EBC1E5ABA7500B96A36 /* GCDMulticastDelegate.m in Sources */,
 				84A24EAC1E5ABA7500B96A36 /* KxAudioManager.m in Sources */,
 				84F7989A1E6CFA1600CF871A /* UPan_FileTableViewCell.m in Sources */,
+				84F65FBA1E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.m in Sources */,
 				84A24EA01E5ABA7500B96A36 /* pSSFlatButton.m in Sources */,
 				848E775C1E5BDC9B005A724A /* kanItemView.m in Sources */,
 				84A24E881E5ABA7500B96A36 /* MBProgressHUD.m in Sources */,
@@ -1210,6 +1263,7 @@
 				84A24E821E5ABA7500B96A36 /* UIWebView+AFNetworking.m in Sources */,
 				84A24E8D1E5ABA7500B96A36 /* NSObject+MJCoding.m in Sources */,
 				84A24EBD1E5ABA7500B96A36 /* pssLinkObj+Api.m in Sources */,
+				84F65FA21E7A5F6500F643EE /* UPan_MoveToViewController.m in Sources */,
 				84F798A31E6D15C800CF871A /* UPan_CellMode.m in Sources */,
 				84A24E9B1E5ABA7500B96A36 /* pSSBaseTableHeaderFooterView.m in Sources */,
 				84A24EB81E5ABA7500B96A36 /* pssMineViewController.m in Sources */,
@@ -1226,6 +1280,7 @@
 				8465B6C71E76BE6A00EC0186 /* LZHProgressSlider.m in Sources */,
 				84A24EB91E5ABA7500B96A36 /* pSSMainTabbarViewController.m in Sources */,
 				84A24E991E5ABA7500B96A36 /* pSSBaseTableViewController.m in Sources */,
+				84F65FB81E7A7B3A00F643EE /* pSSAlbumAsset.m in Sources */,
 				84A24E7D1E5ABA7500B96A36 /* UIAlertView+AFNetworking.m in Sources */,
 				8421FF6F1E69540D0054E8CA /* UPan_PanFileViewController.m in Sources */,
 				84A24EA41E5ABA7500B96A36 /* pSSAVConfig.m in Sources */,
@@ -1237,7 +1292,6 @@
 				84A24EB11E5ABA7500B96A36 /* pSSDecoder.m in Sources */,
 				84A24E721E5ABA7500B96A36 /* AFHTTPSessionManager.m in Sources */,
 				848E774C1E5B082D005A724A /* AQPlayer.mm in Sources */,
-				8421FF6A1E694FDE0054E8CA /* UPan_AlbumViewController.m in Sources */,
 				84A24E911E5ABA7500B96A36 /* MJRefreshBaseView.m in Sources */,
 				84A24EC01E5ABA7500B96A36 /* pSSCommodMethod.m in Sources */,
 				84A24E7B1E5ABA7500B96A36 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -1246,8 +1300,10 @@
 				84A24E8B1E5ABA7500B96A36 /* MJIvar.m in Sources */,
 				8465B6CA1E76BE9700EC0186 /* XYVideoModel.m in Sources */,
 				84A24EA11E5ABA7500B96A36 /* pssPCFileViewController.m in Sources */,
+				84F65FB91E7A7B3A00F643EE /* pSSAlbumModel.m in Sources */,
 				84A24EBB1E5ABA7500B96A36 /* EHUdpLinkObj.m in Sources */,
 				84A24E731E5ABA7500B96A36 /* AFNetworkReachabilityManager.m in Sources */,
+				84F65F9D1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m in Sources */,
 				84A24D751E58522F00B96A36 /* main.m in Sources */,
 				84A24E9A1E5ABA7500B96A36 /* pSSBaseViewController.m in Sources */,
 			);

@@ -60,6 +60,7 @@
     return [[NSFileManager defaultManager] attributesOfItemAtPath:file error:nil];
 }
 
+//创建文件夹
 +(BOOL)createDir:(NSString *)path
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
@@ -122,4 +123,20 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     return [fileManager displayNameAtPath:path];
 }
+
+//文件重命名
++(BOOL)renameFileName:(NSString *)oldName toNewName:(NSString *)newName atPath:(NSString *)path
+{
+    
+    BOOL result = NO;
+    NSError * error = nil;
+    result = [[NSFileManager defaultManager] moveItemAtPath:[path stringByAppendingPathComponent:oldName] toPath:[path stringByAppendingPathComponent:newName] error:&error];
+    if (error){
+        NSLog(@"重命名失败：%@",[error localizedDescription]);
+    }
+    
+    return result;
+}
+
+
 @end
