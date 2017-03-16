@@ -30,6 +30,9 @@
     NSDictionary *numberOfAssetsAttribute = @{NSForegroundColorAttributeName:[UIColor grayColor],
                                               NSFontAttributeName:[UIFont systemFontOfSize:17]};
     NSString *groupTitle = [_mAssetGroup valueForProperty:ALAssetsGroupPropertyName];
+    if ([groupTitle isEqualToString:@"Camera Roll"]) {
+        groupTitle = @"相机胶卷";
+    }
     long numberOfAssets = _mAssetGroup.numberOfAssets;
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@(%ld)",groupTitle,numberOfAssets] attributes:numberOfAssetsAttribute];
     [attributedString addAttributes:groupTitleAttribute range:NSMakeRange(0, groupTitle.length)];

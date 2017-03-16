@@ -75,4 +75,11 @@
     return cell;
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(AlbumDetail_didSelectionWithIndexPath:)]) {
+        [self.m_delegate AlbumDetail_didSelectionWithIndexPath:indexPath];
+    }
+}
+
 @end

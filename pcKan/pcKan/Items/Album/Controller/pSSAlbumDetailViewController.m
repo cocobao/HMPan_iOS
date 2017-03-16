@@ -9,6 +9,7 @@
 #import "pSSAlbumDetailViewController.h"
 #import "pSSAlbumDetailCollectionView.h"
 #import "pSSAlbumAsset.h"
+#import "pSSPictureViewController.h"
 
 @interface pSSAlbumDetailViewController ()<AlbumDetailCollectionViewDelegate>
 @property (nonatomic, strong) pSSAlbumDetailCollectionView *mCollectionView;
@@ -54,7 +55,9 @@
 
 -(void)AlbumDetail_didSelectionWithIndexPath:(NSIndexPath *)indexPath
 {
-    
+    pSSAlbumModel *model = [_mArrayDataSource objectAtIndex:indexPath.item];
+    pSSPictureViewController *vc = [[pSSPictureViewController alloc] initWithAsset:model];
+    [self pushVc:vc];
 }
 
 -(NSArray *)mArrayDataSource
