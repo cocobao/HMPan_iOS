@@ -19,5 +19,7 @@
 @property (nonatomic, weak) id<picFileSenderDelegate> m_delegate;
 
 -(instancetype)initWithFilePath:(NSString *)filePath fileId:(NSInteger)fileId;
+-(instancetype)initWithFileData:(NSData *)fileData fileId:(NSInteger)fileId fileName:(NSString *)fileName;
+
 -(void)cancel;
 @end

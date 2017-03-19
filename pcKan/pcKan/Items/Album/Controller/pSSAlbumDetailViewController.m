@@ -25,12 +25,27 @@
     [self loadData];
 }
 
+-(void)setMAssetGroup:(ALAssetsGroup *)mAssetGroup
+{
+    _mAssetGroup = mAssetGroup;
+    
+    //设置相册页面的标题
+    NSString *groupTitle = [mAssetGroup valueForProperty:ALAssetsGroupPropertyName];
+    if ([groupTitle isEqualToString:@"Camera Roll"]) {
+        groupTitle = @"相机胶卷";
+    }
+    self.title = groupTitle;
+}
+
+//加载数据
 -(void)loadData
 {
+    //是否有访问相册权限
     if (![pSSCommodMethod sysPhotoLibraryIsAuthok]) {
         return;
     }
     
+    //加载相册资源
     WeakSelf(weakSelf);
     [[pSSAlbumAsset shareInstance] setupAlbumAssets:_mAssetGroup withAssets:^(NSMutableArray *assets) {
         weakSelf.mArrayDataSource = assets;
@@ -55,8 +70,9 @@
 
 -(void)AlbumDetail_didSelectionWithIndexPath:(NSIndexPath *)indexPath
 {
-    pSSAlbumModel *model = [_mArrayDataSource objectAtIndex:indexPath.item];
-    pSSPictureViewController *vc = [[pSSPictureViewController alloc] initWithAsset:model];
+    //点击查看某一张照片, 跳转到查看照片的页面
+    pSSPictureViewController *vc = [[pSSPictureViewController alloc] initWithAssetGroup:self.mArrayDataSource
+                                                                                atIndex:indexPath.item];
     [self pushVc:vc];
 }
 

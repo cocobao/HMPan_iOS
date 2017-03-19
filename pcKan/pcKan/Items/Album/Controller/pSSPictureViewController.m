@@ -7,18 +7,28 @@
 //
 
 #import "pSSPictureViewController.h"
+#import "pssLinkObj+Api.h"
+#import "UPan_FileExchanger.h"
+#import "UIAlertView+RWBlock.h"
+#import "pSSAlbumModel.h"
+#import "pSSPictureCollectionView.h"
 
-@interface pSSPictureViewController ()<UIScrollViewDelegate>
-@property (nonatomic, weak) pSSAlbumModel *mAssetModel;
-@property (nonatomic, strong) UIImageView *mImageview;
-@property (nonatomic, strong) UIScrollView *mScrollView;
+@interface pSSPictureViewController ()<PictureCollectionViewDelegate>
+{
+    NSInteger _atIndex;
+}
+@property (nonatomic, strong) pSSPictureCollectionView *mCollectionView;
+@property (nonatomic, strong) UILabel *mDateLabel;
+@property (nonatomic, strong) UIButton *mRightBtn;
+@property (nonatomic, weak) NSArray *mArrAssetSource;
 @end
 
 @implementation pSSPictureViewController
--(instancetype)initWithAsset:(pSSAlbumModel *)assetModel
+-(instancetype)initWithAssetGroup:(NSArray *)assetGroup atIndex:(NSInteger)atIndex
 {
     if (self = [super init]) {
-        _mAssetModel = assetModel;
+        _atIndex = atIndex;
+        _mArrAssetSource = assetGroup;
     }
     return self;
 }
@@ -26,107 +36,137 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.mScrollView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight-kTopBarHeight);
-    self.mImageview.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*9/16);
+    self.mDateLabel.frame = CGRectMake(0, kScreenHeight - kTopBarHeight - 30, kScreenWidth, 30);
+    self.mRightBtn.frame = CGRectMake(0, 0, 40, 40);
+    [self.view addSubview:self.mCollectionView];
+    [self.mCollectionView setContentOffset:CGPointMake(_atIndex*kScreenWidth, 0)];
     
-    [self setImage];
-    
-    [self.mScrollView setMinimumZoomScale:1];
-    [self.mScrollView setZoomScale:1];
-    [self.mScrollView setMaximumZoomScale:100];
-    
-    self.mImageview.userInteractionEnabled = YES;
-    UITapGestureRecognizer* tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesAction:)];
-    [self.mImageview addGestureRecognizer:tap];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:self.mRightBtn];
+    self.navigationItem.rightBarButtonItem = leftItem;
 }
 
--(void)tapGesAction:(UIGestureRecognizer*)gestureRecognizer
+-(void)rightBtnAction:(UIButton *)sender
 {
-    float newscale=0.2*1.5;
-    CGRect zoomRect = [self zoomRectForScale:newscale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
-    [self.mScrollView zoomToRect:zoomRect animated:YES];
-}
-
--(void)setImage
-{
-    //获取资源图片的详细资源信息
-    ALAssetRepresentation* representation = [_mAssetModel.asset defaultRepresentation];
+    //是否连接正常
+    if ([pssLink tcpLinkStatus] != tcpConnect_ConnectOk) {
+        [self addHub:@"请先连接电脑客户端" hide:YES];
+        return;
+    }
     
-    //获取资源图片的高清图
-    CGImageRef cgImage = [representation fullResolutionImage];
-    self.mImageview.image = [UIImage imageWithCGImage:cgImage];
-    
-    //获取资源图片的长宽
-    CGSize dimension = [representation dimensions];
-    CGRect frame = _mImageview.frame;
-    
-    //宽图
-    if (dimension.width > dimension.height) {
-        if (dimension.width > kScreenWidth) {
-            frame.size.width = kScreenWidth;
-            frame.size.height = dimension.height*kScreenWidth/dimension.width;
-        }else{
-            frame.size.width = dimension.width;
-            frame.size.height = dimension.height;
+    UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                   message:[NSString stringWithFormat:@"发送照片:%@ 到电脑", self.title]
+                                                  delegate:nil
+                                         cancelButtonTitle:@"取消"
+                                         otherButtonTitles:@"确定", nil];
+//    WeakSelf(weakSelf);
+    [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
+        if (btnIndex == 1) {
+//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                [weakSelf applyRecvFile];
+//            });
         }
-        _mImageview.frame = frame;
-        self.mImageview.center = CGPointMake(kScreenWidth/2, kScreenHeight/2-kTopBarHeight);
-    }else{
-        //长图
-        CGFloat maxHeight = kScreenHeight-kTopBarHeight;
-        if (dimension.height > maxHeight) {
-            frame.size.height = maxHeight;
-            frame.size.width = dimension.width*maxHeight/dimension.height;
-        }else{
-            frame.size.width = dimension.width;
-            frame.size.height = dimension.height;
-        }
-        _mImageview.frame = frame;
-        self.mImageview.center = CGPointMake(kScreenWidth/2, (kScreenHeight-kTopBarHeight)/2);
-    }
+    }];
+    [view show];
 }
 
-- (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center {
-    CGRect zoomRect;
-    // the zoom rect is in the content view's coordinates.
-    // At a zoom scale of 1.0, it would be the size of the imageScrollView's bounds.
-    // As the zoom scale decreases, so more content is visible, the size of the rect grows.
-    zoomRect.size.height = [self.mScrollView frame].size.height / scale;
-    zoomRect.size.width  = [self.mScrollView frame].size.width  / scale;
-    
-    // choose an origin so as to get the right center.
-    zoomRect.origin.x    = center.x - (zoomRect.size.width  / 2.0);
-    // zoomRect.origin.x=center.x;
-    // zoomRect.origin.y=center.y;
-    zoomRect.origin.y    = center.y - (zoomRect.size.height / 2.0);
-    
-    return zoomRect;
-}
-
-- (nullable UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+-(NSArray *)PictureCollection_DataSource;
 {
-    return self.mImageview;
+    return self.mArrAssetSource;
 }
 
--(UIScrollView *)mScrollView
+-(void)nowDisplayCellIndex:(NSIndexPath *)indexPath
 {
-    if (!_mScrollView) {
-        UIScrollView *view = [[UIScrollView alloc] init];
-        view.delegate = self;
-        [self.view addSubview:view];
-        _mScrollView = view;
-    }
-    return _mScrollView;
+    WeakSelf(weakSelf);
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        pSSAlbumModel *mAssetModel = [weakSelf.mArrAssetSource objectAtIndex:indexPath.item];
+        
+        //获取资源图片的详细资源信息
+        ALAssetRepresentation* representation = [mAssetModel.asset defaultRepresentation];
+        
+        //获取资源图片的名字
+        NSString* filename = [representation filename];
+        
+        //获取图片生成时间
+        NSDate* pictureDate = [mAssetModel.asset valueForProperty:ALAssetPropertyDate];
+        NSDateFormatter * formatter = [[NSDateFormatter alloc]init];
+        formatter.dateFormat = @"- yyyy-MM-dd HH:mm:ss -";
+        formatter.timeZone = [NSTimeZone localTimeZone];//要换成本地的时区，才能获得正确的时间
+        NSString * pictureTime = [formatter stringFromDate:pictureDate];
+        
+        CGImageRef cgImage = [representation fullResolutionImage];
+        UIImage *image = [UIImage imageWithCGImage:cgImage];
+        
+        //获取图片大小
+        NSInteger cup = [pSSCommodMethod imageDataSize:image];
+        NSString *fileSize = [pSSCommodMethod exchangeSize:(CGFloat)cup];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.title = filename;
+            weakSelf.mDateLabel.text = [NSString stringWithFormat:@"%@ %@ -", pictureTime, fileSize];
+        });
+    });
 }
 
--(UIImageView *)mImageview
+////请求pc端接收文件
+//-(void)applyRecvFile:(pSSAlbumModel *)modelData
+//{
+//    //获取资源图片的详细资源信息
+//    ALAssetRepresentation* representation = [modelData.asset defaultRepresentation];
+//    
+//    NSString* filename = [representation filename];
+//    
+//    //UIImage图片转为NSDate数据
+//    NSData *imageData = UIImagePNGRepresentation(self.mImageview.image);
+//
+//    [pssLink NetApi_ApplyRecvFile:@{ptl_fileName:filename,ptl_fileSize:@(imageData.length)}
+//                            block:^(NSDictionary *message, NSError *error) {
+//        if (error) {
+//            return;
+//        }
+//        NSInteger code = [message[ptl_status] integerValue];
+//        if (code != _SUCCESS_CODE) {
+//            NSLog(@"%@", message);
+//            return;
+//        }
+//        NSInteger fileId = [message[ptl_fileId] integerValue];
+//        
+//        [FileExchanger addSendingFileData:imageData fileId:fileId fileName:filename];
+//    }];
+//}
+
+-(pSSPictureCollectionView *)mCollectionView
 {
-    if (!_mImageview) {
-        UIImageView *view = [[UIImageView alloc] init];
-        [self.mScrollView addSubview:view];
-        _mImageview = view;
+    if (!_mCollectionView) {
+        pSSPictureCollectionView *view = [[pSSPictureCollectionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-NAVBAR_H-30)];
+        view.m_delegate = self;
+        _mCollectionView = view;
     }
-    return _mImageview;
+    return _mCollectionView;
+}
+
+-(UILabel *)mDateLabel
+{
+    if (!_mDateLabel) {
+        UILabel *label = [[UILabel alloc] init];
+        label.font = kFont(15);
+        label.textColor = Color_5a5a5a;
+        label.textAlignment = NSTextAlignmentCenter;
+        [self.view addSubview:label];
+        _mDateLabel = label;
+    }
+    return _mDateLabel;
+}
+
+-(UIButton *)mRightBtn
+{
+    if (!_mRightBtn) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn setTitle:@"发送" forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(rightBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+        _mRightBtn = btn;
+    }
+    return _mRightBtn;
 }
 
 @end

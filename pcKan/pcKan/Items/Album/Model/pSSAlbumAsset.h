@@ -19,6 +19,7 @@ typedef void (^albumAssetsBlock)(NSMutableArray *assets);
 @property (nonatomic,strong) NSMutableArray *groups;
 @property (nonatomic,strong) NSMutableArray *assets;
 +(pSSAlbumAsset *)shareInstance;
++(UIImage *)assetsForImageWithPath:(NSString *)path;
 -(void)setupAlbumGroups:(albumGroupsBlock)albumGroups;
 -(void)setupAlbumAssets:(ALAssetsGroup *)group withAssets:(albumAssetsBlock)albumAssets;
 @end

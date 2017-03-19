@@ -7,8 +7,7 @@
 //
 
 #import "pSSBaseViewController.h"
-#import "pSSAlbumModel.h"
 
 @interface pSSPictureViewController : pSSBaseViewController
--(instancetype)initWithAsset:(pSSAlbumModel *)assetModel;
+-(instancetype)initWithAssetGroup:(NSArray *)assetGroup atIndex:(NSInteger)atIndex;
 @end

@@ -119,6 +119,8 @@
 		84A24EE41E5ABD0900B96A36 /* pssUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24EE31E5ABD0900B96A36 /* pssUserInfo.m */; };
 		84A24EEE1E5ABE9F00B96A36 /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A24EEB1E5ABE0D00B96A36 /* IJKMediaFramework.framework */; };
 		84A24EF31E5ABFD800B96A36 /* g711.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24EF21E5ABFD800B96A36 /* g711.m */; };
+		84B961CD1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B961CC1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m */; };
+		84B961D21E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B961D11E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m */; };
 		84CA18C91E729508000CFA9F /* UPan_FileSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA18C81E729508000CFA9F /* UPan_FileSender.m */; };
 		84CB87801E6FD32A00DCE909 /* UIAlertView+RWBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */; };
 		84CB878F1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB878E1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m */; };
@@ -365,6 +367,10 @@
 		84A24EE51E5ABE0D00B96A36 /* IJKMediaPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IJKMediaPlayer.xcodeproj; path = ijkPlayer/ios/IJKMediaPlayer/IJKMediaPlayer.xcodeproj; sourceTree = "<group>"; };
 		84A24EF21E5ABFD800B96A36 /* g711.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = g711.m; sourceTree = "<group>"; };
 		84A24EF41E5ABFE900B96A36 /* g711.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = g711.h; sourceTree = "<group>"; };
+		84B961CB1E7EB6FC00E29BF4 /* pSSPictureCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSPictureCollectionView.h; sourceTree = "<group>"; };
+		84B961CC1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSPictureCollectionView.m; sourceTree = "<group>"; };
+		84B961D01E7EB72900E29BF4 /* pSSPictureCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSPictureCollectionViewCell.h; sourceTree = "<group>"; };
+		84B961D11E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSPictureCollectionViewCell.m; sourceTree = "<group>"; };
 		84CA18C71E729508000CFA9F /* UPan_FileSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileSender.h; sourceTree = "<group>"; };
 		84CA18C81E729508000CFA9F /* UPan_FileSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileSender.m; sourceTree = "<group>"; };
 		84CB877E1E6FD32A00DCE909 /* UIAlertView+RWBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+RWBlock.h"; sourceTree = "<group>"; };
@@ -1098,6 +1104,10 @@
 		84F65FAF1E7A7B3A00F643EE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				84B961CB1E7EB6FC00E29BF4 /* pSSPictureCollectionView.h */,
+				84B961CC1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m */,
+				84B961D01E7EB72900E29BF4 /* pSSPictureCollectionViewCell.h */,
+				84B961D11E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m */,
 				84F65FB01E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.h */,
 				84F65FB11E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.m */,
 				84F65FB21E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.h */,
@@ -1207,6 +1217,7 @@
 			files = (
 				84A24EBA1E5ABA7500B96A36 /* EHTcpLinkObj.m in Sources */,
 				84A24E761E5ABA7500B96A36 /* AFURLRequestSerialization.m in Sources */,
+				84B961CD1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m in Sources */,
 				84F65FB61E7A7B3A00F643EE /* pSSAlbumDetailViewController.m in Sources */,
 				84A24E7F1E5ABA7500B96A36 /* UIImageView+AFNetworking.m in Sources */,
 				84A24EF31E5ABFD800B96A36 /* g711.m in Sources */,
@@ -1227,6 +1238,7 @@
 				84A24EB31E5ABA7500B96A36 /* pssMovieView.m in Sources */,
 				84A24E781E5ABA7500B96A36 /* AFURLSessionManager.m in Sources */,
 				84A24E771E5ABA7500B96A36 /* AFURLResponseSerialization.m in Sources */,
+				84B961D21E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m in Sources */,
 				84A24EB71E5ABA7500B96A36 /* pssMvFrame.m in Sources */,
 				84A24EC11E5ABA7500B96A36 /* RCETimmerHandler.m in Sources */,
 				84CB878F1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m in Sources */,
@@ -1439,7 +1451,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cno;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cnm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1458,7 +1470,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cno;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cnm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

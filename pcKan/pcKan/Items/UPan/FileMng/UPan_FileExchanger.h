@@ -16,4 +16,6 @@
 + (id)shareInstance;
 -(void)addFileRecver:(UPan_File *)file fileSize:(NSInteger)fileSize;
 -(void)addSendingFilePath:(NSString *)filePath fileId:(NSInteger)fileId;
+//添加数据发送者
+-(void)addSendingFileData:(NSData *)fileData fileId:(NSInteger)fileId fileName:(NSString *)fileName;
 @end

@@ -308,4 +308,11 @@
     }
     return nil;
 }
+
+//获取图片的容量大小
++(NSInteger)imageDataSize:(UIImage *)image
+{
+    NSData *data = UIImagePNGRepresentation(image);
+    return data.length;
+}
 @end

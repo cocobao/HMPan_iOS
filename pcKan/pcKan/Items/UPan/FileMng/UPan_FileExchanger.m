@@ -53,6 +53,7 @@ __strong static id sharedInstance = nil;
     return self;
 }
 
+//添加文件接收者
 -(void)addFileRecver:(UPan_File *)file fileSize:(NSInteger)fileSize
 {
     UPan_FileRecver *fr = [[UPan_FileRecver alloc] initWithFileId:file.fileId filePath:file.filePath fileSize:fileSize];
@@ -61,12 +62,22 @@ __strong static id sharedInstance = nil;
     self.muFileExchangers[key] = fr;
 }
 
+//添加文件发送者
 -(void)addSendingFilePath:(NSString *)filePath fileId:(NSInteger)fileId
 {
     UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFilePath:filePath fileId:fileId];
     fs.m_delegate = self;
     self.muFileExchangers[fs.threadName] = fs;
     NSLog(@"add file sending:%@", filePath);
+}
+
+//添加数据发送者
+-(void)addSendingFileData:(NSData *)fileData fileId:(NSInteger)fileId fileName:(NSString *)fileName
+{
+    UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFileData:fileData fileId:fileId fileName:fileName];
+    fs.m_delegate = self;
+    self.muFileExchangers[fs.threadName] = fs;
+    NSLog(@"add file sending:%@", fileName);
 }
 
 //生成文件
@@ -159,10 +170,10 @@ __strong static id sharedInstance = nil;
 -(void)didSendFinish:(NSString *)threadName
 {
     if (self.muFileExchangers[threadName]) {
-        UPan_FileSender *fs = self.muFileExchangers[threadName];
+//        UPan_FileSender *fs = self.muFileExchangers[threadName];
         [self.muFileExchangers removeObjectForKey:threadName];
         
-        [fs cancel];
+//        [fs cancel];
     }
 }
 @end

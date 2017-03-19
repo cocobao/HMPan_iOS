@@ -83,4 +83,24 @@
     };
     [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:resultBlock];
 }
+
++(UIImage *)assetsForImageWithPath:(NSString *)path
+{
+    ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
+    __block UIImage *assetImage = nil;
+    [lib assetForURL:[NSURL URLWithString:path] resultBlock:^(ALAsset *asset){
+        //获取资源图片的详细资源信息
+        ALAssetRepresentation* representation = [asset defaultRepresentation];
+        
+        //获取资源图片的高清图
+        CGImageRef cgImage = [representation fullResolutionImage];
+        assetImage = [UIImage imageWithCGImage:cgImage];
+    }
+    failureBlock:^(NSError *error)
+    {
+        NSLog(@"%@", error);
+    }
+    ];
+    return assetImage;
+}
 @end
