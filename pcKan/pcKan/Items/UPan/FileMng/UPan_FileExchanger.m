@@ -11,6 +11,7 @@
 #import "UPan_FileSender.h"
 #import "UIAlertView+RWBlock.h"
 #import "UPan_FileMng.h"
+#import "MBProgressHUD.h"
 
 @interface UPan_FileExchanger ()<NetTcpCallback, FileRecverDelegate, picFileSenderDelegate>
 @property (nonatomic, strong) NSMutableDictionary *muFileExchangers;
@@ -174,6 +175,9 @@ __strong static id sharedInstance = nil;
         [self.muFileExchangers removeObjectForKey:threadName];
         
 //        [fs cancel];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD showMessage:@"发送成功"];
+        });
     }
 }
 @end

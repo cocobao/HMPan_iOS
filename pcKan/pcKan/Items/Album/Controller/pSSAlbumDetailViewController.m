@@ -9,10 +9,12 @@
 #import "pSSAlbumDetailViewController.h"
 #import "pSSAlbumDetailCollectionView.h"
 #import "pSSAlbumAsset.h"
-#import "pSSPictureViewController.h"
 #import "XLPhotoBrowser.h"
+#import "pssLinkObj+Api.h"
+#import "UIAlertView+RWBlock.h"
+#import "UPan_FileExchanger.h"
 
-@interface pSSAlbumDetailViewController ()<AlbumDetailCollectionViewDelegate, XLPhotoBrowserDatasource>
+@interface pSSAlbumDetailViewController ()<AlbumDetailCollectionViewDelegate, XLPhotoBrowserDatasource, XLPhotoBrowserDelegate>
 @property (nonatomic, strong) pSSAlbumDetailCollectionView *mCollectionView;
 @property (nonatomic, strong) NSMutableArray *mArrayDataSource;
 @end
@@ -83,7 +85,62 @@
 //    [XLPhotoBrowser showPhotoBrowserWithImages:@[image] currentImageIndex:0];
     
     XLPhotoBrowser *browser = [XLPhotoBrowser showPhotoBrowserWithCurrentImageIndex:indexPath.item imageCount:self.mArrayDataSource.count datasource:self];
+    [browser setActionSheetWithTitle:@"" delegate:self cancelButtonTitle:@"取消" deleteButtonTitle:nil otherButtonTitles:@"发送到电脑", @"照片信息", nil];
     browser.pageControlStyle = XLPhotoBrowserPageControlStyleClassic;
+}
+
+-(void)sendPictureActionWithIndex:(NSInteger)index
+{
+    //是否连接正常
+    if ([pssLink tcpLinkStatus] != tcpConnect_ConnectOk) {
+        [self addHub:@"请先连接电脑客户端" hide:YES];
+        return;
+    }
+    
+    UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                   message:[NSString stringWithFormat:@"发送照片:%@ 到电脑", self.title]
+                                                  delegate:nil
+                                         cancelButtonTitle:@"取消"
+                                         otherButtonTitles:@"确定", nil];
+    WeakSelf(weakSelf);
+    [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
+        if (btnIndex == 1) {
+            pSSAlbumModel *assetModel = [weakSelf.mArrayDataSource objectAtIndex:index];
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [weakSelf applyRecvFile:assetModel];
+            });
+        }
+    }];
+    [view show];
+}
+
+//请求pc端接收文件
+-(void)applyRecvFile:(pSSAlbumModel *)modelData
+{
+    //获取资源图片的详细资源信息
+    ALAssetRepresentation* representation = [modelData.asset defaultRepresentation];
+
+    NSString* filename = [representation filename];
+
+    //UIImage图片转为NSDate数据
+    CGImageRef cgImage = [representation fullResolutionImage];
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    NSData *imageData = UIImagePNGRepresentation(image);
+
+    [pssLink NetApi_ApplyRecvFile:@{ptl_fileName:filename,ptl_fileSize:@(imageData.length)}
+                            block:^(NSDictionary *message, NSError *error) {
+        if (error) {
+            return;
+        }
+        NSInteger code = [message[ptl_status] integerValue];
+        if (code != _SUCCESS_CODE) {
+            NSLog(@"%@", message);
+            return;
+        }
+        NSInteger fileId = [message[ptl_fileId] integerValue];
+
+        [FileExchanger addSendingFileData:imageData fileId:fileId fileName:filename];
+    }];
 }
 
 #pragma mark    -   XLPhotoBrowserDatasource
@@ -96,6 +153,15 @@
     CGImageRef cgImage = [representation fullResolutionImage];
     UIImage *image = [UIImage imageWithCGImage:cgImage];
     return image;
+}
+
+- (void)photoBrowser:(XLPhotoBrowser *)browser clickActionSheetIndex:(NSInteger)actionSheetindex currentImageIndex:(NSInteger)currentImageIndex
+{
+    if (actionSheetindex == 0) {
+        [self sendPictureActionWithIndex:currentImageIndex];
+    }else if (actionSheetindex == 1){
+        
+    }
 }
 
 -(NSArray *)mArrayDataSource

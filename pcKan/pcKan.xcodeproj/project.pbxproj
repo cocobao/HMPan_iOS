@@ -10,7 +10,6 @@
 		8421FF6F1E69540D0054E8CA /* UPan_PanFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */; };
 		8421FF761E695DD00054E8CA /* UPan_File.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF751E695DD00054E8CA /* UPan_File.m */; };
 		8421FF7D1E696C120054E8CA /* UPan_FileTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */; };
-		8425FF3E1E7ABDAC00EBE036 /* pSSPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8425FF3D1E7ABDAC00EBE036 /* pSSPictureViewController.m */; };
 		8465B6B01E7642B400EC0186 /* UPan_FileMng.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */; };
 		8465B6BD1E76B42300EC0186 /* pssLocalMoviePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6BC1E76B42300EC0186 /* pssLocalMoviePlayViewController.m */; };
 		8465B6C41E76BE3900EC0186 /* LZHButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6C31E76BE3900EC0186 /* LZHButton.m */; };
@@ -150,8 +149,6 @@
 		84B7A9B21E80013B0021B712 /* XLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B7A9901E80013B0021B712 /* XLPhotoBrowser.m */; };
 		84B7A9B31E80013B0021B712 /* XLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B7A9931E80013B0021B712 /* XLProgressView.m */; };
 		84B7A9B41E80013B0021B712 /* XLZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B7A9951E80013B0021B712 /* XLZoomingScrollView.m */; };
-		84B961CD1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B961CC1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m */; };
-		84B961D21E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B961D11E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m */; };
 		84CA18C91E729508000CFA9F /* UPan_FileSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA18C81E729508000CFA9F /* UPan_FileSender.m */; };
 		84CB87801E6FD32A00DCE909 /* UIAlertView+RWBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */; };
 		84CB878F1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB878E1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m */; };
@@ -192,8 +189,6 @@
 		8421FF751E695DD00054E8CA /* UPan_File.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_File.m; sourceTree = "<group>"; };
 		8421FF7B1E696C110054E8CA /* UPan_FileTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileTableView.h; sourceTree = "<group>"; };
 		8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileTableView.m; sourceTree = "<group>"; };
-		8425FF3C1E7ABDAC00EBE036 /* pSSPictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSPictureViewController.h; sourceTree = "<group>"; };
-		8425FF3D1E7ABDAC00EBE036 /* pSSPictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSPictureViewController.m; sourceTree = "<group>"; };
 		8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPan_FileMng.h; path = pcKan/Items/UPan/FileMng/UPan_FileMng.h; sourceTree = SOURCE_ROOT; };
 		8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPan_FileMng.m; path = pcKan/Items/UPan/FileMng/UPan_FileMng.m; sourceTree = SOURCE_ROOT; };
 		8465B6BB1E76B42300EC0186 /* pssLocalMoviePlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssLocalMoviePlayViewController.h; sourceTree = "<group>"; };
@@ -460,10 +455,6 @@
 		84B7A9931E80013B0021B712 /* XLProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLProgressView.m; sourceTree = "<group>"; };
 		84B7A9941E80013B0021B712 /* XLZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLZoomingScrollView.h; sourceTree = "<group>"; };
 		84B7A9951E80013B0021B712 /* XLZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLZoomingScrollView.m; sourceTree = "<group>"; };
-		84B961CB1E7EB6FC00E29BF4 /* pSSPictureCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSPictureCollectionView.h; sourceTree = "<group>"; };
-		84B961CC1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSPictureCollectionView.m; sourceTree = "<group>"; };
-		84B961D01E7EB72900E29BF4 /* pSSPictureCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSPictureCollectionViewCell.h; sourceTree = "<group>"; };
-		84B961D11E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSPictureCollectionViewCell.m; sourceTree = "<group>"; };
 		84CA18C71E729508000CFA9F /* UPan_FileSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileSender.h; sourceTree = "<group>"; };
 		84CA18C81E729508000CFA9F /* UPan_FileSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileSender.m; sourceTree = "<group>"; };
 		84CB877E1E6FD32A00DCE909 /* UIAlertView+RWBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+RWBlock.h"; sourceTree = "<group>"; };
@@ -1287,8 +1278,6 @@
 				84F65FA71E7A7B3A00F643EE /* pSSAlbumDetailViewController.m */,
 				84F65FA81E7A7B3A00F643EE /* pSSAlbumViewController.h */,
 				84F65FA91E7A7B3A00F643EE /* pSSAlbumViewController.m */,
-				8425FF3C1E7ABDAC00EBE036 /* pSSPictureViewController.h */,
-				8425FF3D1E7ABDAC00EBE036 /* pSSPictureViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1307,10 +1296,6 @@
 		84F65FAF1E7A7B3A00F643EE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				84B961CB1E7EB6FC00E29BF4 /* pSSPictureCollectionView.h */,
-				84B961CC1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m */,
-				84B961D01E7EB72900E29BF4 /* pSSPictureCollectionViewCell.h */,
-				84B961D11E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m */,
 				84F65FB01E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.h */,
 				84F65FB11E7A7B3A00F643EE /* pSSAlbumDetailCollectionView.m */,
 				84F65FB21E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.h */,
@@ -1422,7 +1407,6 @@
 			files = (
 				84A24EBA1E5ABA7500B96A36 /* EHTcpLinkObj.m in Sources */,
 				84A24E761E5ABA7500B96A36 /* AFURLRequestSerialization.m in Sources */,
-				84B961CD1E7EB6FC00E29BF4 /* pSSPictureCollectionView.m in Sources */,
 				84F65FB61E7A7B3A00F643EE /* pSSAlbumDetailViewController.m in Sources */,
 				84A24E7F1E5ABA7500B96A36 /* UIImageView+AFNetworking.m in Sources */,
 				84A24EF31E5ABFD800B96A36 /* g711.m in Sources */,
@@ -1443,7 +1427,6 @@
 				84A24EB31E5ABA7500B96A36 /* pssMovieView.m in Sources */,
 				84A24E781E5ABA7500B96A36 /* AFURLSessionManager.m in Sources */,
 				84A24E771E5ABA7500B96A36 /* AFURLResponseSerialization.m in Sources */,
-				84B961D21E7EB72900E29BF4 /* pSSPictureCollectionViewCell.m in Sources */,
 				84A24EB71E5ABA7500B96A36 /* pssMvFrame.m in Sources */,
 				84A24EC11E5ABA7500B96A36 /* RCETimmerHandler.m in Sources */,
 				84B7A9B31E80013B0021B712 /* XLProgressView.m in Sources */,
@@ -1540,7 +1523,6 @@
 				84A24EC01E5ABA7500B96A36 /* pSSCommodMethod.m in Sources */,
 				84B7A99B1E80013B0021B712 /* FSActionSheetItem.m in Sources */,
 				84B7A9971E80013B0021B712 /* UIView+XLExtension.m in Sources */,
-				8425FF3E1E7ABDAC00EBE036 /* pSSPictureViewController.m in Sources */,
 				84A24E7B1E5ABA7500B96A36 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				84B7A9AD1E80013B0021B712 /* UIImage+MultiFormat.m in Sources */,
 				84A24E711E5ABA7500B96A36 /* AFHTTPRequestOperationManager.m in Sources */,

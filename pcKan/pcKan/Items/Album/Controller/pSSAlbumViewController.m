@@ -29,9 +29,11 @@
         return;
     }
     
+    [self addHub:@"加载中" hide:NO];
     WeakSelf(weakSelf);
     [[pSSAlbumAsset shareInstance] setupAlbumGroups:^(NSMutableArray *groups) {
         weakSelf.mArrayDataSource = groups;
+        [weakSelf removeHub];
         [weakSelf.tableView reloadData];
     }];
 }
