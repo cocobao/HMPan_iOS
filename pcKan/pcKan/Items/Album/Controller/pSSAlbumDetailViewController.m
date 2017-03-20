@@ -10,8 +10,9 @@
 #import "pSSAlbumDetailCollectionView.h"
 #import "pSSAlbumAsset.h"
 #import "pSSPictureViewController.h"
+#import "XLPhotoBrowser.h"
 
-@interface pSSAlbumDetailViewController ()<AlbumDetailCollectionViewDelegate>
+@interface pSSAlbumDetailViewController ()<AlbumDetailCollectionViewDelegate, XLPhotoBrowserDatasource>
 @property (nonatomic, strong) pSSAlbumDetailCollectionView *mCollectionView;
 @property (nonatomic, strong) NSMutableArray *mArrayDataSource;
 @end
@@ -71,9 +72,30 @@
 -(void)AlbumDetail_didSelectionWithIndexPath:(NSIndexPath *)indexPath
 {
     //点击查看某一张照片, 跳转到查看照片的页面
-    pSSPictureViewController *vc = [[pSSPictureViewController alloc] initWithAssetGroup:self.mArrayDataSource
-                                                                                atIndex:indexPath.item];
-    [self pushVc:vc];
+//    pSSPictureViewController *vc = [[pSSPictureViewController alloc] initWithAssetGroup:self.mArrayDataSource
+//                                                                                atIndex:indexPath.item];
+//    [self pushVc:vc];
+//    pSSAlbumModel *assetModel = [self.mArrayDataSource objectAtIndex:indexPath.item];
+//    ALAssetRepresentation* representation = [assetModel.asset defaultRepresentation];
+//    //获取资源图片的高清图
+//    CGImageRef cgImage = [representation fullResolutionImage];
+//    UIImage *image = [UIImage imageWithCGImage:cgImage];
+//    [XLPhotoBrowser showPhotoBrowserWithImages:@[image] currentImageIndex:0];
+    
+    XLPhotoBrowser *browser = [XLPhotoBrowser showPhotoBrowserWithCurrentImageIndex:indexPath.item imageCount:self.mArrayDataSource.count datasource:self];
+    browser.pageControlStyle = XLPhotoBrowserPageControlStyleClassic;
+}
+
+#pragma mark    -   XLPhotoBrowserDatasource
+
+- (UIImage *)photoBrowser:(XLPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
+{
+    pSSAlbumModel *assetModel = [self.mArrayDataSource objectAtIndex:index];
+    ALAssetRepresentation* representation = [assetModel.asset defaultRepresentation];
+    //获取资源图片的高清图
+    CGImageRef cgImage = [representation fullResolutionImage];
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    return image;
 }
 
 -(NSArray *)mArrayDataSource
