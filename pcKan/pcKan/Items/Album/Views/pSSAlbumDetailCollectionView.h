@@ -15,4 +15,5 @@
 
 @interface pSSAlbumDetailCollectionView : UICollectionView
 @property (nonatomic, assign) id<AlbumDetailCollectionViewDelegate> m_delegate;
+@property (nonatomic, assign) BOOL isSelectState;
 @end

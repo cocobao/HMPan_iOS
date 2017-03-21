@@ -37,6 +37,12 @@
     return self;
 }
 
+-(void)setIsSelectState:(BOOL)isSelectState
+{
+    _isSelectState = isSelectState;
+    [self reloadData];
+}
+
 -(UICollectionViewFlowLayout *)flowLayoutWithItemSize:(CGSize)itemSize
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -70,6 +76,7 @@
     
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(AlbumDetail_DataSource)]) {
         cell.mMdel = [[self.m_delegate AlbumDetail_DataSource] objectAtIndex:indexPath.row];
+        [cell isSelectState:_isSelectState];
     }
     
     return cell;
@@ -78,7 +85,12 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(AlbumDetail_didSelectionWithIndexPath:)]) {
-        [self.m_delegate AlbumDetail_didSelectionWithIndexPath:indexPath];
+        if (_isSelectState) {
+            pSSAlbumDetailCollectionViewCell *cell = (pSSAlbumDetailCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+            cell.isSelect = !cell.isSelect;
+        }else{
+            [self.m_delegate AlbumDetail_didSelectionWithIndexPath:indexPath];
+        }
     }
 }
 

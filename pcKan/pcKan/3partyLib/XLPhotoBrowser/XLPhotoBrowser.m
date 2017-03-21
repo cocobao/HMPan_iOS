@@ -66,7 +66,6 @@
 @property (nonatomic , strong) NSString  *actionSheetDeleteButtonTitle;
 @property (nonatomic, assign) CGSize pageControlDotSize;
 @property(nonatomic, strong) NSArray *images;
-
 @end
 
 @implementation XLPhotoBrowser
@@ -852,6 +851,7 @@
     browser.currentImageIndex = currentImageIndex;
     browser.datasource = datasource;
     [browser show];
+    
     return browser;
 }
 
@@ -887,6 +887,24 @@
     [window addSubview:self];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     [self iniaialUI];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(kScreenWidth-50, 50, 40, 40);
+    [btn setImage:[UIImage imageNamed:@"icon_about"] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(infoBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:btn];
+}
+
+-(void)infoBtnAction:(UIButton *)sender
+{
+    FSActionSheet *actionSheet = [[FSActionSheet alloc] initWithTitle:self.actionSheetTitle delegate:nil cancelButtonTitle:self.actionSheetCancelTitle highlightedButtonTitle:self.actionSheetDeleteButtonTitle otherButtonTitles:self.actionOtherButtonTitles];
+    __weak typeof(self) weakSelf = self;
+    // 展示并绑定选择回调
+    [actionSheet showWithSelectedCompletion:^(NSInteger selectedIndex) {
+        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(photoBrowser:clickActionSheetIndex:currentImageIndex:)]) {
+            [weakSelf.delegate photoBrowser:weakSelf clickActionSheetIndex:selectedIndex currentImageIndex:weakSelf.currentImageIndex];
+        }
+    }];
 }
 
 /**

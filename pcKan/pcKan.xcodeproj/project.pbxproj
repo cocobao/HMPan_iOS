@@ -10,6 +10,7 @@
 		8421FF6F1E69540D0054E8CA /* UPan_PanFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */; };
 		8421FF761E695DD00054E8CA /* UPan_File.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF751E695DD00054E8CA /* UPan_File.m */; };
 		8421FF7D1E696C120054E8CA /* UPan_FileTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */; };
+		842BE1BB1E8171B100CAF674 /* pSSControlBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842BE1BA1E8171B100CAF674 /* pSSControlBarView.m */; };
 		8465B6B01E7642B400EC0186 /* UPan_FileMng.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */; };
 		8465B6BD1E76B42300EC0186 /* pssLocalMoviePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6BC1E76B42300EC0186 /* pssLocalMoviePlayViewController.m */; };
 		8465B6C41E76BE3900EC0186 /* LZHButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8465B6C31E76BE3900EC0186 /* LZHButton.m */; };
@@ -189,6 +190,8 @@
 		8421FF751E695DD00054E8CA /* UPan_File.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_File.m; sourceTree = "<group>"; };
 		8421FF7B1E696C110054E8CA /* UPan_FileTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileTableView.h; sourceTree = "<group>"; };
 		8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileTableView.m; sourceTree = "<group>"; };
+		842BE1B91E8171B100CAF674 /* pSSControlBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSSControlBarView.h; sourceTree = "<group>"; };
+		842BE1BA1E8171B100CAF674 /* pSSControlBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pSSControlBarView.m; sourceTree = "<group>"; };
 		8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPan_FileMng.h; path = pcKan/Items/UPan/FileMng/UPan_FileMng.h; sourceTree = SOURCE_ROOT; };
 		8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPan_FileMng.m; path = pcKan/Items/UPan/FileMng/UPan_FileMng.m; sourceTree = SOURCE_ROOT; };
 		8465B6BB1E76B42300EC0186 /* pssLocalMoviePlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssLocalMoviePlayViewController.h; sourceTree = "<group>"; };
@@ -1302,6 +1305,8 @@
 				84F65FB31E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.m */,
 				84F65FB41E7A7B3A00F643EE /* pSSAlbumTableViewCell.h */,
 				84F65FB51E7A7B3A00F643EE /* pSSAlbumTableViewCell.m */,
+				842BE1B91E8171B100CAF674 /* pSSControlBarView.h */,
+				842BE1BA1E8171B100CAF674 /* pSSControlBarView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1514,6 +1519,7 @@
 				8465B6B01E7642B400EC0186 /* UPan_FileMng.m in Sources */,
 				84904F041E71046F00392FD4 /* UPan_FileRecver.m in Sources */,
 				8465B6C41E76BE3900EC0186 /* LZHButton.m in Sources */,
+				842BE1BB1E8171B100CAF674 /* pSSControlBarView.m in Sources */,
 				84B7A9A31E80013B0021B712 /* NSData+ImageContentType.m in Sources */,
 				84A24EB11E5ABA7500B96A36 /* pSSDecoder.m in Sources */,
 				84B7A9A91E80013B0021B712 /* SDWebImageManager.m in Sources */,
@@ -1667,7 +1673,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cnm;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1686,7 +1692,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cnm;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

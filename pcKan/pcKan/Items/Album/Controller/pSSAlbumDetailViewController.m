@@ -13,10 +13,13 @@
 #import "pssLinkObj+Api.h"
 #import "UIAlertView+RWBlock.h"
 #import "UPan_FileExchanger.h"
+#import "pSSControlBarView.h"
 
 @interface pSSAlbumDetailViewController ()<AlbumDetailCollectionViewDelegate, XLPhotoBrowserDatasource, XLPhotoBrowserDelegate>
 @property (nonatomic, strong) pSSAlbumDetailCollectionView *mCollectionView;
 @property (nonatomic, strong) NSMutableArray *mArrayDataSource;
+@property (nonatomic, strong) UIButton *mRightBtn;
+@property (nonatomic, weak) pSSControlBarView *mCtrlBarView;
 @end
 
 @implementation pSSAlbumDetailViewController
@@ -26,6 +29,9 @@
     
     [self.view addSubview:self.mCollectionView];
     [self loadData];
+    
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.mRightBtn];
+    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 -(void)setMAssetGroup:(ALAssetsGroup *)mAssetGroup
@@ -56,16 +62,43 @@
     }];
 }
 
--(pSSAlbumDetailCollectionView *)mCollectionView
+-(void)rightBtnAction:(UIButton *)sender
 {
-    if (!_mCollectionView) {
-        pSSAlbumDetailCollectionView *collection = [[pSSAlbumDetailCollectionView alloc] initWithFrame:CGRectMake(0, 1, kScreenWidth, kScreenHeight-NAVBAR_H-2)];
-        collection.m_delegate = self;
-        _mCollectionView = collection;
+    if (sender.tag == 0) {
+        sender.tag = 1;
+        [sender setTitle:@"取消" forState:UIControlStateNormal];
+        
+        self.mCollectionView.isSelectState = !self.mCollectionView.isSelectState;
+        
+        pSSControlBarView *ctrlBar = [[pSSControlBarView alloc] init];
+        [self.view addSubview:ctrlBar];
+        _mCtrlBarView = ctrlBar;
+        CGRect frame = ctrlBar.frame;
+        frame.origin.y = kScreenHeight - 50 - NAVBAR_H;
+        [UIView animateWithDuration:0.3 animations:^{
+            ctrlBar.frame = frame;
+        }];
+        
+        CGRect frameCollection = self.mCollectionView.frame;
+        frameCollection.size.height -= 50;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.mCollectionView.frame = frameCollection;
+        }];
+    }else{
+        sender.tag = 0;
+        [sender setTitle:@"选择" forState:UIControlStateNormal];
+        
+        if (_mCtrlBarView) {
+            [_mCtrlBarView removeFromSuperview];
+        }
+        
+        CGRect frameCollection = self.mCollectionView.frame;
+        frameCollection.size.height += 50;
+        self.mCollectionView.frame = frameCollection;
     }
-    return _mCollectionView;
 }
 
+#pragma mark - XLPhotoBrowserDatasource
 -(NSArray *)AlbumDetail_DataSource
 {
     return self.mArrayDataSource;
@@ -172,4 +205,27 @@
     }
     return _mArrayDataSource;
 }
+
+-(UIButton *)mRightBtn
+{
+    if (!_mRightBtn) {
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        [btn setTitle:@"选择" forState:UIControlStateNormal];
+        btn.titleLabel.font = kFont(15);
+        [btn addTarget:self action:@selector(rightBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+        _mRightBtn = btn;
+    }
+    return _mRightBtn;
+}
+
+-(pSSAlbumDetailCollectionView *)mCollectionView
+{
+    if (!_mCollectionView) {
+        pSSAlbumDetailCollectionView *collection = [[pSSAlbumDetailCollectionView alloc] initWithFrame:CGRectMake(0, 1, kScreenWidth, kScreenHeight-NAVBAR_H-2)];
+        collection.m_delegate = self;
+        _mCollectionView = collection;
+    }
+    return _mCollectionView;
+}
+
 @end
