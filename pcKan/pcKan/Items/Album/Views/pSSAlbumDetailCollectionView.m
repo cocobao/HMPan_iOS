@@ -73,7 +73,6 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     pSSAlbumDetailCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CEll_identify forIndexPath:indexPath];
-    
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(AlbumDetail_DataSource)]) {
         cell.mMdel = [[self.m_delegate AlbumDetail_DataSource] objectAtIndex:indexPath.row];
         [cell isSelectState:_isSelectState];
@@ -84,13 +83,12 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(AlbumDetail_didSelectionWithIndexPath:)]) {
-        if (_isSelectState) {
-            pSSAlbumDetailCollectionViewCell *cell = (pSSAlbumDetailCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-            cell.isSelect = !cell.isSelect;
-        }else{
-            [self.m_delegate AlbumDetail_didSelectionWithIndexPath:indexPath];
-        }
+    pSSAlbumDetailCollectionViewCell *cell = (pSSAlbumDetailCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    if (_isSelectState) {
+        [cell setIsSelect:!cell.mMdel.isSelect];
+    }
+    if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(AlbumDetail_didSelectionWithIndexPath:seclt:)]) {
+        [self.m_delegate AlbumDetail_didSelectionWithIndexPath:indexPath seclt:cell.mMdel.isSelect];
     }
 }
 

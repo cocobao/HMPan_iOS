@@ -10,7 +10,7 @@
 @protocol AlbumDetailCollectionViewDelegate <NSObject>
 @optional
 -(NSArray *)AlbumDetail_DataSource;
--(void)AlbumDetail_didSelectionWithIndexPath:(NSIndexPath *)indexPath;
+-(void)AlbumDetail_didSelectionWithIndexPath:(NSIndexPath *)indexPath seclt:(BOOL)seclt;
 @end
 
 @interface pSSAlbumDetailCollectionView : UICollectionView

@@ -62,66 +62,6 @@
     }];
 }
 
--(void)rightBtnAction:(UIButton *)sender
-{
-    if (sender.tag == 0) {
-        sender.tag = 1;
-        [sender setTitle:@"取消" forState:UIControlStateNormal];
-        
-        self.mCollectionView.isSelectState = !self.mCollectionView.isSelectState;
-        
-        pSSControlBarView *ctrlBar = [[pSSControlBarView alloc] init];
-        [self.view addSubview:ctrlBar];
-        _mCtrlBarView = ctrlBar;
-        CGRect frame = ctrlBar.frame;
-        frame.origin.y = kScreenHeight - 50 - NAVBAR_H;
-        [UIView animateWithDuration:0.3 animations:^{
-            ctrlBar.frame = frame;
-        }];
-        
-        CGRect frameCollection = self.mCollectionView.frame;
-        frameCollection.size.height -= 50;
-        [UIView animateWithDuration:0.3 animations:^{
-            self.mCollectionView.frame = frameCollection;
-        }];
-    }else{
-        sender.tag = 0;
-        [sender setTitle:@"选择" forState:UIControlStateNormal];
-        
-        if (_mCtrlBarView) {
-            [_mCtrlBarView removeFromSuperview];
-        }
-        
-        CGRect frameCollection = self.mCollectionView.frame;
-        frameCollection.size.height += 50;
-        self.mCollectionView.frame = frameCollection;
-    }
-}
-
-#pragma mark - XLPhotoBrowserDatasource
--(NSArray *)AlbumDetail_DataSource
-{
-    return self.mArrayDataSource;
-}
-
--(void)AlbumDetail_didSelectionWithIndexPath:(NSIndexPath *)indexPath
-{
-    //点击查看某一张照片, 跳转到查看照片的页面
-//    pSSPictureViewController *vc = [[pSSPictureViewController alloc] initWithAssetGroup:self.mArrayDataSource
-//                                                                                atIndex:indexPath.item];
-//    [self pushVc:vc];
-//    pSSAlbumModel *assetModel = [self.mArrayDataSource objectAtIndex:indexPath.item];
-//    ALAssetRepresentation* representation = [assetModel.asset defaultRepresentation];
-//    //获取资源图片的高清图
-//    CGImageRef cgImage = [representation fullResolutionImage];
-//    UIImage *image = [UIImage imageWithCGImage:cgImage];
-//    [XLPhotoBrowser showPhotoBrowserWithImages:@[image] currentImageIndex:0];
-    
-    XLPhotoBrowser *browser = [XLPhotoBrowser showPhotoBrowserWithCurrentImageIndex:indexPath.item imageCount:self.mArrayDataSource.count datasource:self];
-    [browser setActionSheetWithTitle:@"" delegate:self cancelButtonTitle:@"取消" deleteButtonTitle:nil otherButtonTitles:@"发送到电脑", @"照片信息", nil];
-    browser.pageControlStyle = XLPhotoBrowserPageControlStyleClassic;
-}
-
 -(void)sendPictureActionWithIndex:(NSInteger)index
 {
     //是否连接正常
@@ -147,33 +87,153 @@
     [view show];
 }
 
+//多图片发送
+-(void)multiSendPictureAction:(UIButton *)sender
+{
+    //是否连接正常
+    if ([pssLink tcpLinkStatus] != tcpConnect_ConnectOk) {
+        [self addHub:@"请先连接电脑客户端" hide:YES];
+        return;
+    }
+    
+    UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                   message:[NSString stringWithFormat:@"发送%zd个照片到电脑", [self modeIsSelectCount]]
+                                                  delegate:nil
+                                         cancelButtonTitle:@"取消"
+                                         otherButtonTitles:@"确定", nil];
+    WeakSelf(weakSelf);
+    [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
+        if (btnIndex == 1) {
+            for (pSSAlbumModel *assetModel in self.mArrayDataSource) {
+                if (assetModel.isSelect) {
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                        [weakSelf applyRecvFile:assetModel];
+                    });
+                }
+            }
+        }
+    }];
+    [view show];
+}
+
+//获取被选的数量
+-(NSInteger)modeIsSelectCount
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.isSelect == YES"];
+    return [self.mArrayDataSource filteredArrayUsingPredicate:predicate].count;
+}
+
 //请求pc端接收文件
 -(void)applyRecvFile:(pSSAlbumModel *)modelData
 {
     //获取资源图片的详细资源信息
     ALAssetRepresentation* representation = [modelData.asset defaultRepresentation];
-
+    
     NSString* filename = [representation filename];
-
+    
     //UIImage图片转为NSDate数据
     CGImageRef cgImage = [representation fullResolutionImage];
     UIImage *image = [UIImage imageWithCGImage:cgImage];
     NSData *imageData = UIImagePNGRepresentation(image);
-
+    
     [pssLink NetApi_ApplyRecvFile:@{ptl_fileName:filename,ptl_fileSize:@(imageData.length)}
                             block:^(NSDictionary *message, NSError *error) {
-        if (error) {
-            return;
-        }
-        NSInteger code = [message[ptl_status] integerValue];
-        if (code != _SUCCESS_CODE) {
-            NSLog(@"%@", message);
-            return;
-        }
-        NSInteger fileId = [message[ptl_fileId] integerValue];
+                                if (error) {
+                                    return;
+                                }
+                                NSInteger code = [message[ptl_status] integerValue];
+                                if (code != _SUCCESS_CODE) {
+                                    NSLog(@"%@", message);
+                                    return;
+                                }
+                                NSInteger fileId = [message[ptl_fileId] integerValue];
+                                
+                                [FileExchanger addSendingFileData:imageData fileId:fileId fileName:filename];
+                            }];
+}
 
-        [FileExchanger addSendingFileData:imageData fileId:fileId fileName:filename];
-    }];
+//右上角按钮动作
+-(void)rightBtnAction:(UIButton *)sender
+{
+    if (sender.tag == 0) {
+        //取消选择模式
+        sender.tag = 1;
+        [sender setTitle:@"取消" forState:UIControlStateNormal];
+        
+        [self addCtrlBarView];
+        CGRect frame = self.mCtrlBarView.frame;
+        frame.origin.y = kScreenHeight - 50 - NAVBAR_H;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.mCtrlBarView.frame = frame;
+        }];
+        
+        CGRect frameCollection = self.mCollectionView.frame;
+        frameCollection.size.height -= 50;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.mCollectionView.frame = frameCollection;
+        }];
+    }else{
+        //进入选择模式
+        sender.tag = 0;
+        [sender setTitle:@"选择" forState:UIControlStateNormal];
+        
+        if (_mCtrlBarView) {
+            [_mCtrlBarView removeFromSuperview];
+        }
+        
+        //所有数据源设置为未选择状态
+        for (pSSAlbumModel *modeData in self.mArrayDataSource) modeData.isSelect = NO;
+        
+        CGRect frameCollection = self.mCollectionView.frame;
+        frameCollection.size.height += 50;
+        self.mCollectionView.frame = frameCollection;
+    }
+    self.mCollectionView.isSelectState = !self.mCollectionView.isSelectState;
+}
+
+//全选动作
+-(void)selectAllAction:(UIButton *)sender
+{
+    if (sender.tag == 0) {
+        sender.tag = 1;
+        [sender setTitle:@"取消全选" forState:UIControlStateNormal];
+        
+        //所有数据源设置为选择状态
+        for (pSSAlbumModel *modeData in self.mArrayDataSource) modeData.isSelect = YES;
+        
+        [self.mCtrlBarView setCount:self.mArrayDataSource.count];
+    }else{
+        sender.tag = 0;
+        [sender setTitle:@"全选" forState:UIControlStateNormal];
+        
+        //所有数据源设置为未选择状态
+        for (pSSAlbumModel *modeData in self.mArrayDataSource) modeData.isSelect = NO;
+        
+        [self.mCtrlBarView setCount:0];
+    }
+    [self.mCollectionView reloadData];
+}
+
+#pragma mark - XLPhotoBrowserDatasource
+-(NSArray *)AlbumDetail_DataSource
+{
+    return self.mArrayDataSource;
+}
+
+-(void)AlbumDetail_didSelectionWithIndexPath:(NSIndexPath *)indexPath seclt:(BOOL)seclt
+{
+    if (self.mRightBtn.tag != 0) {
+        if (seclt) {
+            [self.mCtrlBarView addCount:1];
+        }else{
+            [self.mCtrlBarView addCount:-1];
+        }
+    }else{
+        //照片预览
+        XLPhotoBrowser *browser = [XLPhotoBrowser showPhotoBrowserWithCurrentImageIndex:indexPath.item imageCount:self.mArrayDataSource.count datasource:self];
+        [browser setActionSheetWithTitle:@"" delegate:self cancelButtonTitle:@"取消" deleteButtonTitle:nil otherButtonTitles:@"发送到电脑", nil];
+        browser.pageControlStyle = XLPhotoBrowserPageControlStyleClassic;
+    }
 }
 
 #pragma mark    -   XLPhotoBrowserDatasource
@@ -195,6 +255,16 @@
     }else if (actionSheetindex == 1){
         
     }
+}
+
+#pragma mark - views
+-(void)addCtrlBarView
+{
+    pSSControlBarView *ctrlBar = [[pSSControlBarView alloc] init];
+    [ctrlBar.selectAllBtn addTarget:self action:@selector(selectAllAction:) forControlEvents:UIControlEventTouchUpInside];
+    [ctrlBar.sendBtn addTarget:self action:@selector(multiSendPictureAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:ctrlBar];
+    _mCtrlBarView = ctrlBar;
 }
 
 -(NSArray *)mArrayDataSource

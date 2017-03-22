@@ -31,16 +31,16 @@
 {
     if (n) {
         self.mSelectIcon.hidden = NO;
-        _isSelect = NO;
     }else{
         self.mSelectIcon.hidden = YES;
-        [self.mSelectIcon setImage:[UIImage imageNamed:@"choose"]];
     }
+    
+    [self setIsSelect:self.mMdel.isSelect];
 }
 
 -(void)setIsSelect:(BOOL)isSelect
 {
-    _isSelect = isSelect;
+    self.mMdel.isSelect = isSelect;
     if (isSelect) {
         [self.mSelectIcon setImage:[UIImage imageNamed:@"choose-up"]];
     }else{

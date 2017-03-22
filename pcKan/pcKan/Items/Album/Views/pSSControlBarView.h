@@ -11,4 +11,7 @@
 @interface pSSControlBarView : UIView
 @property (nonatomic, strong) UIButton *selectAllBtn;
 @property (nonatomic, strong) UIButton *sendBtn;
+
+-(void)addCount:(NSInteger)count;
+-(void)setCount:(NSInteger)count;
 @end

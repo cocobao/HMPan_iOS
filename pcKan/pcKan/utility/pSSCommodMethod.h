@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface pSSCommodMethod : NSObject
 //验证是否有访问相册权限
@@ -49,4 +50,10 @@
 
 //获取图片的容量大小
 +(NSInteger)imageDataSize:(UIImage *)image;
+
+//获取图片资源的名字
++(NSString *)nameOfAsset:(ALAsset *)asset;
+
+//获取图片资源的数据
++(NSData *)dataOfAsset:(ALAsset *)asset;
 @end

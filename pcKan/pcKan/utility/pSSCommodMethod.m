@@ -220,6 +220,7 @@
     return scaledImage;
 }
 
+//图片缩略图
 +(UIImage *)imageShotcutOfImage:(UIImage *)image w:(NSInteger)w h:(NSInteger)h
 {
     UIGraphicsBeginImageContext(CGSizeMake(w,h));
@@ -314,5 +315,21 @@
 {
     NSData *data = UIImagePNGRepresentation(image);
     return data.length;
+}
+
++(NSString *)nameOfAsset:(ALAsset *)asset
+{
+    return [[asset defaultRepresentation] filename];
+}
+
++(NSData *)dataOfAsset:(ALAsset *)asset
+{
+    //获取资源图片的详细资源信息
+    ALAssetRepresentation* representation = [asset defaultRepresentation];
+    
+    //UIImage图片转为NSDate数据
+    CGImageRef cgImage = [representation fullResolutionImage];
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    return UIImagePNGRepresentation(image);
 }
 @end

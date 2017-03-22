@@ -12,9 +12,13 @@
 #import "UIAlertView+RWBlock.h"
 #import "UPan_FileMng.h"
 #import "MBProgressHUD.h"
+#import "pSSAlbumModel.h"
 
 @interface UPan_FileExchanger ()<NetTcpCallback, FileRecverDelegate, picFileSenderDelegate>
-@property (nonatomic, strong) NSMutableDictionary *muFileExchangers;
+@property (nonatomic, strong) NSMutableDictionary *muFileSendExchanger;
+@property (nonatomic, strong) NSMutableDictionary *muFileRecvExchanger;
+@property (nonatomic, strong) NSMutableArray *mArrWaitingSendQueue;
+@property (nonatomic, strong) NSMutableArray *mAssetWaitSendQueue;
 @end
 
 @implementation UPan_FileExchanger
@@ -48,7 +52,9 @@ __strong static id sharedInstance = nil;
 {
     self = [super init];
     if (self) {
-        _muFileExchangers = [NSMutableDictionary dictionary];
+        _muFileSendExchanger = [NSMutableDictionary dictionary];
+        _muFileRecvExchanger = [NSMutableDictionary dictionary];
+        _mAssetWaitSendQueue = [NSMutableArray arrayWithCapacity:30];
         [pssLink addTcpDelegate:self];
     }
     return self;
@@ -60,7 +66,7 @@ __strong static id sharedInstance = nil;
     UPan_FileRecver *fr = [[UPan_FileRecver alloc] initWithFileId:file.fileId filePath:file.filePath fileSize:fileSize];
     fr.m_delegate = self;
     NSString *key = [NSString stringWithFormat:@"%zd", file.fileId];
-    self.muFileExchangers[key] = fr;
+    self.muFileRecvExchanger[key] = fr;
 }
 
 //添加文件发送者
@@ -68,7 +74,7 @@ __strong static id sharedInstance = nil;
 {
     UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFilePath:filePath fileId:fileId];
     fs.m_delegate = self;
-    self.muFileExchangers[fs.threadName] = fs;
+    self.muFileSendExchanger[fs.threadName] = fs;
     NSLog(@"add file sending:%@", filePath);
 }
 
@@ -77,9 +83,28 @@ __strong static id sharedInstance = nil;
 {
     UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFileData:fileData fileId:fileId fileName:fileName];
     fs.m_delegate = self;
-    self.muFileExchangers[fs.threadName] = fs;
+    self.muFileSendExchanger[fs.threadName] = fs;
     NSLog(@"add file sending:%@", fileName);
 }
+
+-(void)addAssetSender:(pSSAlbumModel *)asset
+{
+    
+}
+
+//添加资源发送队列数据,系统图库文件等,由于没办法用url读出数据
+-(void)addAssetsSending:(NSArray *)assets
+{
+    [_mAssetWaitSendQueue addObjectsFromArray:assets];
+    
+    if (_muFileSendExchanger.allKeys == 0) {
+        pSSAlbumModel *one = [_mAssetWaitSendQueue firstObject];
+        [_mAssetWaitSendQueue removeObjectAtIndex:0];
+        
+        [self addAssetSender:one];
+    }
+}
+
 
 //生成文件
 -(UPan_File *)createFile:(NSString *)fileName
@@ -110,8 +135,8 @@ __strong static id sharedInstance = nil;
 {
 //    NSLog(@"file size:%zd, fileId:%zd", data.length, fileId);
     NSString *key = [NSString stringWithFormat:@"%zd", fileId];
-    if (self.muFileExchangers[key]) {
-        UPan_FileRecver *fr = self.muFileExchangers[key];
+    if (self.muFileRecvExchanger[key]) {
+        UPan_FileRecver *fr = self.muFileRecvExchanger[key];
         [fr writeFileData:data];
     }
 }
@@ -161,8 +186,8 @@ __strong static id sharedInstance = nil;
 -(void)didRecvFileFinish:(NSInteger)fileId
 {
     NSString *key = [NSString stringWithFormat:@"%zd", fileId];
-    if (self.muFileExchangers[key]){
-        [self.muFileExchangers removeObjectForKey:key];
+    if (self.muFileRecvExchanger[key]){
+        [self.muFileRecvExchanger removeObjectForKey:key];
     }
     NSLog(@"file:%zd recv finish", fileId);
 }
@@ -170,14 +195,22 @@ __strong static id sharedInstance = nil;
 #pragma mark - picFileSenderDelegate
 -(void)didSendFinish:(NSString *)threadName
 {
-    if (self.muFileExchangers[threadName]) {
-//        UPan_FileSender *fs = self.muFileExchangers[threadName];
-        [self.muFileExchangers removeObjectForKey:threadName];
+    if (self.muFileSendExchanger[threadName]) {
+        UPan_FileSender *fs = self.muFileSendExchanger[threadName];
+        [self.muFileSendExchanger removeObjectForKey:threadName];
         
-//        [fs cancel];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD showMessage:@"发送成功"];
-        });
+        [fs cancel];
+        
+        if (_muFileSendExchanger.count > 0) {
+            
+        }
+        
+        if (_mAssetWaitSendQueue.count > 0) {
+            pSSAlbumModel *one = [_mAssetWaitSendQueue firstObject];
+            [_mAssetWaitSendQueue removeObjectAtIndex:0];
+            
+            [self addAssetSender:one];
+        }
     }
 }
 @end

@@ -11,6 +11,6 @@
 
 @interface pSSAlbumDetailCollectionViewCell : UICollectionViewCell
 @property (nonatomic, weak) pSSAlbumModel *mMdel;
-@property (nonatomic, assign) BOOL isSelect;
 -(void)isSelectState:(BOOL)n;
+-(void)setIsSelect:(BOOL)isSelect;
 @end
