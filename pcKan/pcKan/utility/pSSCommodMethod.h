@@ -56,4 +56,7 @@
 
 //获取图片资源的数据
 +(NSData *)dataOfAsset:(ALAsset *)asset;
+
++(void)initRandomId;
++(uint32_t)getRandomMessageID;
 @end

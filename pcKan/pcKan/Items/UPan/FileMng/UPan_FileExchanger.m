@@ -13,6 +13,7 @@
 #import "UPan_FileMng.h"
 #import "MBProgressHUD.h"
 #import "pSSAlbumModel.h"
+#import "UPan_AssetSender.h"
 
 @interface UPan_FileExchanger ()<NetTcpCallback, FileRecverDelegate, picFileSenderDelegate>
 @property (nonatomic, strong) NSMutableDictionary *muFileSendExchanger;
@@ -75,36 +76,68 @@ __strong static id sharedInstance = nil;
     UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFilePath:filePath fileId:fileId];
     fs.m_delegate = self;
     self.muFileSendExchanger[fs.threadName] = fs;
+    [fs start];
     NSLog(@"add file sending:%@", filePath);
 }
 
 //添加数据发送者
 -(void)addSendingFileData:(NSData *)fileData fileId:(NSInteger)fileId fileName:(NSString *)fileName
 {
-    UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFileData:fileData fileId:fileId fileName:fileName];
+    UPan_AssetSender *fs = [[UPan_AssetSender alloc] initWithFileData:fileData fileId:fileId fileName:fileName];
     fs.m_delegate = self;
     self.muFileSendExchanger[fs.threadName] = fs;
+    [fs start];
     NSLog(@"add file sending:%@", fileName);
 }
 
--(void)addAssetSender:(pSSAlbumModel *)asset
+-(void)loopAssetSender
 {
+    if (_muFileSendExchanger.allKeys.count > 0 ||
+        _mAssetWaitSendQueue.count == 0) {
+        return;
+    }
     
+    pSSAlbumModel *one = [_mAssetWaitSendQueue firstObject];
+    [_mAssetWaitSendQueue removeObjectAtIndex:0];
+    
+    //获取资源图片的详细资源信息
+    ALAssetRepresentation* representation = [one.asset defaultRepresentation];
+    
+    NSString* filename = [representation filename];
+    
+    //UIImage图片转为NSDate数据
+    CGImageRef cgImage = [representation fullResolutionImage];
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    NSData *imageData = UIImagePNGRepresentation(image);
+    
+    WeakSelf(weakSelf);
+    [pssLink NetApi_ApplyRecvFile:@{ptl_fileName:filename,ptl_fileSize:@(imageData.length)}
+                            block:^(NSDictionary *message, NSError *error) {
+                                if (error) {
+                                    [weakSelf loopAssetSender];
+                                    return;
+                                }
+                                NSInteger code = [message[ptl_status] integerValue];
+                                if (code != _SUCCESS_CODE) {
+                                    NSLog(@"%@", message);
+                                    [weakSelf loopAssetSender];
+                                    return;
+                                }
+                                NSInteger fileId = [message[ptl_fileId] integerValue];
+                                
+                                [FileExchanger addSendingFileData:imageData fileId:fileId fileName:filename];
+                            }];
 }
 
 //添加资源发送队列数据,系统图库文件等,由于没办法用url读出数据
--(void)addAssetsSending:(NSArray *)assets
+-(void)addSendingAssets:(NSArray *)assets
 {
-    [_mAssetWaitSendQueue addObjectsFromArray:assets];
-    
-    if (_muFileSendExchanger.allKeys == 0) {
-        pSSAlbumModel *one = [_mAssetWaitSendQueue firstObject];
-        [_mAssetWaitSendQueue removeObjectAtIndex:0];
-        
-        [self addAssetSender:one];
-    }
+    WeakSelf(weakSelf);
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [weakSelf.mAssetWaitSendQueue addObjectsFromArray:assets];
+        [weakSelf loopAssetSender];
+    });
 }
-
 
 //生成文件
 -(UPan_File *)createFile:(NSString *)fileName
@@ -198,7 +231,6 @@ __strong static id sharedInstance = nil;
     if (self.muFileSendExchanger[threadName]) {
         UPan_FileSender *fs = self.muFileSendExchanger[threadName];
         [self.muFileSendExchanger removeObjectForKey:threadName];
-        
         [fs cancel];
         
         if (_muFileSendExchanger.count > 0) {
@@ -206,11 +238,16 @@ __strong static id sharedInstance = nil;
         }
         
         if (_mAssetWaitSendQueue.count > 0) {
-            pSSAlbumModel *one = [_mAssetWaitSendQueue firstObject];
-            [_mAssetWaitSendQueue removeObjectAtIndex:0];
-            
-            [self addAssetSender:one];
+            WeakSelf(weakSelf);
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [weakSelf loopAssetSender];
+            });
+            return;
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD showMessage:@"发送完毕"];
+        });
     }
 }
 @end

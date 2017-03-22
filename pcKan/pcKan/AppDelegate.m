@@ -10,6 +10,8 @@
 #import "pSSMainTabbarViewController.h"
 #import "UPan_FileExchanger.h"
 
+@import CoreTelephony;
+
 @interface AppDelegate ()
 
 @end
@@ -25,6 +27,24 @@
     [self.window makeKeyWindow];
     
     FileExchanger;
+    
+    CTCellularData *cellularData = [[CTCellularData alloc]init];
+    cellularData.cellularDataRestrictionDidUpdateNotifier =  ^(CTCellularDataRestrictedState state){
+        //获取联网状态
+        switch (state) {
+            case kCTCellularDataRestricted:
+                NSLog(@"Restricrted");
+                break;
+            case kCTCellularDataNotRestricted:
+                NSLog(@"Not Restricted");
+                break;
+            case kCTCellularDataRestrictedStateUnknown:
+                NSLog(@"Unknown");
+                break;
+            default:
+                break;
+        };
+    };
     return YES;
 }
 

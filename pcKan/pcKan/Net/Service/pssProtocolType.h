@@ -57,6 +57,4 @@ typedef void (^msgSendBlock)(NSDictionary *message, NSError *error);
 
 -(instancetype)initWithData:(NSData *)data msgId:(int)msgId block:(msgSendBlock)block;
 
-+(void)initRandomId;
-+(uint32_t)getRandomMessageID;
 @end

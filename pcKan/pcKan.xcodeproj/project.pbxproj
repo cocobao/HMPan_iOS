@@ -23,6 +23,8 @@
 		84904F011E70F92400392FD4 /* HBImageTypeSizeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 84904F001E70F92400392FD4 /* HBImageTypeSizeUtil.m */; };
 		84904F041E71046F00392FD4 /* UPan_FileRecver.m in Sources */ = {isa = PBXBuildFile; fileRef = 84904F031E71046F00392FD4 /* UPan_FileRecver.m */; };
 		84904F071E71087F00392FD4 /* UPan_FileExchanger.m in Sources */ = {isa = PBXBuildFile; fileRef = 84904F061E71087F00392FD4 /* UPan_FileExchanger.m */; };
+		849229F11E82C6B30050891B /* UPan_FileBaseSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 849229F01E82C6B30050891B /* UPan_FileBaseSender.m */; };
+		849229F41E82C7D00050891B /* UPan_AssetSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 849229F31E82C7D00050891B /* UPan_AssetSender.m */; };
 		84A24D751E58522F00B96A36 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24D741E58522F00B96A36 /* main.m */; };
 		84A24D781E58522F00B96A36 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24D771E58522F00B96A36 /* AppDelegate.m */; };
 		84A24D801E58522F00B96A36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84A24D7F1E58522F00B96A36 /* Assets.xcassets */; };
@@ -216,6 +218,10 @@
 		84904F031E71046F00392FD4 /* UPan_FileRecver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileRecver.m; sourceTree = "<group>"; };
 		84904F051E71087F00392FD4 /* UPan_FileExchanger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileExchanger.h; sourceTree = "<group>"; };
 		84904F061E71087F00392FD4 /* UPan_FileExchanger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileExchanger.m; sourceTree = "<group>"; };
+		849229EF1E82C6B30050891B /* UPan_FileBaseSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_FileBaseSender.h; sourceTree = "<group>"; };
+		849229F01E82C6B30050891B /* UPan_FileBaseSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileBaseSender.m; sourceTree = "<group>"; };
+		849229F21E82C7D00050891B /* UPan_AssetSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_AssetSender.h; sourceTree = "<group>"; };
+		849229F31E82C7D00050891B /* UPan_AssetSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_AssetSender.m; sourceTree = "<group>"; };
 		84A24D701E58522F00B96A36 /* pcKan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pcKan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A24D741E58522F00B96A36 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		84A24D761E58522F00B96A36 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -578,6 +584,10 @@
 				84904F031E71046F00392FD4 /* UPan_FileRecver.m */,
 				84CA18C71E729508000CFA9F /* UPan_FileSender.h */,
 				84CA18C81E729508000CFA9F /* UPan_FileSender.m */,
+				849229F21E82C7D00050891B /* UPan_AssetSender.h */,
+				849229F31E82C7D00050891B /* UPan_AssetSender.m */,
+				849229EF1E82C6B30050891B /* UPan_FileBaseSender.h */,
+				849229F01E82C6B30050891B /* UPan_FileBaseSender.m */,
 			);
 			path = FileMng;
 			sourceTree = "<group>";
@@ -1481,6 +1491,7 @@
 				84A24EB61E5ABA7500B96A36 /* pSSMovieViewController.m in Sources */,
 				84904F071E71087F00392FD4 /* UPan_FileExchanger.m in Sources */,
 				84A24E821E5ABA7500B96A36 /* UIWebView+AFNetworking.m in Sources */,
+				849229F41E82C7D00050891B /* UPan_AssetSender.m in Sources */,
 				84A24E8D1E5ABA7500B96A36 /* NSObject+MJCoding.m in Sources */,
 				84A24EBD1E5ABA7500B96A36 /* pssLinkObj+Api.m in Sources */,
 				84F65FA21E7A5F6500F643EE /* UPan_MoveToViewController.m in Sources */,
@@ -1544,6 +1555,7 @@
 				84B7A9B41E80013B0021B712 /* XLZoomingScrollView.m in Sources */,
 				84F65F9D1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m in Sources */,
 				84A24D751E58522F00B96A36 /* main.m in Sources */,
+				849229F11E82C6B30050891B /* UPan_FileBaseSender.m in Sources */,
 				84B7A9A51E80013B0021B712 /* SDWebImageCompat.m in Sources */,
 				84A24E9A1E5ABA7500B96A36 /* pSSBaseViewController.m in Sources */,
 			);
@@ -1673,7 +1685,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cny;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1692,7 +1704,7 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cny;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

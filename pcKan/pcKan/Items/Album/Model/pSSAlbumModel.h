@@ -10,6 +10,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @interface pSSAlbumModel : NSObject
+@property (nonatomic, assign) NSInteger assetID;
 @property (nonatomic,strong) ALAsset *asset;
 @property (nonatomic,strong) NSIndexPath *indexPath;
 @property (nonatomic,strong,readonly) NSString *assetType;

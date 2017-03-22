@@ -15,6 +15,7 @@
     if (self) {
         _asset = asset;
         _isSelect = NO;
+        _assetID = [pSSCommodMethod getRandomMessageID];
         _assetType = [asset valueForProperty:ALAssetPropertyType];
     }
     return self;

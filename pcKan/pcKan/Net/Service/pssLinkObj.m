@@ -49,7 +49,7 @@ __strong static id sharedInstance = nil;
 {
     self = [super init];
     if (self) {
-        [pssHSMmsg initRandomId];
+        [pSSCommodMethod initRandomId];
         _udp_link = [[EHUdpLinkObj alloc] init];
         _tcp_link = [[EHTcpLinkObj alloc] init];
         
@@ -124,7 +124,7 @@ __strong static id sharedInstance = nil;
 //打包
 -(pssHSMmsg *)packDataType:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block
 {
-    uint32_t msgId = [pssHSMmsg getRandomMessageID];
+    uint32_t msgId = [pSSCommodMethod getRandomMessageID];
     
     if (!body) {
         body = @{};

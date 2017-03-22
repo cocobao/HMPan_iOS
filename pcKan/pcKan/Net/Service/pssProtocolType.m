@@ -21,18 +21,4 @@
     return self;
 }
 
-static uint32_t randomMessageId;
-
-+(void)initRandomId
-{
-    randomMessageId = 2 + arc4random() % 10000;
-}
-
-+(uint32_t)getRandomMessageID
-{
-    @synchronized(self) {
-        randomMessageId += 2;
-    }
-    return randomMessageId;
-}
 @end

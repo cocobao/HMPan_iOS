@@ -90,6 +90,10 @@
 //多图片发送
 -(void)multiSendPictureAction:(UIButton *)sender
 {
+    if ([self modeIsSelectCount] == 0) {
+        return;
+    }
+
     //是否连接正常
     if ([pssLink tcpLinkStatus] != tcpConnect_ConnectOk) {
         [self addHub:@"请先连接电脑客户端" hide:YES];
@@ -101,15 +105,17 @@
                                                   delegate:nil
                                          cancelButtonTitle:@"取消"
                                          otherButtonTitles:@"确定", nil];
-    WeakSelf(weakSelf);
     [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
         if (btnIndex == 1) {
+            NSMutableArray *arrIsSelectAsset = [NSMutableArray array];
             for (pSSAlbumModel *assetModel in self.mArrayDataSource) {
                 if (assetModel.isSelect) {
-                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                        [weakSelf applyRecvFile:assetModel];
-                    });
+                    [arrIsSelectAsset addObject:assetModel];
                 }
+            }
+            
+            if (arrIsSelectAsset.count > 0) {
+                [FileExchanger addSendingAssets:arrIsSelectAsset];
             }
         }
     }];

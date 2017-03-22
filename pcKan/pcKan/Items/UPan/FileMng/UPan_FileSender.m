@@ -8,20 +8,11 @@
 
 #import "UPan_FileSender.h"
 #import "UPan_FileMng.h"
-#import "pssProtocolType.h"
 #import "pSSAlbumAsset.h"
 
-static const NSInteger MaxReadSize = (1024*512);
-
 @interface UPan_FileSender ()
-{
-    CGFloat lastPostPersent;
-}
 @property (nonatomic, strong) NSString *filePath;
 @property (nonatomic, assign) NSInteger sendLength;
-@property (nonatomic, assign) NSInteger mFileId;
-@property (nonatomic, strong) NSThread *mThread;
-@property (nonatomic, strong) NSData *mSendData;
 @end
 
 @implementation UPan_FileSender
@@ -29,86 +20,14 @@ static const NSInteger MaxReadSize = (1024*512);
 {
     if (self = [super init]) {
         _filePath = filePath;
-        _mFileId = fileId;
-        lastPostPersent = 0;
-        
-        [self threadWithName:[NSString stringWithFormat:@"mvThread_%zd", _mFileId] Start:@selector(mvThread:)];
+        self.mFileId = fileId;
+
+        [self threadWithName:[NSString stringWithFormat:@"mvThread_%zd", self.mFileId]
+                       Start:@selector(mvThread:)
+                      target:self
+                         obj:self];
     }
     return self;
-}
-
--(instancetype)initWithFileData:(NSData *)fileData fileId:(NSInteger)fileId fileName:(NSString *)fileName
-{
-    if (self = [super init]){
-        lastPostPersent = 0;
-        _mSendData = fileData;
-        _mFileId = fileId;
-        [self threadWithName:[NSString stringWithFormat:@"fThread_pic_%@", fileName] Start:@selector(fileDataThread:)];
-    }
-    return self;
-}
-
--(void)threadWithName:(NSString *)threadName Start:(SEL)selector
-{
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:selector object:self];
-    [thread setName:threadName];
-    [thread start];
-    _mThread = thread;
-    _threadName = threadName;
-}
-
--(void)cancel
-{
-    if (_mThread) {
-        [_mThread cancel];
-    }
-}
-
--(void)postNotification:(CGFloat)persent fileId:(NSInteger)fileId speed:(CGFloat)speed
-{
-    if (persent - lastPostPersent >= 1) {
-        lastPostPersent = persent;
-        NSNotificationCenter *nofity = [NSNotificationCenter defaultCenter];
-        [nofity postNotificationName:kNotificationFileSendPersent
-                              object:@{ptl_fileId:@(fileId),
-                                       ptl_persent:@(persent),
-                                       ptl_speed:@(speed)}];
-    }
-}
-
-//直接发送数据线程
--(void)fileDataThread:(id)obj
-{
-    __weak UPan_FileSender *fileSender = (UPan_FileSender *)obj;
-    NSInteger offset = 0;
-    NSData *data = fileSender.mSendData;
-    
-    NSThread *currentThread = [NSThread currentThread];
-    do {
-        if (currentThread.isCancelled) {
-            NSLog(@"thread is cannel");
-            break;
-        }
-        
-        NSInteger readSize = 0;
-        if (data.length - offset > MaxReadSize) {
-            readSize = MaxReadSize;
-        }else{
-            readSize = data.length - offset;
-        }
-        
-        NSData *tmpData = [NSData dataWithBytes:(void *)(data.bytes + offset) length:readSize];
-        NSData *reData = [self resetForSendData:tmpData fid:fileSender.mFileId];
-        offset += readSize;
-        [pssLink sendFileData:reData];
-        usleep(80000);
-    }while (offset < data.length);
-    _mThread = nil;
-    
-    NSLog(@"file Send complete");
-    if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didSendFinish:)]) {
-        [self.m_delegate didSendFinish:fileSender.threadName];
-    }
 }
 
 //读取文件数据发送线程
@@ -145,46 +64,15 @@ static const NSInteger MaxReadSize = (1024*512);
         NSData *reData = [self resetForSendData:data fid:fileSender.mFileId];
         [pssLink sendFileData:reData];
 //        NSLog(@"send size:%zd", reData.length);
-        usleep(80000);
+        usleep(100000);
     }
     
     [fileHandle closeFile];
-    _mThread = nil;
-    
+
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didSendFinish:)]) {
         [self.m_delegate didSendFinish:fileSender.threadName];
     }
 }
 
-//从文件里读取数据
--(NSData *)readFileHandle:(NSFileHandle *)handle offset:(NSInteger)offSet fileSize:(NSInteger)fileSize
-{
-    NSInteger readSize = 0;
-    if (fileSize - offSet > MaxReadSize) {
-        readSize = MaxReadSize;
-    }else{
-        readSize = fileSize - offSet;
-    }
-    
-    if (readSize <= 0) {
-        return nil;
-    }
-    
-    return [handle readDataOfLength:readSize];
-}
 
-//把数据调整为对端可解格式
--(NSData *)resetForSendData:(NSData *)pSrc fid:(unsigned long long)fid
-{
-    int sizeSpace = sizeof(unsigned long long);
-    int headerSize = sizeof(stPssProtocolHead);
-    NSMutableData *muData = [[NSMutableData alloc] initWithLength:(headerSize+pSrc.length+sizeSpace)];
-    
-    uint8_t *pDes = (uint8_t *)[muData bytes];
-    //添加文件ID
-    memcpy(pDes+headerSize, &fid, sizeof(fid));
-    //添加文件数据
-    memcpy(pDes+headerSize+sizeSpace, [pSrc bytes], pSrc.length);
-    return muData;
-}
 @end
