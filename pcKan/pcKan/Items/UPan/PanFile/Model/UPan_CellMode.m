@@ -64,7 +64,7 @@
     }else if (file.fileType == UPan_FT_Mov){
         NSURL *url = [NSURL fileURLWithPath:file.filePath];
         UIImage *image = [pSSCommodMethod thumbnailImageForVideo:url];
-        file.mIcon = [pSSCommodMethod imageShotcutOfImage:image w:_F_Icon.size.width h:_F_Icon.size.height];
+        file.mIcon = image;//[pSSCommodMethod imageShotcutOfImage:image w:_F_Icon.size.width h:_F_Icon.size.height];
     }
 }
 @end

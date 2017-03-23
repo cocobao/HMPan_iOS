@@ -10,13 +10,13 @@
 #import "UPan_FileTableView.h"
 #import "UPan_FileMng.h"
 #import "UPan_File.h"
-#import "pssLocalMoviePlayViewController.h"
 #import "pssLinkObj.h"
 #import "pssLinkObj+Api.h"
 #import "UPan_FileExchanger.h"
 #import "EHScSetDefendView.h"
 #import "EHSuspensionFrameTextFieldView.h"
 #import "UPan_MoveToViewController.h"
+#import "pssGUIPlayerViewController.h"
 
 @interface UPan_PanFileViewController ()<UPanFileDelegate, NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
@@ -251,8 +251,7 @@
     }else if (file.fileType == UPan_FT_Img){
         
     }else if (file.fileType == UPan_FT_Mov){
-        pssLocalMoviePlayViewController *vc = [[pssLocalMoviePlayViewController alloc] initWithURL:
-                                               [NSURL fileURLWithPath:file.filePath]];
+        pssGUIPlayerViewController *vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
         [self pushVc:vc];
     }
 }

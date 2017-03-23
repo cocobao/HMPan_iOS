@@ -54,6 +54,7 @@ __strong static id sharedInstance = nil;
         _tcp_link = [[EHTcpLinkObj alloc] init];
         
         _udp_link.m_delegate = self;
+        [_tcp_link addDelegate:self];
         
         WeakSelf(weakSelf);
         _mTimer = [[RCETimmerHandler alloc] initWithFrequency:8 handleBlock:^{
@@ -111,14 +112,19 @@ __strong static id sharedInstance = nil;
         _tcp_link.port = port;
         [_tcp_link socketConnectWithIp:ip port:port];
     }
-    
-    [self NetApi_loginService:^(NSDictionary *message, NSError *error) {
-        if (error) {
-            return;
-        }
-        NSLog(@"login ok");
-        [UserInfo setUserWithInfo:message];
-    }];
+}
+
+- (void)NetStatusChange:(tcpConnectState)state
+{
+    if (state == tcpConnect_ConnectOk) {
+        [self NetApi_loginService:^(NSDictionary *message, NSError *error) {
+            if (error) {
+                return;
+            }
+            NSLog(@"login ok");
+            [UserInfo setUserWithInfo:message];
+        }];
+    }
 }
 
 //打包

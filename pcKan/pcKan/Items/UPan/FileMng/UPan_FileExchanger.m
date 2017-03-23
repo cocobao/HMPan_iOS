@@ -109,6 +109,7 @@ __strong static id sharedInstance = nil;
     CGImageRef cgImage = [representation fullResolutionImage];
     UIImage *image = [UIImage imageWithCGImage:cgImage];
     NSData *imageData = UIImagePNGRepresentation(image);
+    CGImageRelease(cgImage);
     
     WeakSelf(weakSelf);
     [pssLink NetApi_ApplyRecvFile:@{ptl_fileName:filename,ptl_fileSize:@(imageData.length)}
