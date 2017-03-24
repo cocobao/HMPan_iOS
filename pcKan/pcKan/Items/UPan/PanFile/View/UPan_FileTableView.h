@@ -14,7 +14,7 @@
 -(void)accessButtonWithIndex:(NSIndexPath *)indexPath;
 @optional
 -(NSArray *)UPanFileDataSource;
--(void)didSelectFile:(UPan_File *)file;
+-(void)didSelectFile:(NSIndexPath *)indexPath;
 @end
 
 @interface UPan_FileTableView : UITableView

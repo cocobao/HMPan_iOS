@@ -102,9 +102,8 @@ MGSwipeTableCellDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(UPanFileDataSource)]) {
-        UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:indexPath.row];
         if ([self.m_delegate respondsToSelector:@selector(didSelectFile:)]) {
-            [self.m_delegate didSelectFile:file];
+            [self.m_delegate didSelectFile:indexPath];
         }
     }
 }

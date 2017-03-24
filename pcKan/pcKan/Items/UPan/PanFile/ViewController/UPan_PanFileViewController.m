@@ -17,8 +17,13 @@
 #import "EHSuspensionFrameTextFieldView.h"
 #import "UPan_MoveToViewController.h"
 #import "pssGUIPlayerViewController.h"
+#import "XLPhotoBrowser.h"
 
-@interface UPan_PanFileViewController ()<UPanFileDelegate, NetTcpCallback>
+@interface UPan_PanFileViewController ()
+<UPanFileDelegate,
+NetTcpCallback,
+XLPhotoBrowserDatasource,
+XLPhotoBrowserDelegate>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
 @property (nonatomic, strong) NSMutableArray *mDataSource;
 @property (nonatomic, strong) NSString *mCurDir;
@@ -219,7 +224,6 @@
             [weakSelf setupFileSource];
         }
     };
-
 }
 
 #pragma mark - NetTcpCallback
@@ -243,17 +247,33 @@
 }
 
 //查看文件
--(void)didSelectFile:(UPan_File *)file
+-(void)didSelectFile:(NSIndexPath *)indexPath
 {
+    UPan_File *file = [self.mDataSource objectAtIndex:indexPath.row];
     if (file.fileType == UPan_FT_Dir) {
         UPan_PanFileViewController *vc = [[UPan_PanFileViewController alloc] initWithPath:file.filePath];
         [self pushVc:vc];
     }else if (file.fileType == UPan_FT_Img){
-        
+        //照片预览
+        XLPhotoBrowser *browser = [XLPhotoBrowser showPhotoBrowserWithCurrentImageIndex:indexPath.row imageCount:1 datasource:self];
+        browser.pageControlStyle = XLPhotoBrowserPageControlStyleNone;
     }else if (file.fileType == UPan_FT_Mov){
         pssGUIPlayerViewController *vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
         [self pushVc:vc];
     }
+}
+
+#pragma mark    -   XLPhotoBrowserDatasource
+
+- (UIImage *)photoBrowser:(XLPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
+{
+    UPan_File *file = [self.mDataSource objectAtIndex:index];
+    return [pSSCommodMethod imageOfPath:file.filePath];
+}
+
+- (void)photoBrowser:(XLPhotoBrowser *)browser clickActionSheetIndex:(NSInteger)actionSheetindex currentImageIndex:(NSInteger)currentImageIndex
+{
+
 }
 
 //删除文件

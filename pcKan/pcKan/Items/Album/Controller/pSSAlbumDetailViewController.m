@@ -69,16 +69,17 @@
         [self addHub:@"请先连接电脑客户端" hide:YES];
         return;
     }
-    
+    pSSAlbumModel *assetModel = [self.mArrayDataSource objectAtIndex:index];
+    ALAssetRepresentation* representation = [assetModel.asset defaultRepresentation];
+    NSString* filename = [representation filename];
     UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                   message:[NSString stringWithFormat:@"发送照片:%@ 到电脑", self.title]
+                                                   message:[NSString stringWithFormat:@"发送照片:%@ 到电脑", filename]
                                                   delegate:nil
                                          cancelButtonTitle:@"取消"
                                          otherButtonTitles:@"确定", nil];
     WeakSelf(weakSelf);
     [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
         if (btnIndex == 1) {
-            pSSAlbumModel *assetModel = [weakSelf.mArrayDataSource objectAtIndex:index];
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [weakSelf applyRecvFile:assetModel];
             });
@@ -238,7 +239,7 @@
         //照片预览
         XLPhotoBrowser *browser = [XLPhotoBrowser showPhotoBrowserWithCurrentImageIndex:indexPath.item imageCount:self.mArrayDataSource.count datasource:self];
         [browser setActionSheetWithTitle:@"" delegate:self cancelButtonTitle:@"取消" deleteButtonTitle:nil otherButtonTitles:@"发送到电脑", nil];
-        browser.pageControlStyle = XLPhotoBrowserPageControlStyleClassic;
+        browser.pageControlStyle = XLPhotoBrowserPageControlStyleNone;
     }
 }
 
