@@ -347,4 +347,68 @@ static uint32_t randomMessageId;
     }
     return randomMessageId;
 }
+
+//文件头信息，返回文件类型
++(NSString *)fileHeadTypeWithFile:(NSString *)filePath
+{
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
+    NSData *headData = [fileHandle readDataOfLength:16];
+    [fileHandle closeFile];
+    
+    uint8_t *b = (uint8_t *)[headData bytes];
+
+    //Adobe Photoshop, psd文件, 38425053
+    if (*b == 0x38 &&
+        *(b+1) == 0x42 &&
+        *(b+2) == 0x50 &&
+        *(b+3) == 0x53) {
+        return @"psd";
+    }
+    
+    //XML (xml), 3C3F786D6C
+    if (*b == 0x3C &&
+        *(b+1) == 0x3F &&
+        *(b+2) == 0x78 &&
+        *(b+3) == 0x6D &&
+        *(b+4) == 0x6C ) {
+        return @"xml";
+    }
+    
+    //HTML (html), 68746D6C3E
+    if (*b == 0x68 &&
+        *(b+1) == 0x74 &&
+        *(b+2) == 0x6D &&
+        *(b+3) == 0x6C &&
+        *(b+4) == 0x3E ) {
+        return @"html";
+    }
+    
+    //Adobe Acrobat (pdf), 255044462D312E
+    if (*b == 0x25 &&
+        *(b+1) == 0x50 &&
+        *(b+2) == 0x44 &&
+        *(b+3) == 0x46 &&
+        *(b+4) == 0x2D &&
+        *(b+1) == 0x31 &&
+        *(b+2) == 0x2E) {
+        return @"pdf";
+    }
+    
+    //ZIP Archive (zip), 504B0304
+    if (*b == 0x50 &&
+        *(b+1) == 0x4b &&
+        *(b+2) == 0x03 &&
+        *(b+3) == 0x04) {
+        return @"zip";
+    }
+    
+    //RAR Archive (rar)，文件头：52617221
+    if (*b == 0x52 &&
+        *(b+1) == 0x61 &&
+        *(b+2) == 0x72 &&
+        *(b+3) == 0x21) {
+        return @"rar";
+    }
+    return @"";
+}
 @end

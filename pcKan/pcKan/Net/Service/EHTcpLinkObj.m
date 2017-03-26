@@ -180,7 +180,7 @@
 -(void)packHandlerVer1:(NSData *)data
 {
     stPssProtocolHead *head = (stPssProtocolHead *)data.bytes;
-    char *body = (char *)(data.bytes + sizeof(stPssProtocolHead));
+    char *body = (char *)data.bytes + sizeof(stPssProtocolHead);
     
     //文件数据
     if (head->type == emPssProtocolType_SendFile) {

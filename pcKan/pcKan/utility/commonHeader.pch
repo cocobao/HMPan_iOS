@@ -8,11 +8,12 @@
 
 #ifndef commonHeader_pch
 #define commonHeader_pch
+
+#ifdef __OBJC__
 #import "UIFont_Color.h"
 #import "pSSCommodMethod.h"
 #import "comMarcoDefine.h"
 #import "MBProgressHUD+pSSAddition.h"
-
 
 typedef void(^callBackFinishBlock)(NSDictionary *receData, NSError *error);
 
@@ -52,5 +53,11 @@ attributes:@{NSFontAttributeName:font} context:nil].size : CGSizeZero;
 #define MB_MULTILINE_TEXTSIZE(text, font, maxSize, mode) [text length] > 0 ? [text \
 sizeWithFont:font constrainedToSize:maxSize lineBreakMode:mode] : CGSizeZero;
 #endif
+
+#endif
+
+
+
+
 
 #endif /* commonHeader_pch */

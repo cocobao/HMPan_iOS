@@ -30,19 +30,18 @@
     self.mCreateDateLabel.frame = mMode.F_CreateDate;
     self.mLine.frame = mMode.F_Line;
     self.mPerPersentlabel.frame = mMode.F_Persent;
-    
     self.mFileNameLabel.text = mFile.fileName;
+    
+    if (mFile.mIcon) {
+        self.mIcon.image = mFile.mIcon;
+    }else{
+        self.mIcon.image = [UIImage imageNamed:@"file"];
+    }
+    
     if (mFile.fileType == UPan_FT_Dir) {
         self.mCreateDateLabel.text = mFile.createDate;
-        self.mIcon.image = [UIImage imageNamed:@"fold"];
     }else{
         [self setFileDateAndSize];
-        
-        if (mFile.mIcon) {
-            self.mIcon.image = mFile.mIcon;
-        }else{
-            self.mIcon.image = [UIImage imageNamed:@"file"];
-        }
     }
     
     if (mFile.fileType != UPan_FT_Dir) {
@@ -90,7 +89,7 @@
                 [weakSelf.mPersentLayer removeFromSuperlayer];
                 [weakSelf.mPersentBackLayer removeFromSuperlayer];
                 
-                [weakSelf.mFile ifMediaType];
+                [weakSelf.mFile knowFileType];
                 if (weakSelf.mFile.fileType != UPan_FT_UnKnownFile) {
                     [weakSelf.tableView reloadData];
                 }
@@ -199,6 +198,7 @@
     if (!_mIcon) {
         UIImageView *view = [[UIImageView alloc] init];
         [self.contentView addSubview:view];
+        view.tag = View_tag_ImageView;
         _mIcon = view;
     }
     return _mIcon;

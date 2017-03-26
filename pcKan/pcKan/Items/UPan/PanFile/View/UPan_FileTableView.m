@@ -19,7 +19,7 @@ UITableViewDelegate,
 UITableViewDataSource,
 MGSwipeTableCellDelegate
 >
-@property (nonatomic, strong) NSMutableDictionary *dictCellMode;
+@property (nonatomic, strong) NSMutableArray *cellModes;
 @property (nonatomic, copy) void (^headerRereshingBlock)();
 @end
 
@@ -38,9 +38,15 @@ MGSwipeTableCellDelegate
         self.rowHeight = CELL_HEIGHT;
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.backgroundColor = Color_BackGround;
-        _dictCellMode = [NSMutableDictionary dictionary];
+        _cellModes = [NSMutableArray array];
     }
     return self;
+}
+
+-(void)reloadData
+{
+    [_cellModes removeAllObjects];
+    [super reloadData];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -59,21 +65,16 @@ MGSwipeTableCellDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(UPanFileDataSource)]) {
-        UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:indexPath.row];
         UPan_CellMode *mode = nil;
-        if (_dictCellMode[file.fileName]) {
-            mode = _dictCellMode[@(file.fileId)];
-        }else{
-            mode = [[UPan_CellMode alloc] init];
-            [mode setupModel:file];
-            if (mode.isCommon) {
-                if (!_dictCellMode[COMMON_CELL]){
-                    _dictCellMode[COMMON_CELL] = mode;
-                }
-            }else{
-                _dictCellMode[@(file.fileId)] = mode;
-            }
+        if (_cellModes.count > indexPath.row) {
+            mode = [_cellModes objectAtIndex:indexPath.row];
+            return mode.cell_height;
         }
+        
+        UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:indexPath.row];
+        mode = [[UPan_CellMode alloc] init];
+        [mode setupModel:file];
+        [_cellModes addObject:mode];
         
         return mode.cell_height;
     }
@@ -86,10 +87,7 @@ MGSwipeTableCellDelegate
     UPan_FileTableViewCell *cell = [UPan_FileTableViewCell cellWithTableView:self];
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(UPanFileDataSource)]) {
         UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:indexPath.row];
-        UPan_CellMode *mode = _dictCellMode[@(file.fileId)];
-        if (!mode) {
-            mode = _dictCellMode[COMMON_CELL];
-        }
+        UPan_CellMode *mode = _cellModes[indexPath.row];
         [cell setMMode:mode file:file];
         
         cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"删除" backgroundColor:[UIColor redColor]]];

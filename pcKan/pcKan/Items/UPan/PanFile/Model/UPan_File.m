@@ -23,39 +23,136 @@
         _fileId = [atts[NSFileSystemFileNumber] integerValue];
         NSDate *date = atts[NSFileCreationDate];
         _createDate = [pSSCommodMethod dateToString:date];
+        _attsFileType = atts[NSFileType];
         
-        NSFileAttributeType type = atts[NSFileType];
-        if (type == NSFileTypeDirectory) {
-            _fileType = UPan_FT_Dir;
-        }else{
-            [self ifMediaType];
-        }
+        [self knowFileType];
     }
     return self;
 }
 
--(void)ifMediaType
+//文件类型分类
+-(void)knowFileType
 {
+    do {
+        if ([self ifDirType])       break;
+        if ([self ifDocType])       break;
+        if ([self ifCompressType])  break;
+        if ([self ifImgType])       break;
+        if ([self ifVideoType])     break;
+    } while (0);
+}
+
+//是否为文件夹类型
+-(BOOL)ifDirType
+{
+    if (_attsFileType == NSFileTypeDirectory) {
+        _fileType = UPan_FT_Dir;
+        return YES;
+    }
+    return NO;
+}
+
+//是否为文档类型
+-(BOOL)ifDocType
+{
+    if ([_fileName hasSuffix:@".doc"] ||
+        [_fileName hasSuffix:@".docx"]) {
+        _fileType = UPan_FT_Word;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".ppt"]) {
+        _fileType = UPan_FT_Ppt;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".pdf"]) {
+        _fileType = UPan_FT_Pdf;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".xls"]) {
+        _fileType = UPan_FT_Xls;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".txt"]) {
+        _fileType = UPan_FT_Txt;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".h"]) {
+        _fileType = UPan_FT_H;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".m"]) {
+        _fileType = UPan_FT_M;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".psd"]) {
+        _fileType = UPan_FT_Psd;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".xml"]) {
+        _fileType = UPan_FT_Xml;
+        return YES;
+    }
+    
+    if ([_fileName hasSuffix:@".html"]) {
+        _fileType = UPan_FT_Html;
+        return YES;
+    }
+    return NO;
+}
+
+//是否为压缩文件
+-(BOOL)ifCompressType
+{
+    if (_fileSize > 6) {
+        NSString *extend = [pSSCommodMethod fileHeadTypeWithFile:_filePath];
+        
+        if ([extend isEqualToString:@"rar"]) {
+            _fileType = UPan_FT_Zip;
+            return YES;
+        }
+        
+        if ([extend isEqualToString:@"zip"]) {
+            _fileType = UPan_FT_Rar;
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
+//是否为图片类型
+-(BOOL)ifImgType
+{
+    //根据文件头信息来确定是否图片文件
     HBImageType t = [HBImageTypeSizeUtil imageTypeOfFilePath:_filePath];
     if (t == HBImageTypeJPG ||
         t == HBImageTypePNG ||
         t == HBImageTypeBMP) {
         _fileType = UPan_FT_Img;
-    }else{
-        if ([_fileName hasSuffix:@".mov"] ||
-            [_fileName hasSuffix:@".flv"] ||
-            [_fileName hasSuffix:@".mp4"] ||
-            [_fileName hasSuffix:@".mkv"]) {
-            _fileType = UPan_FT_Mov;
-        }
-        else{
-            //文件是否有视频轨道
-            AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:_filePath] options:nil];
-            NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
-            if ([tracks count] > 0) {
-                _fileType = UPan_FT_Mov;
-            }
-        }
+        return YES;
     }
+    return NO;
+}
+
+//是否为视频类型
+-(BOOL)ifVideoType
+{
+    //文件是否有视频轨道
+    AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:_filePath] options:nil];
+    NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+    if ([tracks count] > 0) {
+        _fileType = UPan_FT_Mov;
+        return YES;
+    }
+    
+    return NO;
 }
 @end

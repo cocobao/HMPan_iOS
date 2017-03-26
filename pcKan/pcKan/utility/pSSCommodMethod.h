@@ -57,6 +57,10 @@
 //获取图片资源的数据
 +(NSData *)dataOfAsset:(ALAsset *)asset;
 
+//全局唯一ID
 +(void)initRandomId;
 +(uint32_t)getRandomMessageID;
+
+//文件头信息，返回文件类型
++(NSString *)fileHeadTypeWithFile:(NSString *)filePath;
 @end

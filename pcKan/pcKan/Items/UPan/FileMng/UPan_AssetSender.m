@@ -51,7 +51,7 @@
         NSData *reData = [self resetForSendData:tmpData fid:fileSender.mFileId];
         offset += readSize;
         [pssLink sendFileData:reData];
-        usleep(80000);
+        usleep(100000);
     }while (offset < data.length);
 
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didSendFinish:)]) {

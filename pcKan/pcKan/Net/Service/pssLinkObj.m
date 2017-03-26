@@ -49,7 +49,6 @@ __strong static id sharedInstance = nil;
 {
     self = [super init];
     if (self) {
-        [pSSCommodMethod initRandomId];
         _udp_link = [[EHUdpLinkObj alloc] init];
         _tcp_link = [[EHTcpLinkObj alloc] init];
         

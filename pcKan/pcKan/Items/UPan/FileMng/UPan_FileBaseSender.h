@@ -14,7 +14,7 @@
 -(void)didSendFinish:(NSString *)threadName;
 @end
 
-#define MaxReadSize (1024*512)
+#define MaxReadSize (1024*256)
 
 @interface UPan_FileBaseSender : NSObject
 @property (nonatomic, assign) CGFloat lastPostPersent;

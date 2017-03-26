@@ -17,13 +17,16 @@
 #import "EHSuspensionFrameTextFieldView.h"
 #import "UPan_MoveToViewController.h"
 #import "pssGUIPlayerViewController.h"
-#import "XLPhotoBrowser.h"
+#import "pssDocReaderViewController.h"
+#import "SARUnArchiveANY.h"
+#import "LZMAExtractor.h"
+#import "UIImageView+MJWebCache.h"
+#import "MJPhotoBrowser.h"
+#import "MJPhoto.h"
 
 @interface UPan_PanFileViewController ()
 <UPanFileDelegate,
-NetTcpCallback,
-XLPhotoBrowserDatasource,
-XLPhotoBrowserDelegate>
+NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
 @property (nonatomic, strong) NSMutableArray *mDataSource;
 @property (nonatomic, strong) NSString *mCurDir;
@@ -88,6 +91,7 @@ XLPhotoBrowserDelegate>
     [ntf removeObserver:self];
 }
 
+//文件资源准备好
 -(void)setupFileSource
 {
     //生成主路径
@@ -109,7 +113,7 @@ XLPhotoBrowserDelegate>
         [arrO addObject:uFile];
     }
     
-    //把目录排到前面
+    //把文件夹排到前面
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.fileType = %d", UPan_FT_Dir];
     NSArray *arrD = [arrO filteredArrayUsingPredicate:predicate];
     [arrO removeObjectsInArray:arrD];
@@ -246,36 +250,6 @@ XLPhotoBrowserDelegate>
     return _mDataSource;
 }
 
-//查看文件
--(void)didSelectFile:(NSIndexPath *)indexPath
-{
-    UPan_File *file = [self.mDataSource objectAtIndex:indexPath.row];
-    if (file.fileType == UPan_FT_Dir) {
-        UPan_PanFileViewController *vc = [[UPan_PanFileViewController alloc] initWithPath:file.filePath];
-        [self pushVc:vc];
-    }else if (file.fileType == UPan_FT_Img){
-        //照片预览
-        XLPhotoBrowser *browser = [XLPhotoBrowser showPhotoBrowserWithCurrentImageIndex:indexPath.row imageCount:1 datasource:self];
-        browser.pageControlStyle = XLPhotoBrowserPageControlStyleNone;
-    }else if (file.fileType == UPan_FT_Mov){
-        pssGUIPlayerViewController *vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-        [self pushVc:vc];
-    }
-}
-
-#pragma mark    -   XLPhotoBrowserDatasource
-
-- (UIImage *)photoBrowser:(XLPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
-{
-    UPan_File *file = [self.mDataSource objectAtIndex:index];
-    return [pSSCommodMethod imageOfPath:file.filePath];
-}
-
-- (void)photoBrowser:(XLPhotoBrowser *)browser clickActionSheetIndex:(NSInteger)actionSheetindex currentImageIndex:(NSInteger)currentImageIndex
-{
-
-}
-
 //删除文件
 -(void)didDeleteFile:(UPan_File *)file
 {
@@ -284,19 +258,78 @@ XLPhotoBrowserDelegate>
     [self.mDataSource removeObject:file];
 }
 
+//查看文件
+-(void)didSelectFile:(NSIndexPath *)indexPath
+{
+    UPan_File *file = [self.mDataSource objectAtIndex:indexPath.row];
+    switch (file.fileType) {
+        case UPan_FT_Dir:
+        {
+            //文件夹类型，跳转到下一集目录展示
+            UPan_PanFileViewController *vc = [[UPan_PanFileViewController alloc] initWithPath:file.filePath];
+            [self pushVc:vc];
+        }
+            break;
+        case UPan_FT_Img:
+        {
+            //照片预览
+            UITableViewCell *cell = [self.mTableView cellForRowAtIndexPath:indexPath];
+            
+            MJPhoto *photo = [[MJPhoto alloc] init];
+            photo.url = [NSURL fileURLWithPath:file.filePath];
+            photo.srcImageView = [cell viewWithTag:View_tag_ImageView];
+            MJPhotoBrowser *photoBrowser = [[MJPhotoBrowser alloc] init];
+            photoBrowser.photos = @[photo];
+            photoBrowser.currentPhotoIndex = 0;
+            [photoBrowser show];
+        }
+            break;
+        case UPan_FT_Mov:
+        {
+            //本地视频观看
+            pssGUIPlayerViewController *vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            [self pushVc:vc];
+        }
+            break;
+        case UPan_FT_Word:
+        case UPan_FT_Pdf:
+        case UPan_FT_Ppt:
+        case UPan_FT_Xls:
+        case UPan_FT_Txt:
+        case UPan_FT_H:
+        case UPan_FT_M:
+        {
+            //浏览文档
+            pssDocReaderViewController *vc = [[pssDocReaderViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            [self pushVc:vc];
+        }
+            break;
+        case UPan_FT_Rar:
+        case UPan_FT_Zip:
+        {
+            [self decompressFile:file];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+//点击更多操作
 -(void)accessButtonWithIndex:(NSIndexPath *)indexPath
 {
     NSArray *arrItems = @[@"重命名", @"发送到电脑", @"移动到", @"取消"];
+    
     EHScSetDefendView *view = [[EHScSetDefendView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)
                                                                    arr:arrItems];
     [view show];
     WeakSelf(weakSelf);
     view.didSelectIndex = ^(NSInteger index){
         if (index == arrItems.count - 1) {
+            //取消
             return;
         }
-        
-        UPan_File *file = [weakSelf.mDataSource objectAtIndex:indexPath.row];
+        UPan_File *file = [_mDataSource objectAtIndex:indexPath.row];
         if (index == 0) {
             [weakSelf reNameFile:file indexPath:indexPath];
         }else if (index == 1) {
@@ -310,6 +343,64 @@ XLPhotoBrowserDelegate>
             [weakSelf presentVc:vc];
         }
     };
+}
+
+#pragma mark - Decompress
+-(void)decompressFile:(UPan_File *)file
+{
+    NSArray *arrItems = @[@"直接解压", @"密码解压", @"取消"];
+    
+    EHScSetDefendView *view = [[EHScSetDefendView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)
+                                                                   arr:arrItems];
+    [view show];
+    WeakSelf(weakSelf);
+    view.didSelectIndex = ^(NSInteger index){
+        StrongSelf(strongSelf, weakSelf);
+        if (index == arrItems.count - 1) return;
+        
+        if (index == 0) {
+            [strongSelf unArchive:file.filePath andPassword:nil destinationPath:weakSelf.mCurDir];
+        }else if(index == 1){
+            EHSuspensionFrameTextFieldView *view = [[EHSuspensionFrameTextFieldView alloc] initWithTitle:@"解压密码" placeholder:@""];
+            [view show];
+            view.didSelectButton = ^(NSInteger index, NSString *text){
+                if (index == 0) return;
+                
+                [strongSelf unArchive:file.filePath andPassword:text destinationPath:strongSelf.mCurDir];
+            };
+        }
+    };
+}
+
+//解压
+- (void)unArchive: (NSString *)filePath andPassword:(NSString*)password destinationPath:(NSString *)destPath{
+    NSAssert(filePath, @"can't find filePath");
+    SARUnArchiveANY *unarchive = [[SARUnArchiveANY alloc] initWithPath:filePath];
+    if (password != nil && password.length > 0) {
+        unarchive.password = password;
+    }
+    
+    if (destPath != nil)
+        unarchive.destinationPath = destPath;
+    
+    WeakSelf(weakSelf);
+    [weakSelf addHub:@"解压中" hide:NO];
+    unarchive.completionBlock = ^(NSArray *filePaths){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf removeHub];
+            [weakSelf addHub:@"解压成功" hide:YES];
+            [weakSelf setupFileSource];
+        });
+    };
+    unarchive.failureBlock = ^(){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf removeHub];
+            [weakSelf addHub:@"解压失败" hide:YES];
+        });
+    };
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [unarchive decompress];
+    });
 }
 
 #pragma mark - views

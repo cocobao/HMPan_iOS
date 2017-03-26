@@ -9,6 +9,8 @@
 #ifndef comMarcoDefine_h
 #define comMarcoDefine_h
 
+#define View_tag_ImageView 10001
+
 #define _SUCCESS_CODE 200
 #define PSS_CMD_TYPE @"PSS_CMD_TYPE"
 #define UPAN_SRC_PATH @"HMPan"

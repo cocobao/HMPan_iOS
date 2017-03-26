@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "pSSMainTabbarViewController.h"
 #import "UPan_FileExchanger.h"
+#import "UncaughtExceptionHandler.h"
 
 @import CoreTelephony;
 
@@ -20,14 +21,18 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    InstallUncaughtExceptionHandler();
+    
+    [pSSCommodMethod initRandomId];
+    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     pSSMainTabbarViewController *tabbar = [[pSSMainTabbarViewController alloc] init];
     self.window.rootViewController = tabbar;
-    [self.window makeKeyWindow];
+    [self.window makeKeyAndVisible];
     
     FileExchanger;
-    
+
     CTCellularData *cellularData = [[CTCellularData alloc]init];
     cellularData.cellularDataRestrictionDidUpdateNotifier =  ^(CTCellularDataRestrictedState state){
         //获取联网状态
