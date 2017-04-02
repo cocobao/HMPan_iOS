@@ -10,6 +10,7 @@
 #import "pssLinkObj+Api.h"
 #import "pssUserInfo.h"
 #import "RCETimmerHandler.h"
+#import "UPan_FileExchanger.h"
 
 #define PRO_VERSION 1
 
@@ -56,10 +57,16 @@ __strong static id sharedInstance = nil;
         [_tcp_link addDelegate:self];
         
         WeakSelf(weakSelf);
-        _mTimer = [[RCETimmerHandler alloc] initWithFrequency:8 handleBlock:^{
-            if (weakSelf.tcpLinkStatus != tcpConnect_ConnectOk) {
+        _mTimer = [[RCETimmerHandler alloc] initWithFrequency:5 handleBlock:^{
+            if (weakSelf.tcpLinkStatus == tcpConnect_ConnectOk) {
+                if (!UserInfo.isLogin) {
+                    [weakSelf NetLogin];
+                }
+            }else{
                 [weakSelf NetApi_BoardCastIp];
             }
+            
+            [weakSelf.tcp_link checkForTimeoutPack];
         } cancelBlock:nil];
         [_mTimer start];
     }
@@ -97,6 +104,11 @@ __strong static id sharedInstance = nil;
     return _tcp_link.connectState;
 }
 
+-(void)cutoffTcpConnect
+{
+    [_tcp_link cutOffConnection];
+}
+
 //收到服务端IP广播
 -(void)recvBoatcastWithIp:(NSString *)ip port:(NSInteger)port
 {
@@ -113,16 +125,29 @@ __strong static id sharedInstance = nil;
     }
 }
 
+-(void)NetLogin
+{
+    NSLog(@"send login");
+    [self NetApi_loginService:^(NSDictionary *message, NSError *error) {
+        if (error) {
+            return;
+        }
+        NSLog(@"login ok");
+        [UserInfo setUserWithInfo:message];
+        UserInfo.isLogin = YES;
+    }];
+}
+
 - (void)NetStatusChange:(tcpConnectState)state
 {
-    if (state == tcpConnect_ConnectOk) {
-        [self NetApi_loginService:^(NSDictionary *message, NSError *error) {
-            if (error) {
-                return;
-            }
-            NSLog(@"login ok");
-            [UserInfo setUserWithInfo:message];
-        }];
+    if (state != tcpConnect_ConnectOk) {
+        UserInfo.isLogin = NO;
+        
+        NSLog(@"logout");
+        NSNotificationCenter *no = [NSNotificationCenter defaultCenter];
+        [no postNotificationName:kNotificationLogout object:nil];
+    }else{
+        [self NetLogin];
     }
 }
 

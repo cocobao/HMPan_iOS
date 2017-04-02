@@ -72,7 +72,7 @@
 -(void)cutOffConnection
 {
     NSLog(@"cut off by mySelf");
-    if (_connectState != tcpConnect_ConnectNotOk) {
+    if (_connectState == tcpConnect_ConnectOk) {
         [_mGcdTcpSocket disconnect];
     }
 }
@@ -196,6 +196,8 @@
     [dict setValue:@(head->type) forKey:PSS_CMD_TYPE];
     [dict setValue:@(head->msgId) forKey:ptl_msgId];
     
+    NSLog(@"recv cmd type:%zd", head->type);
+    
     if (head->bodyLength > 0) {
         NSData *jsonData = [[NSData alloc] initWithBytes:body length:head->bodyLength];
         [dict addEntriesFromDictionary:[pSSCommodMethod jsonObjectWithJsonData:jsonData]];
@@ -214,6 +216,25 @@
         }
     }else{
         [_multicastDelegate NetTcpCallback:dict error:nil];
+    }
+}
+
+-(void)checkForTimeoutPack
+{
+    if (_mMessageQueue.count == 0) {
+        return;
+    }
+    
+    time_t nowTimeInternal = time(NULL);
+    NSArray *arrCopySource = [NSArray arrayWithArray:_mMessageQueue];
+    for (pssHSMmsg *pack in arrCopySource) {
+        if (nowTimeInternal - pack.sendTime > 5) {
+            [_mMessageQueue removeObject:pack];
+            
+            if (pack.sendBlock) {
+                pack.sendBlock(nil, [NSError errorWithDomain:@"网络超时" code:-1 userInfo:nil]);
+            }
+        }
     }
 }
 

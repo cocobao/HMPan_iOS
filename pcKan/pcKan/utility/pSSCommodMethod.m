@@ -183,6 +183,13 @@
     return YES;
 }
 
++(NSDate *)GMTtoLocalData:(NSDate *)date
+{
+    NSTimeZone *timeZone = [NSTimeZone systemTimeZone]; // 获取的是系统的时区
+    NSInteger interval = [timeZone secondsFromGMTForDate: date];// local时间距离GMT的秒数
+    return [date dateByAddingTimeInterval: interval];
+}
+
 +(NSString *)dateToString:(NSDate *)date
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -352,9 +359,11 @@ static uint32_t randomMessageId;
 +(NSString *)fileHeadTypeWithFile:(NSString *)filePath
 {
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
-    NSData *headData = [fileHandle readDataOfLength:16];
+    NSData *headData = [fileHandle readDataOfLength:10];
     [fileHandle closeFile];
-    
+    if (!headData) {
+        return @"";
+    }
     uint8_t *b = (uint8_t *)[headData bytes];
 
     //Adobe Photoshop, psd文件, 38425053

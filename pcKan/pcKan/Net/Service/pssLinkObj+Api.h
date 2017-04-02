@@ -17,5 +17,6 @@
 -(void)NetApi_BoardCastIp;
 -(void)NetApi_ApplySendFileAck:(NSString *)filePath fileId:(NSInteger)fileId;
 -(void)NetApi_ApplyRecvFile:(NSDictionary *)info block:(msgSendBlock)block;
+-(void)NetApi_FilePartWithFileId:(NSInteger)fileId pcFilePath:(NSString *)pcFilePath seek:(uint64_t)seek block:(msgSendBlock)block;
 -(void)sendFileData:(NSData *)data;
 @end

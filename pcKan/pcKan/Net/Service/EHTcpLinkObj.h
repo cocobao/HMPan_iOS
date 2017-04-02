@@ -33,4 +33,5 @@ typedef enum tcpConnectState{
 - (void)addDelegate:(id)delegate;
 - (void)removeDelegate:(id)delegate;
 -(void)sendData:(pssHSMmsg *)pack;
+-(void)checkForTimeoutPack;
 @end

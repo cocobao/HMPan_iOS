@@ -43,14 +43,11 @@
 
 -(void)postNotification:(CGFloat)persent fileId:(NSInteger)fileId speed:(CGFloat)speed
 {
-    if (persent - _lastPostPersent >= 1) {
-        _lastPostPersent = persent;
-        NSNotificationCenter *nofity = [NSNotificationCenter defaultCenter];
-        [nofity postNotificationName:kNotificationFileSendPersent
-                              object:@{ptl_fileId:@(fileId),
-                                       ptl_persent:@(persent),
-                                       ptl_speed:@(speed)}];
-    }
+    NSNotificationCenter *nofity = [NSNotificationCenter defaultCenter];
+    [nofity postNotificationName:kNotificationFileSendPersent
+                          object:@{ptl_fileId:@(fileId),
+                                   ptl_persent:@(persent),
+                                   ptl_speed:@(speed)}];
 }
 
 -(void)threadWithName:(NSString *)threadName Start:(SEL)selector target:(id)target obj:(id)obj

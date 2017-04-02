@@ -35,6 +35,9 @@
 
 +(UIImage *)imageOfPath:(NSString *)filePath;
 
+//GMT转当地时间
++(NSDate *)GMTtoLocalData:(NSDate *)date;
+
 //获取图片的缩略图
 +(UIImage *)imageShotcutOfPath:(NSString *)filePath w:(NSInteger)w h:(NSInteger)h;
 +(UIImage *)imageShotcutOfImage:(UIImage *)image w:(NSInteger)w h:(NSInteger)h;

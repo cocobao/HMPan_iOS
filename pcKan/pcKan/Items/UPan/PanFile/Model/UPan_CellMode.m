@@ -95,7 +95,9 @@
     else if (file.fileType == UPan_FT_Mov){
         NSURL *url = [NSURL fileURLWithPath:file.filePath];
         UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
-        image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:_F_Icon.size.width h:_F_Icon.size.height];
+        if (imageTmp != nil) {
+            image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:_F_Icon.size.width h:_F_Icon.size.height];
+        }
     }
     
     file.mIcon = image;

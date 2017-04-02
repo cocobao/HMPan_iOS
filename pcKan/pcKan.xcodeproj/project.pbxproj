@@ -92,7 +92,6 @@
 		849C3FDB1E84143D0048033D /* GUIPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C3FD61E84143D0048033D /* GUIPlayerView.m */; };
 		849C3FDC1E84143D0048033D /* GUISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C3FD81E84143D0048033D /* GUISlider.m */; };
 		849C3FDD1E84143D0048033D /* UIView+UpdateAutoLayoutConstraints.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C3FDA1E84143D0048033D /* UIView+UpdateAutoLayoutConstraints.m */; };
-		849C3FE81E8418050048033D /* pssGUIPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 849C3FE71E8418050048033D /* pssGUIPlayerViewController.m */; };
 		84A24D751E58522F00B96A36 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24D741E58522F00B96A36 /* main.m */; };
 		84A24D781E58522F00B96A36 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A24D771E58522F00B96A36 /* AppDelegate.m */; };
 		84A24D801E58522F00B96A36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84A24D7F1E58522F00B96A36 /* Assets.xcassets */; };
@@ -186,6 +185,10 @@
 		84CA18C91E729508000CFA9F /* UPan_FileSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CA18C81E729508000CFA9F /* UPan_FileSender.m */; };
 		84CB87801E6FD32A00DCE909 /* UIAlertView+RWBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */; };
 		84CB878F1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CB878E1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m */; };
+		84D8E8191E894FE700D1D5D6 /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D8E8181E894FE700D1D5D6 /* IJKMediaFramework.framework */; };
+		84D8E8261E895F5400D1D5D6 /* pssGUIPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8E8221E895F5400D1D5D6 /* pssGUIPlayerViewController.m */; };
+		84D8E8271E895F5400D1D5D6 /* pssIjkPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8E8241E895F5400D1D5D6 /* pssIjkPlayerViewController.m */; };
+		84D8E82A1E895F8F00D1D5D6 /* pssMediaControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8E8291E895F8F00D1D5D6 /* pssMediaControlView.m */; };
 		84F65F9D1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65F9C1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m */; };
 		84F65FA21E7A5F6500F643EE /* UPan_MoveToViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FA11E7A5F6500F643EE /* UPan_MoveToViewController.m */; };
 		84F65FB61E7A7B3A00F643EE /* pSSAlbumDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FA71E7A7B3A00F643EE /* pSSAlbumDetailViewController.m */; };
@@ -412,8 +415,6 @@
 		849C3FD81E84143D0048033D /* GUISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GUISlider.m; sourceTree = "<group>"; };
 		849C3FD91E84143D0048033D /* UIView+UpdateAutoLayoutConstraints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UpdateAutoLayoutConstraints.h"; sourceTree = "<group>"; };
 		849C3FDA1E84143D0048033D /* UIView+UpdateAutoLayoutConstraints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UpdateAutoLayoutConstraints.m"; sourceTree = "<group>"; };
-		849C3FE61E8418050048033D /* pssGUIPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssGUIPlayerViewController.h; sourceTree = "<group>"; };
-		849C3FE71E8418050048033D /* pssGUIPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssGUIPlayerViewController.m; sourceTree = "<group>"; };
 		84A24D701E58522F00B96A36 /* pcKan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pcKan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A24D741E58522F00B96A36 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		84A24D761E58522F00B96A36 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -588,6 +589,13 @@
 		84CB877F1E6FD32A00DCE909 /* UIAlertView+RWBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+RWBlock.m"; sourceTree = "<group>"; };
 		84CB878D1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+pSSAddition.h"; sourceTree = "<group>"; };
 		84CB878E1E6FE95100DCE909 /* MBProgressHUD+pSSAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+pSSAddition.m"; sourceTree = "<group>"; };
+		84D8E8181E894FE700D1D5D6 /* IJKMediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IJKMediaFramework.framework; path = pcKan/3partyLib/IJKMediaFramework.framework; sourceTree = "<group>"; };
+		84D8E8211E895F5400D1D5D6 /* pssGUIPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssGUIPlayerViewController.h; sourceTree = "<group>"; };
+		84D8E8221E895F5400D1D5D6 /* pssGUIPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssGUIPlayerViewController.m; sourceTree = "<group>"; };
+		84D8E8231E895F5400D1D5D6 /* pssIjkPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssIjkPlayerViewController.h; sourceTree = "<group>"; };
+		84D8E8241E895F5400D1D5D6 /* pssIjkPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssIjkPlayerViewController.m; sourceTree = "<group>"; };
+		84D8E8281E895F8F00D1D5D6 /* pssMediaControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssMediaControlView.h; sourceTree = "<group>"; };
+		84D8E8291E895F8F00D1D5D6 /* pssMediaControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssMediaControlView.m; sourceTree = "<group>"; };
 		84F65F9B1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EHSuspensionFrameTextFieldView.h; sourceTree = "<group>"; };
 		84F65F9C1E7A2D2100F643EE /* EHSuspensionFrameTextFieldView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EHSuspensionFrameTextFieldView.m; sourceTree = "<group>"; };
 		84F65FA01E7A5F6500F643EE /* UPan_MoveToViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_MoveToViewController.h; sourceTree = "<group>"; };
@@ -620,6 +628,7 @@
 				84A24EE01E5ABC4000B96A36 /* AudioToolbox.framework in Frameworks */,
 				84A24EDE1E5ABC3600B96A36 /* AVFoundation.framework in Frameworks */,
 				8480006A1E87B4B10081C4D7 /* Unrar4iOS.framework in Frameworks */,
+				84D8E8191E894FE700D1D5D6 /* IJKMediaFramework.framework in Frameworks */,
 				84A24EDC1E5ABC2F00B96A36 /* CoreGraphics.framework in Frameworks */,
 				84A24EDA1E5ABC2400B96A36 /* CoreMedia.framework in Frameworks */,
 				84A24ED91E5ABC1D00B96A36 /* CoreVideo.framework in Frameworks */,
@@ -1053,8 +1062,8 @@
 		849C3FE51E8417FA0048033D /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				849C3FE61E8418050048033D /* pssGUIPlayerViewController.h */,
-				849C3FE71E8418050048033D /* pssGUIPlayerViewController.m */,
+				84D8E8201E895F5400D1D5D6 /* Controller */,
+				84D8E8251E895F5400D1D5D6 /* View */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -1109,6 +1118,7 @@
 		84A24D8A1E58524200B96A36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84D8E8181E894FE700D1D5D6 /* IJKMediaFramework.framework */,
 				84A24EDF1E5ABC4000B96A36 /* AudioToolbox.framework */,
 				84A24EDD1E5ABC3600B96A36 /* AVFoundation.framework */,
 				84A24EDB1E5ABC2F00B96A36 /* CoreGraphics.framework */,
@@ -1503,6 +1513,26 @@
 			path = PageControl;
 			sourceTree = "<group>";
 		};
+		84D8E8201E895F5400D1D5D6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				84D8E8211E895F5400D1D5D6 /* pssGUIPlayerViewController.h */,
+				84D8E8221E895F5400D1D5D6 /* pssGUIPlayerViewController.m */,
+				84D8E8231E895F5400D1D5D6 /* pssIjkPlayerViewController.h */,
+				84D8E8241E895F5400D1D5D6 /* pssIjkPlayerViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		84D8E8251E895F5400D1D5D6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				84D8E8281E895F8F00D1D5D6 /* pssMediaControlView.h */,
+				84D8E8291E895F8F00D1D5D6 /* pssMediaControlView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		84F65FA41E7A7B3A00F643EE /* Album */ = {
 			isa = PBXGroup;
 			children = (
@@ -1648,7 +1678,6 @@
 				848000D31E87C2720081C4D7 /* MJPhoto.m in Sources */,
 				84F65FBC1E7A7B3A00F643EE /* pSSAlbumTableViewCell.m in Sources */,
 				847858571E856BDB00CA9497 /* UncaughtExceptionHandler.m in Sources */,
-				849C3FE81E8418050048033D /* pssGUIPlayerViewController.m in Sources */,
 				848000011E87B2690081C4D7 /* SSZipArchive.m in Sources */,
 				84A24E741E5ABA7500B96A36 /* AFSecurityPolicy.m in Sources */,
 				848000781E87B4B10081C4D7 /* Ppmd7Dec.c in Sources */,
@@ -1680,7 +1709,9 @@
 				84A24E881E5ABA7500B96A36 /* MBProgressHUD.m in Sources */,
 				8480006D1E87B4B10081C4D7 /* 7zDec.c in Sources */,
 				848000D91E87C2720081C4D7 /* MJPhotoView.m in Sources */,
+				84D8E82A1E895F8F00D1D5D6 /* pssMediaControlView.m in Sources */,
 				848000771E87B4B10081C4D7 /* Ppmd7.c in Sources */,
+				84D8E8261E895F5400D1D5D6 /* pssGUIPlayerViewController.m in Sources */,
 				848000E31E87C2720081C4D7 /* UIImage+GIF.m in Sources */,
 				84B7A99F1E80013B0021B712 /* TAAnimatedDotView.m in Sources */,
 				84A24E7E1E5ABA7500B96A36 /* UIButton+AFNetworking.m in Sources */,
@@ -1731,6 +1762,7 @@
 				848000DD1E87C2720081C4D7 /* SDWebImageDecoder.m in Sources */,
 				84F798A31E6D15C800CF871A /* UPan_CellMode.m in Sources */,
 				84A24E9B1E5ABA7500B96A36 /* pSSBaseTableHeaderFooterView.m in Sources */,
+				84D8E8271E895F5400D1D5D6 /* pssIjkPlayerViewController.m in Sources */,
 				848000DF1E87C2720081C4D7 /* SDWebImageDownloaderOperation.m in Sources */,
 				849C3FDC1E84143D0048033D /* GUISlider.m in Sources */,
 				848000E71E87C2720081C4D7 /* UIView+WebCacheOperation.m in Sources */,
@@ -1921,6 +1953,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/pcKan/3partyLib/SARUnArchiveANY/Frameworks",
+					"$(PROJECT_DIR)/pcKan/3partyLib",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/pcKan/utility/commonHeader.pch";
@@ -1928,8 +1961,9 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cnk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1942,6 +1976,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/pcKan/3partyLib/SARUnArchiveANY/Frameworks",
+					"$(PROJECT_DIR)/pcKan/3partyLib",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/pcKan/utility/commonHeader.pch";
@@ -1949,8 +1984,9 @@
 				INFOPLIST_FILE = pcKan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
+				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cnk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

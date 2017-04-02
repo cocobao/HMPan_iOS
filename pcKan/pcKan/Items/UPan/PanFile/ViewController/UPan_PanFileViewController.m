@@ -23,12 +23,14 @@
 #import "UIImageView+MJWebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
+#import "pssIjkPlayerViewController.h"
 
 @interface UPan_PanFileViewController ()
 <UPanFileDelegate,
 NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
 @property (nonatomic, strong) NSMutableArray *mDataSource;
+@property (nonatomic, strong) NSMutableArray *mInfoSource;
 @property (nonatomic, strong) NSString *mCurDir;
 @property (nonatomic, strong) UIButton *mLinkBtn;
 @property (nonatomic, strong) UIButton *mCreateFoldBtn;
@@ -49,25 +51,33 @@ NetTcpCallback>
     [super viewDidLoad];
     
     _mDataSource = [NSMutableArray array];
+    _mInfoSource = [NSMutableArray array];
+    
     self.mTableView.frame = CGRectMake(0, 0, kScreenWidth, kViewHeight);
-
     WeakSelf(weakSelf);
     [self.mTableView headerRereshing:YES rereshingBlock:^{
         [weakSelf setupFileSource];
     }];
-    [self setupFileSource];
     
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:self.mCreateFoldBtn];
     self.navigationItem.rightBarButtonItem = leftItem;
     
     [self.navigationController.navigationBar addSubview:self.mLinkBtn];
+    
+    [self addHub:@"加载中" hide:NO];
+    //获取当前路径的文件资源
+    [self setupFileSource];
+    [self removeHub];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    //添加tcp代理
     [pssLink addTcpDelegate:self];
     
+    //当前的网络状态显示
     tcpConnectState state = [pssLink tcpLinkStatus];
     if (state == tcpConnect_ConnectOk) {
         self.mLinkBtn.backgroundColor = [UIColor greenColor];
@@ -75,6 +85,7 @@ NetTcpCallback>
         self.mLinkBtn.backgroundColor = [UIColor redColor];
     }
     
+    //注册通知接口
     NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
     [ntf addObserver:self selector:@selector(ntfCreateNewFile:) name:kNotificationFileCreate object:nil];
     
@@ -91,42 +102,90 @@ NetTcpCallback>
     [ntf removeObserver:self];
 }
 
+//读出信息文件
+-(void)parseTheInfoFile:(NSString *)filePath
+{
+    NSData *data = [UPan_FileMng readFile:filePath];
+    NSDictionary *dict = [pSSCommodMethod jsonObjectWithJsonData:data];
+    if (!dict) {
+        return;
+    }
+    [_mInfoSource addObject:dict];
+}
+
 //文件资源准备好
 -(void)setupFileSource
 {
     //生成主路径
     NSString *rootPath = nil;
     rootPath = self.mCurDir;
-
+    
+    [_mInfoSource removeAllObjects];
+    [_mDataSource removeAllObjects];
+    
     //获取路径下所有文件
     NSArray *arr = [UPan_FileMng ContentOfPath:rootPath];
     if (arr.count == 0) {
+        [self.mTableView reloadData];
         return;
     }
     
+    //读出传输信息文件
+    for (NSString *file in arr) {
+        if ([file hasSuffix:@".hmf"]) {
+            
+            NSString *path = [rootPath stringByAppendingPathComponent:file];
+            [self parseTheInfoFile:path];
+        }
+    }
+    
+    //读出所有文件
     NSMutableArray *arrO = [NSMutableArray arrayWithCapacity:arr.count];
     for (NSString *file in arr) {
-        NSString *path = [rootPath stringByAppendingPathComponent:file];
-        NSDictionary *fileAtts = [UPan_FileMng fileAttriutes:path];
+        if ([file hasSuffix:@".hmf"]) continue;
         
+        NSString *path = [rootPath stringByAppendingPathComponent:file];
+
+        //实例化文件对象类
+        NSDictionary *fileAtts = [UPan_FileMng fileAttriutes:path];
         UPan_File *uFile = [[UPan_File alloc] initWithPath:path Atts:fileAtts];
+        
+        //是否有传输信息
+        for (NSDictionary *chanInfoDict in _mInfoSource) {
+            NSInteger fileId = [chanInfoDict[ptl_fileId] integerValue];
+            if (fileId == uFile.fileId) {
+                if ([FileExchanger isFileExchanging:fileId]) {
+                    uFile.exchangingState = EXCHANGE_ING;
+                }else{
+                    uFile.exchangingState = EXCHANGE_PUSE;
+                }
+                
+                uFile.exchangeInfo = [NSMutableDictionary dictionaryWithDictionary:chanInfoDict];
+                
+                //这里必须更新路径，iphone每次启动文件路径都会变化
+                [uFile.exchangeInfo setValue:uFile.filePath forKey:ptl_filePath];
+                
+                break;
+            }
+        }
+        
         [arrO addObject:uFile];
     }
     
-    //把文件夹排到前面
+    //把文件夹类排到前面
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.fileType = %d", UPan_FT_Dir];
     NSArray *arrD = [arrO filteredArrayUsingPredicate:predicate];
     [arrO removeObjectsInArray:arrD];
     
-    [_mDataSource removeAllObjects];
+    //添加文件夹类
     if (arrD.count > 0) {
         [_mDataSource addObjectsFromArray:arrD];
     }
-    
+    //添加普通文件类
     if (arrO.count > 0) {
         [_mDataSource addObjectsFromArray:arrO];
     }
-    
+    [_mInfoSource removeAllObjects];
     [self.mTableView reloadData];
 }
 
@@ -253,7 +312,11 @@ NetTcpCallback>
 //删除文件
 -(void)didDeleteFile:(UPan_File *)file
 {
+    [FileExchanger removeFileRecver:file.fileId];
     [UPan_FileMng deleteFile:file.filePath];
+    
+    NSString *infoFile = [NSString stringWithFormat:@"%@.hmf", file.filePath];
+    [UPan_FileMng deleteFile:infoFile];
     
     [self.mDataSource removeObject:file];
 }
@@ -262,6 +325,11 @@ NetTcpCallback>
 -(void)didSelectFile:(NSIndexPath *)indexPath
 {
     UPan_File *file = [self.mDataSource objectAtIndex:indexPath.row];
+    if (file.exchangingState != EXCHANGE_COM &&
+        file.fileType != UPan_FT_Mov) {
+        return;
+    }
+    
     switch (file.fileType) {
         case UPan_FT_Dir:
         {
@@ -287,7 +355,15 @@ NetTcpCallback>
         case UPan_FT_Mov:
         {
             //本地视频观看
-            pssGUIPlayerViewController *vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            UIViewController *vc = nil;
+            if (([file.fileName hasSuffix:@"mp4"] ||
+                 [file.fileName hasSuffix:@"MP4"]) &&
+                file.exchangingState == EXCHANGE_COM) {
+                vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            }
+            else{
+                vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            }
             [self pushVc:vc];
         }
             break;

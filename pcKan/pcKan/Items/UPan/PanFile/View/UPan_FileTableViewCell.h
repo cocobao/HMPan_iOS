@@ -12,6 +12,7 @@
 #define CELL_HEIGHT MarginW(35)
 
 @interface UPan_FileTableViewCell : pSSBaseTableViewCell
+@property (nonatomic, strong) NSIndexPath *mIndexPath;
 @property (nonatomic, weak) UPan_File *mFile;
 @property (nonatomic, strong) UPan_CellMode *mMode;
 

@@ -10,9 +10,9 @@
 
 @interface pssDocReaderViewController ()<UIDocumentInteractionControllerDelegate>
 {
-    UIDocumentInteractionController *_documentController;
     NSURL *_url;
 }
+@property (nonatomic, strong) UIDocumentInteractionController *documentController;
 @end
 
 @implementation pssDocReaderViewController
@@ -27,14 +27,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    [self addHub:@"加载中" hide:NO];
+    
     _documentController = [UIDocumentInteractionController interactionControllerWithURL:_url];
     [_documentController setDelegate:self];
     
-    //当前APP打开  需实现协议方法才可以完成预览功能
-    [_documentController presentPreviewAnimated:YES];
-    
-    [self addHub:@"加载中" hide:NO];
+    WeakSelf(weakSelf);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //当前APP打开  需实现协议方法才可以完成预览功能
+        [weakSelf.documentController presentPreviewAnimated:YES];
+    });
 }
 
 - (void)didReceiveMemoryWarning {

@@ -12,7 +12,8 @@
 
 @interface pssUserInfo : NSObject
 @property (nonatomic, assign) uint uid;
+@property (nonatomic, assign) BOOL isLogin;
 
-+ (id)shareInstance;
++ (instancetype)shareInstance;
 -(void)setUserWithInfo:(NSDictionary *)info;
 @end

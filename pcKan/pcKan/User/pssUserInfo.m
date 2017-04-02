@@ -9,8 +9,8 @@
 #import "pssUserInfo.h"
 
 @implementation pssUserInfo
-__strong static id sharedInstance = nil;
-+ (id)shareInstance
+__strong static pssUserInfo *sharedInstance = nil;
++ (instancetype)shareInstance
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{

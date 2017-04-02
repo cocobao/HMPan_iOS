@@ -51,10 +51,12 @@
 #define ptl_persent @"persent"
 #define ptl_seek @"seek"
 #define ptl_speed @"speed"
+#define ptl_pcFilePath @"pcFilePath"
 
 /*Notification*/
 #define kNotificationFileRecvPersent @"kNotificationFileRecvPersent"
 #define kNotificationFileSendPersent @"kNotificationFileSendPersent"
 #define kNotificationFileCreate @"kNotificationFileCreate"
+#define kNotificationLogout @"kNotificationLogout"
 
 #endif /* comMarcoDefine_h */

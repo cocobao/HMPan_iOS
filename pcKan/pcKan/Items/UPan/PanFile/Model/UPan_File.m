@@ -21,9 +21,11 @@
         _fileSize = [atts[NSFileSize] longLongValue];
         _fileType = UPan_FT_UnKnownFile;
         _fileId = [atts[NSFileSystemFileNumber] integerValue];
-        NSDate *date = atts[NSFileCreationDate];
-        _createDate = [pSSCommodMethod dateToString:date];
         _attsFileType = atts[NSFileType];
+        _exchangingState = EXCHANGE_COM;
+        
+        NSDate *date = [pSSCommodMethod GMTtoLocalData:atts[NSFileCreationDate]];
+        _createDate = [pSSCommodMethod dateToString:date];
         
         [self knowFileType];
     }
@@ -33,13 +35,11 @@
 //文件类型分类
 -(void)knowFileType
 {
-    do {
-        if ([self ifDirType])       break;
-        if ([self ifDocType])       break;
-        if ([self ifCompressType])  break;
-        if ([self ifImgType])       break;
-        if ([self ifVideoType])     break;
-    } while (0);
+    if ([self ifDirType])       return;
+    if ([self ifDocType])       return;
+    if ([self ifCompressType])  return;
+    if ([self ifImgType])       return;
+    if ([self ifVideoType])     return;
 }
 
 //是否为文件夹类型
@@ -111,17 +111,20 @@
 //是否为压缩文件
 -(BOOL)ifCompressType
 {
-    if (_fileSize > 6) {
-        NSString *extend = [pSSCommodMethod fileHeadTypeWithFile:_filePath];
-        
-        if ([extend isEqualToString:@"rar"]) {
-            _fileType = UPan_FT_Zip;
-            return YES;
-        }
-        
-        if ([extend isEqualToString:@"zip"]) {
-            _fileType = UPan_FT_Rar;
-            return YES;
+    if (_fileSize > 10) {
+        if ([_fileName hasSuffix:@".rar"] ||
+            [_fileName hasSuffix:@".zip"]) {
+            NSString *extend = [pSSCommodMethod fileHeadTypeWithFile:_filePath];
+            
+            if ([extend isEqualToString:@"rar"]) {
+                _fileType = UPan_FT_Zip;
+                return YES;
+            }
+            
+            if ([extend isEqualToString:@"zip"]) {
+                _fileType = UPan_FT_Rar;
+                return YES;
+            }
         }
     }
     
@@ -151,6 +154,17 @@
     if ([tracks count] > 0) {
         _fileType = UPan_FT_Mov;
         return YES;
+    }else{
+        if ([_fileName hasSuffix:@"flv"] ||
+            [_fileName hasSuffix:@"FLV"] ||
+            [_fileName hasSuffix:@"avi"] ||
+            [_fileName hasSuffix:@"AVI"] ||
+            [_fileName hasSuffix:@"rmvb"] ||
+            [_fileName hasSuffix:@"RMVB"]
+            ) {
+            _fileType = UPan_FT_Mov;
+            return YES;
+        }
     }
     
     return NO;

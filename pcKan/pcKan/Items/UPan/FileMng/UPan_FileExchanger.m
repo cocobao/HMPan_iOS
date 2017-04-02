@@ -62,12 +62,14 @@ __strong static id sharedInstance = nil;
 }
 
 //添加文件接收者
--(void)addFileRecver:(UPan_File *)file fileSize:(NSInteger)fileSize
+-(void)addFileRecver:(UPan_File *)file fileSize:(NSInteger)fileSize pcFilePath:(NSString *)pcFilePath
 {
-    UPan_FileRecver *fr = [[UPan_FileRecver alloc] initWithFileId:file.fileId filePath:file.filePath fileSize:fileSize];
+    UPan_FileRecver *fr = [[UPan_FileRecver alloc] initWithFileId:file.fileId filePath:file.filePath pcFilePath:pcFilePath fileSize:fileSize];
     fr.m_delegate = self;
     NSString *key = [NSString stringWithFormat:@"%zd", file.fileId];
     self.muFileRecvExchanger[key] = fr;
+    
+    [fr reApply];
 }
 
 //添加文件发送者
@@ -88,6 +90,76 @@ __strong static id sharedInstance = nil;
     self.muFileSendExchanger[fs.threadName] = fs;
     [fs start];
     NSLog(@"add file sending:%@", fileName);
+}
+
+//移除接受者
+-(void)removeFileRecver:(NSInteger)fileId
+{
+    NSString *key = [NSString stringWithFormat:@"%zd", fileId];
+    
+    if (self.muFileRecvExchanger[key]) {
+        [self.muFileRecvExchanger removeObjectForKey:key];
+        
+        NSLog(@"remove file recver, key:%@", key);
+    }
+}
+
+//文件是否在传输中
+-(BOOL)isFileExchanging:(NSInteger)fileId
+{
+    NSArray *arrKeys = [_muFileRecvExchanger allKeys];
+    if (arrKeys.count == 0) {
+        return NO;
+    }
+    
+    for (NSString *key in arrKeys) {
+        UPan_FileRecver *fr = _muFileRecvExchanger[key];
+        if (fr.fileId == fileId) {
+            if (!fr.isSuspend) {
+                return YES;
+            }
+            break;
+        }
+    }
+    return NO;
+}
+
+-(void)recoverAllRecver
+{
+    NSArray *allKey = [self.muFileRecvExchanger allKeys];
+    for (NSString *key in allKey) {
+        UPan_FileRecver *fr = self.muFileRecvExchanger[key];
+        fr.isSuspend = NO;
+        [fr reApply];
+        
+        NSLog(@"recover recver, key:%@", key);
+    }
+}
+
+//恢复接收传输
+-(void)recoverRecver:(NSDictionary *)infoDict
+{
+    NSString *key = [NSString stringWithFormat:@"%zd", [infoDict[ptl_fileId] integerValue]];
+    UPan_FileRecver *fr = nil;
+    if (self.muFileRecvExchanger[key]) {
+        fr = self.muFileRecvExchanger[key];
+        fr.isSuspend = NO;
+    }else{
+        fr = [[UPan_FileRecver alloc] initWithInfoDict:infoDict];
+        self.muFileRecvExchanger[key] = fr;
+    }
+    [fr reApply];
+}
+
+//暂停接收传输
+-(void)puseRecver:(NSInteger)fileId
+{
+    NSString *key = [NSString stringWithFormat:@"%zd", fileId];
+    
+    if (self.muFileRecvExchanger[key]){
+        UPan_FileRecver *fr = self.muFileRecvExchanger[key];
+        fr.isSuspend = YES;
+    }
 }
 
 -(void)loopAssetSender
@@ -146,12 +218,12 @@ __strong static id sharedInstance = nil;
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH %@", fileName];
     NSArray *arrTmp = [arrSrcFile filteredArrayUsingPredicate:predicate];
     if (arrTmp.count > 0) {
-        //创建副本文件
+        //已存在该文件，重命名为副本
         NSString *noExtenName = [fileName stringByDeletingPathExtension];
         NSString *exten = [fileName pathExtension];
         fileName = [NSString stringWithFormat:@"%@-副本%zd%@%@", noExtenName, arrTmp.count, (exten.length>0)?@".":@"",exten];
     }
-    
+    //创建文件
     NSString *createPath = [_mNowPath stringByAppendingPathComponent:fileName];
     [UPan_FileMng createFile:createPath];
     NSDictionary *fileAtts = [UPan_FileMng fileAttriutes:createPath];
@@ -159,7 +231,13 @@ __strong static id sharedInstance = nil;
         return nil;
     }
     
+    //创建保存传输信息文件
+    NSString *infoFile = [NSString stringWithFormat:@"%@/%@.hmf", _mNowPath, fileName];
+    [UPan_FileMng createFile:infoFile];
+    
+    //创建文件结构对象
     UPan_File *uFile = [[UPan_File alloc] initWithPath:createPath Atts:fileAtts];
+    uFile.exchangingState = EXCHANGE_ING;
     return uFile;
 }
 
@@ -171,6 +249,8 @@ __strong static id sharedInstance = nil;
     if (self.muFileRecvExchanger[key]) {
         UPan_FileRecver *fr = self.muFileRecvExchanger[key];
         [fr writeFileData:data];
+    }else{
+        NSLog(@"file recver has been remove");
     }
 }
 
@@ -196,16 +276,19 @@ __strong static id sharedInstance = nil;
                     
                     //生成文件
                     UPan_File *uFile = [weakSelf createFile:fileName];
-                    NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
-                    [ntf postNotificationName:kNotificationFileCreate object:uFile];
                     
                     if (!uFile) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [MBProgressHUD showMessage:@"创建文件失败"];
+                        });
                         return;
                     }
+                    NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
+                    [ntf postNotificationName:kNotificationFileCreate object:uFile];
 
                     NSLog(@"create fileId:%zd, fileSize:%zd", uFile.fileId, fileSize);
-                    [weakSelf addFileRecver:uFile fileSize:fileSize];
-                    [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
+                    [weakSelf addFileRecver:uFile fileSize:fileSize pcFilePath:filePath];
+//                    [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
                 });
             }
         }];

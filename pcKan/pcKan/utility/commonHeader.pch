@@ -14,6 +14,7 @@
 #import "pSSCommodMethod.h"
 #import "comMarcoDefine.h"
 #import "MBProgressHUD+pSSAddition.h"
+#import "pssUserInfo.h"
 
 typedef void(^callBackFinishBlock)(NSDictionary *receData, NSError *error);
 

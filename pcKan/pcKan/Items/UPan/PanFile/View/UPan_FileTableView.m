@@ -49,6 +49,20 @@ MGSwipeTableCellDelegate
     [super reloadData];
 }
 
+-(void)reloadRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+    for (NSIndexPath *index in indexPaths) {
+        [_cellModes removeObjectAtIndex:index.row];
+        
+        UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:index.row];
+        UPan_CellMode *mode = [[UPan_CellMode alloc] init];
+        [mode setupModel:file];
+        [_cellModes insertObject:mode atIndex:index.row];
+    }
+    
+    [super reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+}
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -86,10 +100,12 @@ MGSwipeTableCellDelegate
 {
     UPan_FileTableViewCell *cell = [UPan_FileTableViewCell cellWithTableView:self];
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(UPanFileDataSource)]) {
+        cell.mIndexPath = indexPath;
+        
         UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:indexPath.row];
         UPan_CellMode *mode = _cellModes[indexPath.row];
         [cell setMMode:mode file:file];
-        
+
         cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"删除" backgroundColor:[UIColor redColor]]];
         cell.rightSwipeSettings.transition = MGSwipeStateSwipingRightToLeft;
         cell.delegate = self;
@@ -116,14 +132,17 @@ MGSwipeTableCellDelegate
 //点击删除
 -(BOOL)swipeTableCell:(MGSwipeTableCell *)cell tappedButtonAtIndex:(NSInteger)index direction:(MGSwipeDirection)direction fromExpansion:(BOOL)fromExpansion
 {
+    //删除项
+    NSIndexPath * path = [self indexPathForCell:cell];
+    
     //必须删除数据源
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didDeleteFile:)]) {
         UPan_FileTableViewCell *fileCell = (UPan_FileTableViewCell *)cell;
         [self.m_delegate didDeleteFile:fileCell.mFile];
+        
+        [_cellModes removeObjectAtIndex:path.row];
     }
     
-    //删除项
-    NSIndexPath * path = [self indexPathForCell:cell];
     [self deleteRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationFade];
     [self endUpdates];
     return YES;

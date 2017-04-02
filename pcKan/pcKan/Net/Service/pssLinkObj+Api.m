@@ -56,6 +56,14 @@
     [self.udp_link sendData:jsonBody toHost:BROUADCAST_IP toPort:BROUADCAST_PORT];
 }
 
+//请求文件部分
+-(void)NetApi_FilePartWithFileId:(NSInteger)fileId pcFilePath:(NSString *)pcFilePath seek:(uint64_t)seek block:(msgSendBlock)block
+{
+    NSDictionary *dict = @{ptl_filePath:pcFilePath, ptl_fileId:@(fileId), ptl_seek:@(seek)};
+    pssHSMmsg *pack = [self packDataType:emPssProtocolType_FilePart body:dict block:block];
+    [self.tcp_link sendData:pack];
+}
+
 //请求接收文件ack
 -(void)NetApi_ApplySendFileAck:(NSString *)filePath fileId:(NSInteger)fileId
 {
