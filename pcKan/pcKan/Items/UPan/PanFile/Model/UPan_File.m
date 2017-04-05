@@ -19,7 +19,7 @@
         _fileName = [UPan_FileMng fileNameByPath:path];
         _filePath = path;
         _fileSize = [atts[NSFileSize] longLongValue];
-        _fileType = UPan_FT_UnKnownFile;
+        _fileType = UPan_FT_Ukn;
         _fileId = [atts[NSFileSystemFileNumber] integerValue];
         _attsFileType = atts[NSFileType];
         _exchangingState = EXCHANGE_COM;
@@ -40,6 +40,7 @@
     if ([self ifCompressType])  return;
     if ([self ifImgType])       return;
     if ([self ifVideoType])     return;
+    if ([self ifAudioType])     return;
 }
 
 //是否为文件夹类型
@@ -148,7 +149,7 @@
 //是否为视频类型
 -(BOOL)ifVideoType
 {
-    //文件是否有视频轨道
+    //文件是否有视频轨道，以此来判断是否视频文件
     AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:_filePath] options:nil];
     NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
     if ([tracks count] > 0) {
@@ -160,13 +161,27 @@
             [_fileName hasSuffix:@"avi"] ||
             [_fileName hasSuffix:@"AVI"] ||
             [_fileName hasSuffix:@"rmvb"] ||
-            [_fileName hasSuffix:@"RMVB"]
+            [_fileName hasSuffix:@"RMVB"] ||
+            [_fileName hasSuffix:@"MKV"] ||
+            [_fileName hasSuffix:@"mkv"]
             ) {
             _fileType = UPan_FT_Mov;
             return YES;
         }
     }
     
+    return NO;
+}
+
+//是否为音频文件
+-(BOOL)ifAudioType
+{
+    AVAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:_filePath] options:nil];
+    NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeAudio];
+    if ([tracks count] > 0){
+        _fileType = UPan_FT_Mus;
+        return YES;
+    }
     return NO;
 }
 @end

@@ -11,9 +11,10 @@
 #import "pssMediaControlView.h"
 
 @interface pssIjkPlayerViewController ()
-@property (nonatomic, strong) NSURL *mURL;
+@property (atomic, strong) NSURL *mURL;
 @property(atomic, retain) id<IJKMediaPlayback> player;
 @property (nonatomic, strong) pssMediaControlView *ctrlView;
+@property (assign, nonatomic) CGRect defaultFrame;
 @end
 
 @implementation pssIjkPlayerViewController
@@ -41,47 +42,74 @@
     [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_frame" ofCategory:kIJKFFOptionCategoryCodec];
-    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_loop_filter" ofCategory:kIJKFFOptionCategoryCodec];
-    [options setOptionIntValue:0 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];
-    [options setOptionIntValue:60 forKey:@"max-fps" ofCategory:kIJKFFOptionCategoryPlayer];
-    [options setPlayerOptionIntValue:256 forKey:@"vol"];
+//    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_frame" ofCategory:kIJKFFOptionCategoryCodec];
+//    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_loop_filter" ofCategory:kIJKFFOptionCategoryCodec];
+//    [options setOptionIntValue:0 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];
+//    [options setOptionIntValue:60 forKey:@"max-fps" ofCategory:kIJKFFOptionCategoryPlayer];
+//    [options setPlayerOptionIntValue:256 forKey:@"vol"];
     
-    CGRect playerFrame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*9.0f / 16.0f+64);
+    CGFloat width = [[UIScreen mainScreen] bounds].size.width;
+    CGRect playerFrame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);//CGRectMake(0, 0, width, width*9/16+NAVBAR_H);
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:_mURL withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.player.view.frame = playerFrame;
     self.player.scalingMode = IJKMPMovieScalingModeAspectFit;
     self.player.shouldAutoplay = YES;
-    self.player.view.center = CGPointMake(kScreenWidth/2, (kScreenHeight)/2-64);
     self.player.view.backgroundColor = [UIColor blackColor];
+    self.player.view.center = CGPointMake(width/2, (kScreenHeight - NAVBAR_H)/2);
+//    self.ctrlView.delegatePlayer = self.player;
+//    self.ctrlView.frame = CGRectMake(0, playerFrame.size.height-40-NAVBAR_H, playerFrame.size.width, 40);
     
-    self.ctrlView.delegatePlayer = self.player;
-    self.ctrlView.frame = CGRectMake(0, playerFrame.size.height-40-64, playerFrame.size.width, 40);
-    
-    [self.player.view addSubview:self.ctrlView];
+//    [self.player.view addSubview:self.ctrlView];
     [self.view addSubview:self.player.view];
+    
+//    _defaultFrame = self.view.frame;
+    
+//    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer:)]; 
+//    [self.player.view addGestureRecognizer:gesture];
+}
+
+- (BOOL)prefersStatusBarHidden{
+    if (self.ctrlView.fullBtn.selected) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    WeakSelf(weakSelf);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.player prepareToPlay];
-    });
     [super viewWillAppear:animated];
-    [self installMovieNotificationObservers];
     
-    [self.ctrlView refreshMediaControl];
+    [self installMovieNotificationObservers];
+//    [self.ctrlView refreshMediaControl];
+    [self.player prepareToPlay];
+    
+//    [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:3];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [self.player shutdown];
     [super viewDidDisappear:animated];
+    [self.player shutdown];
     [self removeMovieNotificationObservers];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+-(void)tapPlayer:(UITapGestureRecognizer *)gesture
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCtrlBar) object:nil];
+    if (self.ctrlView.hidden) {
+        self.ctrlView.hidden = NO;
+        [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:3];
+    }else{
+        self.ctrlView.hidden = YES;
+    }
+}
+
+-(void)hideCtrlBar
+{
+    self.ctrlView.hidden = YES;
 }
 
 - (void)onClickPlay:(UIButton *)sender
@@ -98,6 +126,7 @@
 
 - (void)didSliderTouchDown
 {
+    [self.player pause];
     [self.ctrlView beginDragMediaSlider];
 }
 
@@ -108,18 +137,79 @@
 
 - (void)didSliderTouchUpOutside
 {
+    if (!self.ctrlView.playerBtn.selected) {
+        [self.player play];
+    }
     [self.ctrlView endDragMediaSlider];
 }
 
 - (void)didSliderTouchUpInside
 {
     self.player.currentPlaybackTime = self.ctrlView.mediaProgressSlider.value;
+    if (!self.ctrlView.playerBtn.selected) {
+        [self.player play];
+    }
+    
     [self.ctrlView endDragMediaSlider];
 }
 
 - (void)didSliderValueChanged
 {
+    self.player.currentPlaybackTime = self.ctrlView.mediaProgressSlider.value;
     [self.ctrlView continueDragMediaSlider];
+}
+
+-(void)fullAction:(UIButton *)sender
+{
+    if (sender.selected) {
+        sender.selected = NO;
+        [sender setImage:[UIImage imageNamed:@"gui_expand"] forState:UIControlStateNormal];
+
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+        
+        [UIView animateWithDuration:0.3f animations:^{
+            [self.view setTransform:CGAffineTransformIdentity];
+            [self.view setFrame:_defaultFrame];
+            
+            CGRect frame = _defaultFrame;
+            frame.origin = CGPointZero;
+            frame.size.height = frame.size.width*9/16+NAVBAR_H;
+            
+            [self.player.view setFrame:frame];
+            self.player.view.center = CGPointMake(frame.size.width/2, (kScreenHeight - NAVBAR_H)/2);
+            self.ctrlView.frame = CGRectMake(0, frame.size.height-40-NAVBAR_H, frame.size.width, 40);
+        }];
+    }else{
+        sender.selected = YES;
+        [sender setImage:[UIImage imageNamed:@"gui_shrink"] forState:UIControlStateNormal];
+
+        //隐藏导航栏
+        [self.navigationController setNavigationBarHidden:YES animated:NO];
+        
+        CGFloat width = [[UIScreen mainScreen] bounds].size.width;
+        CGFloat height = [[UIScreen mainScreen] bounds].size.height;
+        CGRect frame;
+        
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        if (UIInterfaceOrientationIsPortrait(orientation)) {
+            CGFloat aux = width;
+            width = height;
+            height = aux;
+            frame = CGRectMake((height - width) / 2, (width - height) / 2, width, height);
+        } else {
+            frame = CGRectMake(0, 0, width, height);
+        }
+        
+        [UIView animateWithDuration:0.3f animations:^{
+            [self.view setFrame:frame];
+            [self.player.view setFrame:CGRectMake(0, 0, width, height)];
+            self.ctrlView.frame = CGRectMake(0, frame.size.height-40, frame.size.width, 40);
+            
+            if (UIInterfaceOrientationIsPortrait(orientation)) {
+                [self.view setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+            }
+        }];
+    }
 }
 
 - (void)loadStateDidChange:(NSNotification*)notification
@@ -259,6 +349,7 @@
         [view.mediaProgressSlider addTarget:self action:@selector(didSliderValueChanged) forControlEvents:UIControlEventValueChanged];
         [view.mediaProgressSlider addTarget:self action:@selector(didSliderTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         [view.mediaProgressSlider addTarget:self action:@selector(didSliderTouchUpOutside) forControlEvents:UIControlEventTouchUpOutside];
+        [view.fullBtn addTarget:self action:@selector(fullAction:) forControlEvents:UIControlEventTouchUpInside];
         _ctrlView = view;
     }
     return _ctrlView;

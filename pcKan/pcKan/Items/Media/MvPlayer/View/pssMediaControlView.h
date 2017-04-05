@@ -14,7 +14,7 @@
 @property(nonatomic,weak) id<IJKMediaPlayback> delegatePlayer;
 
 @property (nonatomic, strong) UIButton *playerBtn;
-
+@property (nonatomic, strong) UIButton *fullBtn;
 @property (nonatomic,strong)  UILabel *currentTimeLabel;
 @property (nonatomic,strong)  UILabel *totalDurationLabel;
 @property (nonatomic,strong)  UISlider *mediaProgressSlider;

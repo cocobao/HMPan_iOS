@@ -420,4 +420,36 @@ static uint32_t randomMessageId;
     }
     return @"";
 }
+
+/**
+*  通过音乐地址，读取音乐数据，获得图片
+*
+*  @param url 音乐地址
+*
+*  @return音乐图片
+*/
++ (UIImage *)musicImageWithMusicURL:(NSURL *)url {
+    NSData *data = nil;
+    // 初始化媒体文件
+    AVURLAsset *mp3Asset = [AVURLAsset URLAssetWithURL:url options:nil];
+    // 读取文件中的数据
+    for (NSString *format in [mp3Asset availableMetadataFormats]) {
+        for (AVMetadataItem *metadataItem in [mp3Asset metadataForFormat:format]) {
+            //artwork这个key对应的value里面存的就是封面缩略图，其它key可以取出其它摘要信息，例如title - 标题
+            if ([metadataItem.commonKey isEqualToString:@"artwork"]) {
+                NSDictionary *dict = (NSDictionary*)metadataItem.value;
+                if ([dict isKindOfClass:[NSDictionary class]] && dict[@"data"]) {
+                    data = [dict objectForKey:@"data"];
+                }else if([dict isKindOfClass:[NSData class]]){
+                    data = (NSData *)metadataItem.value;
+                }
+                break;
+            }
+        }
+    }
+    if (!data) {
+        return nil;
+    }
+    return [UIImage imageWithData:data];
+}
 @end

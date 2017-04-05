@@ -9,13 +9,15 @@
 #import <Foundation/Foundation.h>
 
 typedef enum : NSUInteger {
-    UPan_FT_UnKnownFile,
+    //未知类型
+    UPan_FT_Ukn,
     
     //文件夹类型
     UPan_FT_Dir,
     
     //媒体类型
     UPan_FT_Img,
+    UPan_FT_Mus,
     UPan_FT_Mov,
     
     //文档类型

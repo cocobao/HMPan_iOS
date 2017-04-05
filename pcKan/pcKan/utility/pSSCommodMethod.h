@@ -66,4 +66,7 @@
 
 //文件头信息，返回文件类型
 +(NSString *)fileHeadTypeWithFile:(NSString *)filePath;
+
+//获取音频文件的缩略图
++ (UIImage *)musicImageWithMusicURL:(NSURL *)url;
 @end

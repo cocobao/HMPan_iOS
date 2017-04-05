@@ -17,12 +17,16 @@
 {
     [super layoutSubviews];
     
-    self.backgroundColor = Color_black(20);
+    self.backgroundColor = Color_black(30);
     
     self.playerBtn.frame = CGRectMake(0, 0, self.bounds.size.height, self.bounds.size.height);
     self.currentTimeLabel.frame = CGRectMake(CGRectGetMaxX(_playerBtn.frame), 0, 50, self.bounds.size.height);
-    self.totalDurationLabel.frame = CGRectMake(self.bounds.size.width-60, 0, 50, self.bounds.size.height);
-    self.mediaProgressSlider.frame = CGRectMake(CGRectGetMaxX(_currentTimeLabel.frame), 0, CGRectGetMinX(_totalDurationLabel.frame)-CGRectGetMaxX(_currentTimeLabel.frame)-10, self.bounds.size.height);
+    self.fullBtn.frame = CGRectMake(self.bounds.size.width-40, 0, 30, self.bounds.size.height);
+    self.totalDurationLabel.frame = CGRectMake(CGRectGetMinX(_fullBtn.frame)-60, 0, 50, self.bounds.size.height);
+    self.mediaProgressSlider.frame = CGRectMake(CGRectGetMaxX(_currentTimeLabel.frame),
+                                                0,
+                                                CGRectGetMinX(_totalDurationLabel.frame)-CGRectGetMaxX(_currentTimeLabel.frame)-10,
+                                                self.bounds.size.height);
 }
 
 - (void)beginDragMediaSlider
@@ -56,6 +60,7 @@
     NSInteger intPosition = position + 0.5;
     NSInteger less = intDuration - intPosition;
     
+    //显示剩余时间
     if (less >= 0) {
         self.mediaProgressSlider.maximumValue = duration;
         self.totalDurationLabel.text = [NSString stringWithFormat:@"-%02d:%02d", (int)(less / 60), (int)(less % 60)];
@@ -64,15 +69,30 @@
         self.mediaProgressSlider.maximumValue = 1.0f;
     }
     
+    //显示当前已观看时间
+    self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(intPosition / 60), (int)(intPosition % 60)];
+    
+    //更新进度条
     if (intDuration > 0) {
         self.mediaProgressSlider.value = position;
     } else {
         self.mediaProgressSlider.value = 0.0f;
     }
-    self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d", (int)(intPosition / 60), (int)(intPosition % 60)];
     
+    //下次更新
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(refreshMediaControl) object:nil];
     [self performSelector:@selector(refreshMediaControl) withObject:nil afterDelay:0.5];
+}
+
+-(UIButton *)fullBtn
+{
+    if (!_fullBtn) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn setImage:[UIImage imageNamed:@"gui_expand"] forState:UIControlStateNormal];
+        [self addSubview:btn];
+        _fullBtn = btn;
+    }
+    return _fullBtn;
 }
 
 -(UILabel *)totalDurationLabel

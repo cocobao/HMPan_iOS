@@ -24,6 +24,10 @@
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
 #import "pssIjkPlayerViewController.h"
+#import "pSSAvPlayerViewController.h"
+#import "pSSAvPlayerViewController.h"
+#import "pSSAvPlayerModule.h"
+#import "testPlayerViewController.h"
 
 @interface UPan_PanFileViewController ()
 <UPanFileDelegate,
@@ -61,7 +65,6 @@ NetTcpCallback>
     
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:self.mCreateFoldBtn];
     self.navigationItem.rightBarButtonItem = leftItem;
-    
     [self.navigationController.navigationBar addSubview:self.mLinkBtn];
     
     [self addHub:@"加载中" hide:NO];
@@ -330,11 +333,12 @@ NetTcpCallback>
         return;
     }
     
+    UIViewController *vc = nil;
     switch (file.fileType) {
         case UPan_FT_Dir:
         {
             //文件夹类型，跳转到下一集目录展示
-            UPan_PanFileViewController *vc = [[UPan_PanFileViewController alloc] initWithPath:file.filePath];
+            vc = [[UPan_PanFileViewController alloc] initWithPath:file.filePath];
             [self pushVc:vc];
         }
             break;
@@ -354,17 +358,14 @@ NetTcpCallback>
             break;
         case UPan_FT_Mov:
         {
-            //本地视频观看
-            UIViewController *vc = nil;
-            if (([file.fileName hasSuffix:@"mp4"] ||
-                 [file.fileName hasSuffix:@"MP4"]) &&
-                file.exchangingState == EXCHANGE_COM) {
-                vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            if ([PSS_AVPLAYER isPlaying]) {
+                [PSS_AVPLAYER stop];
             }
-            else{
-                vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-            }
-            [self pushVc:vc];
+            
+            //本地视频观看testPlayerViewController
+//            vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+//            vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            vc = [[testPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
         }
             break;
         case UPan_FT_Word:
@@ -376,18 +377,30 @@ NetTcpCallback>
         case UPan_FT_M:
         {
             //浏览文档
-            pssDocReaderViewController *vc = [[pssDocReaderViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-            [self pushVc:vc];
+            vc = [[pssDocReaderViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
         }
             break;
         case UPan_FT_Rar:
         case UPan_FT_Zip:
         {
+            //文件解压
             [self decompressFile:file];
+        }
+            break;
+        case UPan_FT_Mus:
+        {
+            //本地音频播放
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.fileType = %d", UPan_FT_Mus];
+            NSArray *arrMus = [self.mDataSource filteredArrayUsingPredicate:predicate];
+            vc = [[pSSAvPlayerViewController alloc] initWithFiles:arrMus playFile:file];
         }
             break;
         default:
             break;
+    }
+    
+    if (vc) {
+        [self pushVc:vc];
     }
 }
 
@@ -448,7 +461,7 @@ NetTcpCallback>
     };
 }
 
-//解压
+//解压文件
 - (void)unArchive: (NSString *)filePath andPassword:(NSString*)password destinationPath:(NSString *)destPath{
     NSAssert(filePath, @"can't find filePath");
     SARUnArchiveANY *unarchive = [[SARUnArchiveANY alloc] initWithPath:filePath];
@@ -461,6 +474,7 @@ NetTcpCallback>
     
     WeakSelf(weakSelf);
     [weakSelf addHub:@"解压中" hide:NO];
+    //解压成功
     unarchive.completionBlock = ^(NSArray *filePaths){
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf removeHub];
@@ -468,6 +482,7 @@ NetTcpCallback>
             [weakSelf setupFileSource];
         });
     };
+    //解压失败
     unarchive.failureBlock = ^(){
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf removeHub];

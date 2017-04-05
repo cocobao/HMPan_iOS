@@ -61,45 +61,57 @@
 -(void)setIcon:(UPan_File *)file
 {
     UIImage *image = nil;
-    if (file.fileType == UPan_FT_Dir) {
-        image = [UIImage imageNamed:@"fold"];
-    }
-    else if (file.fileType == UPan_FT_Psd){
-        image = [UIImage imageNamed:@"icon_psd"];
-    }
-    else if(file.fileType == UPan_FT_Zip ||
-            file.fileType == UPan_FT_Rar){
-        image = [UIImage imageNamed:@"icon_compress"];
-    }
-    else if (file.fileType == UPan_FT_Pdf){
-        image = [UIImage imageNamed:@"icon_pdf"];
-    }
-    else if (file.fileType == UPan_FT_Word){
-        image = [UIImage imageNamed:@"icon_word"];
-    }
-    else if (file.fileType == UPan_FT_Ppt){
-        image = [UIImage imageNamed:@"icon_ppt"];
-    }
-    else if (file.fileType == UPan_FT_Xls){
-        image = [UIImage imageNamed:@"icon_xls"];
-    }
-    else if (file.fileType == UPan_FT_Xml){
-        image = [UIImage imageNamed:@"icon_xml"];
-    }
-    else if (file.fileType == UPan_FT_Html){
-        image = [UIImage imageNamed:@"icon_html"];
-    }
-    else if (file.fileType == UPan_FT_Img) {
-        image = [pSSCommodMethod imageShotcutOfPath:file.filePath w:_F_Icon.size.width h:_F_Icon.size.height];
-    }
-    else if (file.fileType == UPan_FT_Mov){
-        NSURL *url = [NSURL fileURLWithPath:file.filePath];
-        UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
-        if (imageTmp != nil) {
-            image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:_F_Icon.size.width h:_F_Icon.size.height];
+    switch (file.fileType) {
+        case UPan_FT_Dir:
+            image = [UIImage imageNamed:@"fold"];
+            break;
+        case UPan_FT_Psd:
+            image = [UIImage imageNamed:@"icon_psd"];
+            break;
+        case UPan_FT_Zip:
+        case UPan_FT_Rar:
+            image = [UIImage imageNamed:@"icon_compress"];
+            break;
+        case UPan_FT_Pdf:
+            image = [UIImage imageNamed:@"icon_pdf"];
+            break;
+        case UPan_FT_Word:
+            image = [UIImage imageNamed:@"icon_word"];
+            break;
+        case UPan_FT_Ppt:
+            image = [UIImage imageNamed:@"UPan_FT_Ppt"];
+            break;
+        case UPan_FT_Xls:
+            image = [UIImage imageNamed:@"icon_xls"];
+            break;
+        case UPan_FT_Xml:
+            image = [UIImage imageNamed:@"icon_xml"];
+            break;
+        case UPan_FT_Html:
+            image = [UIImage imageNamed:@"icon_html"];
+            break;
+        case UPan_FT_Img:
+            image = [pSSCommodMethod imageShotcutOfPath:file.filePath w:_F_Icon.size.width h:_F_Icon.size.height];
+            break;
+        case UPan_FT_Mov:
+        {
+            NSURL *url = [NSURL fileURLWithPath:file.filePath];
+            UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
+            if (imageTmp != nil) {
+                image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:_F_Icon.size.width h:_F_Icon.size.height];
+            }
         }
+            break;
+        case UPan_FT_Mus:
+        {
+            NSURL *url = [NSURL fileURLWithPath:file.filePath];
+            image = [pSSCommodMethod musicImageWithMusicURL:url];
+        }
+            break;
+        default:
+            break;
     }
-    
+
     file.mIcon = image;
 }
 @end
