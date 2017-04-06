@@ -58,5 +58,6 @@
 #define kNotificationFileSendPersent @"kNotificationFileSendPersent"
 #define kNotificationFileCreate @"kNotificationFileCreate"
 #define kNotificationLogout @"kNotificationLogout"
+#define kNotificationMusicNext @"kNotificationMusicNext"
 
 #endif /* comMarcoDefine_h */

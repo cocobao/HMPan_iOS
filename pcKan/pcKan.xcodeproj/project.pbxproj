@@ -658,9 +658,9 @@
 		8421FF631E694F960054E8CA /* PanFile */ = {
 			isa = PBXGroup;
 			children = (
+				8421FF6C1E69540D0054E8CA /* ViewController */,
 				8421FF731E695B1F0054E8CA /* Model */,
 				8421FF6B1E69540D0054E8CA /* View */,
-				8421FF6C1E69540D0054E8CA /* ViewController */,
 			);
 			path = PanFile;
 			sourceTree = "<group>";
@@ -1638,7 +1638,7 @@
 				TargetAttributes = {
 					84A24D6F1E58522F00B96A36 = {
 						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -1989,6 +1989,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2017,6 +2018,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ybz.self.pcKan.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

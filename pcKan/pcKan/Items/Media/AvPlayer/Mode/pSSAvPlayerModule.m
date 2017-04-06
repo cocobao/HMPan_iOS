@@ -35,12 +35,15 @@ __strong static id sharedInstance = nil;
     return self;
 }
 
--(void)startWithMode:(pSSAvMode *)mode
+-(void)startWithMode:(NSInteger)index
 {
+    pSSAvMode *mode = [_mAudiosSource objectAtIndex:index];
+    //如果当前播放就是选择的，不做处理
     if (_mAvMode && mode.mFile.fileId == _mAvMode.mFile.fileId) {
         return;
     }
     _mAvMode = mode;
+    _currentIndex = index;
     
     [self stop];
     [self play];
@@ -88,6 +91,28 @@ __strong static id sharedInstance = nil;
     return self.audioPlayer.currentTime;
 }
 
+-(void)addAudioFile:(UPan_File *)file
+{
+    pSSAvMode *mode = [[pSSAvMode alloc] initWithFile:file];
+    [_mAudiosSource addObject:mode];
+}
+
+-(void)removeAudioFile:(UPan_File *)file
+{
+    BOOL isFound = NO;
+    NSInteger i = 0;
+    for (pSSAvMode *mode in _mAudiosSource) {
+        if (mode.mFile.fileId == file.fileId) {
+            isFound = YES;
+            break;
+        }
+        i++;
+    }
+    if (YES) {
+        [_mAudiosSource removeObjectAtIndex:i];
+    }
+}
+
 -(AVAudioPlayer *)audioPlayer{
     if (!_audioPlayer) {
         NSError *error=nil;
@@ -110,4 +135,17 @@ __strong static id sharedInstance = nil;
     return _audioPlayer;
 }
 
+#pragma mark - AVAudioPlayerDelegate
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    _currentIndex++;
+    if (_currentIndex >= _mAudiosSource.count) {
+        _currentIndex = 0;
+    }
+    _mAvMode = [_mAudiosSource objectAtIndex:_currentIndex];
+    [self stop];
+    [self play];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMusicNext object:nil];
+}
 @end

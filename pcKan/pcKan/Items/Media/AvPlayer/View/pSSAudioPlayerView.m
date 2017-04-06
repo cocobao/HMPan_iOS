@@ -116,7 +116,6 @@
 
 -(void)playWithMode:(pSSAvMode *)mode
 {
-    [PSS_AVPLAYER startWithMode:mode];
     [self setPlayBtnState];
     
     NSMutableString *str = [NSMutableString stringWithString:mode.mTitle];

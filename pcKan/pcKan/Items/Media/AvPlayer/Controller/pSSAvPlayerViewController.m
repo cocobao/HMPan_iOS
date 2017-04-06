@@ -34,6 +34,9 @@
             }
             i++;
         }
+        PSS_AVPLAYER.mAudiosSource = [NSMutableArray arrayWithArray:_mDataSource];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNextAv:) name:kNotificationMusicNext object:nil];
     }
     return self;
 }
@@ -43,6 +46,7 @@
     
     self.mListView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight-NAVBAR_H-CGRectGetHeight(self.mPlayerView.frame));
     
+    [PSS_AVPLAYER startWithMode:_nowPlayIndex];
     [self.mPlayerView playWithMode:[_mDataSource objectAtIndex:_nowPlayIndex]];
 }
 
@@ -52,6 +56,12 @@
     [self.mPlayerView releaseView];
 }
 
+-(void)notifyNextAv:(NSNotification *)notify
+{
+    self.mPlayerView.b_NextPlay();
+}
+
+#pragma mark - audioListDelegate
 -(NSArray *)audioDataSource
 {
     return _mDataSource;
@@ -63,11 +73,13 @@
         return;
     }
     _nowPlayIndex = index;
+    [PSS_AVPLAYER startWithMode:_nowPlayIndex];
     [self.mPlayerView playWithMode:[_mDataSource objectAtIndex:_nowPlayIndex]];
     
     [self.mListView reloadData];
 }
 
+#pragma mark - views
 -(pSSAudioListView *)mListView
 {
     if (!_mListView) {

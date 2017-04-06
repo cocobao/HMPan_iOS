@@ -17,10 +17,12 @@
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 @property (nonatomic, strong) pSSAvMode *mAvMode;
+@property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, strong) NSMutableArray *mAudiosSource;
 
 + (instancetype)shareInstance;
 
--(void)startWithMode:(pSSAvMode *)mode;
+-(void)startWithMode:(NSInteger)index;
 
 //是否正在播放
 -(BOOL)isPlaying;
@@ -39,4 +41,10 @@
 
 //当前播放时间
 -(NSTimeInterval)currentTime;
+
+//添加音频文件
+-(void)addAudioFile:(UPan_File *)file;
+
+//删除音频文件
+-(void)removeAudioFile:(UPan_File *)file;
 @end
