@@ -35,12 +35,16 @@
 //文件类型分类
 -(void)knowFileType
 {
-    if ([self ifDirType])       return;
-    if ([self ifDocType])       return;
-    if ([self ifCompressType])  return;
-    if ([self ifImgType])       return;
-    if ([self ifVideoType])     return;
-    if ([self ifAudioType])     return;
+    do {
+        if ([self ifDirType])       break;
+        if ([self ifDocType])       break;
+        if ([self ifCompressType])  break;
+        if ([self ifImgType])       break;
+        if ([self ifVideoType])     break;
+        if ([self ifAudioType])     break;
+    } while (0);
+    
+    [self setIcon];
 }
 
 //是否为文件夹类型
@@ -183,5 +187,64 @@
         return YES;
     }
     return NO;
+}
+
+//设置文件图标
+-(void)setIcon
+{
+    UIImage *image = nil;
+    switch (_fileType) {
+        case UPan_FT_Dir:
+            image = [UIImage imageNamed:@"fold"];
+            break;
+        case UPan_FT_Psd:
+            image = [UIImage imageNamed:@"icon_psd"];
+            break;
+        case UPan_FT_Zip:
+        case UPan_FT_Rar:
+            image = [UIImage imageNamed:@"icon_compress"];
+            break;
+        case UPan_FT_Pdf:
+            image = [UIImage imageNamed:@"icon_pdf"];
+            break;
+        case UPan_FT_Word:
+            image = [UIImage imageNamed:@"icon_word"];
+            break;
+        case UPan_FT_Ppt:
+            image = [UIImage imageNamed:@"UPan_FT_Ppt"];
+            break;
+        case UPan_FT_Xls:
+            image = [UIImage imageNamed:@"icon_xls"];
+            break;
+        case UPan_FT_Xml:
+            image = [UIImage imageNamed:@"icon_xml"];
+            break;
+        case UPan_FT_Html:
+            image = [UIImage imageNamed:@"icon_html"];
+            break;
+        case UPan_FT_Img:
+            image = [pSSCommodMethod imageShotcutOfPath:_filePath w:MarginW(35) h:MarginW(30)];
+            break;
+        case UPan_FT_Mov:
+        {
+            NSURL *url = [NSURL fileURLWithPath:_filePath];
+            UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
+            if (imageTmp != nil) {
+                image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:MarginW(35) h:MarginW(30)];
+            }
+        }
+            break;
+        case UPan_FT_Mus:
+        {
+            NSURL *url = [NSURL fileURLWithPath:_filePath];
+            image = [pSSCommodMethod musicImageWithMusicURL:url];
+        }
+            break;
+        default:
+            image = [UIImage imageNamed:@"file"];
+            break;
+    }
+    
+    _mIcon = image;
 }
 @end

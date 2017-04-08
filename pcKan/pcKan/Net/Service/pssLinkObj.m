@@ -11,6 +11,7 @@
 #import "pssUserInfo.h"
 #import "RCETimmerHandler.h"
 #import "UPan_FileExchanger.h"
+#import "pssNetCom.h"
 
 #define PRO_VERSION 1
 
@@ -63,7 +64,10 @@ __strong static id sharedInstance = nil;
                     [weakSelf NetLogin];
                 }
             }else{
-                [weakSelf NetApi_BoardCastIp];
+                NSInteger netType = [pssNetCom getCurrentNetTypeForInt];
+                if (netType == 20 || netType == 0) {
+                    [weakSelf NetApi_BoardCastIp];
+                }
             }
             
             [weakSelf.tcp_link checkForTimeoutPack];

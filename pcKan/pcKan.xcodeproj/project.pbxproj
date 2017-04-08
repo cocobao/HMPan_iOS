@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		546AB9CE1E988E100064376E /* UPan_CurrentPathFileMng.m in Sources */ = {isa = PBXBuildFile; fileRef = 546AB9CD1E988E100064376E /* UPan_CurrentPathFileMng.m */; };
+		546AB9D11E98D11F0064376E /* pssNetCom.m in Sources */ = {isa = PBXBuildFile; fileRef = 546AB9D01E98D11F0064376E /* pssNetCom.m */; };
 		8421FF6F1E69540D0054E8CA /* UPan_PanFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */; };
 		8421FF761E695DD00054E8CA /* UPan_File.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF751E695DD00054E8CA /* UPan_File.m */; };
 		8421FF7D1E696C120054E8CA /* UPan_FileTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8421FF7C1E696C120054E8CA /* UPan_FileTableView.m */; };
@@ -199,6 +201,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		546AB9CC1E988E100064376E /* UPan_CurrentPathFileMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_CurrentPathFileMng.h; sourceTree = "<group>"; };
+		546AB9CD1E988E100064376E /* UPan_CurrentPathFileMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_CurrentPathFileMng.m; sourceTree = "<group>"; };
+		546AB9CF1E98D11F0064376E /* pssNetCom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssNetCom.h; sourceTree = "<group>"; };
+		546AB9D01E98D11F0064376E /* pssNetCom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssNetCom.m; sourceTree = "<group>"; };
 		8421FF6D1E69540D0054E8CA /* UPan_PanFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_PanFileViewController.h; sourceTree = "<group>"; };
 		8421FF6E1E69540D0054E8CA /* UPan_PanFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_PanFileViewController.m; sourceTree = "<group>"; };
 		8421FF741E695DD00054E8CA /* UPan_File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_File.h; sourceTree = "<group>"; };
@@ -715,6 +721,8 @@
 				849229F31E82C7D00050891B /* UPan_AssetSender.m */,
 				849229EF1E82C6B30050891B /* UPan_FileBaseSender.h */,
 				849229F01E82C6B30050891B /* UPan_FileBaseSender.m */,
+				546AB9CC1E988E100064376E /* UPan_CurrentPathFileMng.h */,
+				546AB9CD1E988E100064376E /* UPan_CurrentPathFileMng.m */,
 			);
 			path = FileMng;
 			sourceTree = "<group>";
@@ -1459,6 +1467,8 @@
 				84A24E651E5ABA7500B96A36 /* pssNetServiceHeaper.h */,
 				84A24E661E5ABA7500B96A36 /* pssProtocolType.h */,
 				84A24E671E5ABA7500B96A36 /* pssProtocolType.m */,
+				546AB9CF1E98D11F0064376E /* pssNetCom.h */,
+				546AB9D01E98D11F0064376E /* pssNetCom.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1814,7 +1824,9 @@
 				84904F041E71046F00392FD4 /* UPan_FileRecver.m in Sources */,
 				8465B6C41E76BE3900EC0186 /* LZHButton.m in Sources */,
 				8480006B1E87B4B10081C4D7 /* 7zBuf.c in Sources */,
+				546AB9D11E98D11F0064376E /* pssNetCom.m in Sources */,
 				848000D61E87C2720081C4D7 /* MJPhotoLoadingView.m in Sources */,
+				546AB9CE1E988E100064376E /* UPan_CurrentPathFileMng.m in Sources */,
 				842BE1BB1E8171B100CAF674 /* pSSControlBarView.m in Sources */,
 				848000E11E87C2720081C4D7 /* SDWebImagePrefetcher.m in Sources */,
 				848000D81E87C2720081C4D7 /* MJPhotoToolbar.m in Sources */,

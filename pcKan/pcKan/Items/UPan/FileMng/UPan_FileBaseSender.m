@@ -9,6 +9,12 @@
 #import "UPan_FileBaseSender.h"
 
 @implementation UPan_FileBaseSender
+-(void)dealloc
+{
+    NSLog(@"dealloc UPan_FileBaseSender");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 //从文件里读取数据
 -(NSData *)readFileHandle:(NSFileHandle *)handle offset:(NSInteger)offSet fileSize:(NSInteger)fileSize
 {

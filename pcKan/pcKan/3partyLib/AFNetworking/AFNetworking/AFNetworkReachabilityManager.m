@@ -33,6 +33,8 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
+#import <UIKit/UIKit.h>
+
 NSString * const AFNetworkingReachabilityDidChangeNotification = @"com.alamofire.networking.reachability.change";
 NSString * const AFNetworkingReachabilityNotificationStatusItem = @"AFNetworkingReachabilityNotificationStatusItem";
 
@@ -118,7 +120,6 @@ static void AFNetworkReachabilityCallback(SCNetworkReachabilityRef __unused targ
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter postNotificationName:AFNetworkingReachabilityDidChangeNotification object:nil userInfo:@{ AFNetworkingReachabilityNotificationStatusItem: @(status) }];
     });
-    
 }
 
 static const void * AFNetworkReachabilityRetainCallback(const void *info) {
@@ -140,20 +141,43 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {
 
 @implementation AFNetworkReachabilityManager
 
+static AFNetworkReachabilityManager *_sharedManager = nil;
 + (instancetype)sharedManager {
-    static AFNetworkReachabilityManager *_sharedManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+#if (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED >= 90000) || (defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 101100)
+        struct sockaddr_in6 address;
+        bzero(&address, sizeof(address));
+        address.sin6_len = sizeof(address);
+        address.sin6_family = AF_INET6;
+#else
         struct sockaddr_in address;
         bzero(&address, sizeof(address));
         address.sin_len = sizeof(address);
         address.sin_family = AF_INET;
-
+#endif
         _sharedManager = [self managerForAddress:&address];
     });
 
     return _sharedManager;
 }
++ (id)allocWithZone:(NSZone *)zone//其实alloc也是调用此方法，只是参数zone为nil而已
+{
+    @synchronized(self) {
+        if (_sharedManager == nil) {
+            _sharedManager = [super allocWithZone:zone];
+            //            [sharedInstance initQueue];
+            return _sharedManager;  // assignment and return on first allocation
+        }
+    }
+    return _sharedManager; //on subsequent allocation attempts return nil
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;//此处保证不会产生副本
+}
+
 
 + (instancetype)managerForDomain:(NSString *)domain {
     SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(kCFAllocatorDefault, [domain UTF8String]);
@@ -166,9 +190,8 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {
 
 + (instancetype)managerForAddress:(const void *)address {
     SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, (const struct sockaddr *)address);
-
     AFNetworkReachabilityManager *manager = [[self alloc] initWithReachability:reachability];
-    manager.networkReachabilityAssociation = AFNetworkReachabilityForAddress;
+//    manager.networkReachabilityAssociation = AFNetworkReachabilityForAddress;
 //    CFRelease(reachability);
     return manager;
 }

@@ -14,6 +14,7 @@
 #import "MBProgressHUD.h"
 #import "pSSAlbumModel.h"
 #import "UPan_AssetSender.h"
+#import "UPan_CurrentPathFileMng.h"
 
 @interface UPan_FileExchanger ()<NetTcpCallback, FileRecverDelegate, picFileSenderDelegate>
 @property (nonatomic, strong) NSMutableDictionary *muFileSendExchanger;
@@ -57,8 +58,15 @@ __strong static id sharedInstance = nil;
         _muFileRecvExchanger = [NSMutableDictionary dictionary];
         _mAssetWaitSendQueue = [NSMutableArray arrayWithCapacity:30];
         [pssLink addTcpDelegate:self];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFileNotify:) name:kNotificationDeleteFile object:nil];
     }
     return self;
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 //添加文件接收者
@@ -73,13 +81,14 @@ __strong static id sharedInstance = nil;
 }
 
 //添加文件发送者
--(void)addSendingFilePath:(NSString *)filePath fileId:(NSInteger)fileId
+-(void)addSendingFilePath:(UPan_File *)file
 {
-    UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFilePath:filePath fileId:fileId];
+    UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFilePath:file.filePath fileId:file.fileId];
     fs.m_delegate = self;
     self.muFileSendExchanger[fs.threadName] = fs;
     [fs start];
-    NSLog(@"add file sending:%@", filePath);
+    file.exchangingState = EXCHANGE_ING;
+    MITLog(@"add file sending:%@", file.filePath);
 }
 
 //添加数据发送者
@@ -89,7 +98,7 @@ __strong static id sharedInstance = nil;
     fs.m_delegate = self;
     self.muFileSendExchanger[fs.threadName] = fs;
     [fs start];
-    NSLog(@"add file sending:%@", fileName);
+    MITLog(@"add file sending:%@", fileName);
 }
 
 //移除接受者
@@ -100,8 +109,15 @@ __strong static id sharedInstance = nil;
     if (self.muFileRecvExchanger[key]) {
         [self.muFileRecvExchanger removeObjectForKey:key];
         
-        NSLog(@"remove file recver, key:%@", key);
+        MITLog(@"remove file recver, key:%@", key);
     }
+}
+
+//删除文件通知
+-(void)deleteFileNotify:(NSNotification *)notify
+{
+    UPan_File *file = (UPan_File *)notify.object;
+    [self removeFileRecver:file.fileId];
 }
 
 //文件是否在传输中
@@ -132,7 +148,7 @@ __strong static id sharedInstance = nil;
         fr.isSuspend = NO;
         [fr reApply];
         
-        NSLog(@"recover recver, key:%@", key);
+        MITLog(@"recover recver, key:%@", key);
     }
 }
 
@@ -162,6 +178,7 @@ __strong static id sharedInstance = nil;
     }
 }
 
+//遍历Asset资源发送
 -(void)loopAssetSender
 {
     if (_muFileSendExchanger.allKeys.count > 0 ||
@@ -191,7 +208,7 @@ __strong static id sharedInstance = nil;
                                 }
                                 NSInteger code = [message[ptl_status] integerValue];
                                 if (code != _SUCCESS_CODE) {
-                                    NSLog(@"%@", message);
+                                    MITLog(@"%@", message);
                                     [weakSelf loopAssetSender];
                                     return;
                                 }
@@ -242,18 +259,20 @@ __strong static id sharedInstance = nil;
 }
 
 #pragma mark - NetTcpCallback
+//接收文件数据
 - (void)NetRecvFileData:(NSData *)data fileId:(unsigned long long)fileId
 {
-//    NSLog(@"file size:%zd, fileId:%zd", data.length, fileId);
+//    MITLog(@"file size:%zd, fileId:%zd", data.length, fileId);
     NSString *key = [NSString stringWithFormat:@"%zd", fileId];
     if (self.muFileRecvExchanger[key]) {
         UPan_FileRecver *fr = self.muFileRecvExchanger[key];
         [fr writeFileData:data];
     }else{
-        NSLog(@"file recver has been remove");
+        MITLog(@"file recver has been remove");
     }
 }
 
+//接收到指令处理
 - (void)NetTcpCallback:(NSDictionary *)receData error:(NSError *)error
 {
     NSInteger comType = [receData[PSS_CMD_TYPE] integerValue];
@@ -283,10 +302,11 @@ __strong static id sharedInstance = nil;
                         });
                         return;
                     }
+                    //通知新建文件
                     NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
                     [ntf postNotificationName:kNotificationFileCreate object:uFile];
 
-                    NSLog(@"create fileId:%zd, fileSize:%zd", uFile.fileId, fileSize);
+                    MITLog(@"create fileId:%zd, fileSize:%zd", uFile.fileId, fileSize);
                     [weakSelf addFileRecver:uFile fileSize:fileSize pcFilePath:filePath];
 //                    [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
                 });
@@ -299,22 +319,38 @@ __strong static id sharedInstance = nil;
 }
 
 #pragma mark - FileRecverDelegate
+//文件接收成功
 -(void)didRecvFileFinish:(NSInteger)fileId
 {
     NSString *key = [NSString stringWithFormat:@"%zd", fileId];
     if (self.muFileRecvExchanger[key]){
         [self.muFileRecvExchanger removeObjectForKey:key];
+        
+        UPan_File *file = [CurPathFile fileWithFileId:fileId];
+        if (!file) {
+            return;
+        }
+        file.exchangingState = EXCHANGE_COM;
+        file.exchangeInfo = nil;
+        [file knowFileType];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationFileRecvFinish object:file];
     }
-    NSLog(@"file:%zd recv finish", fileId);
+    MITLog(@"file:%zd recv finish", fileId);
 }
 
 #pragma mark - picFileSenderDelegate
+//文件发送完成
 -(void)didSendFinish:(NSString *)threadName
 {
     if (self.muFileSendExchanger[threadName]) {
         UPan_FileSender *fs = self.muFileSendExchanger[threadName];
         [self.muFileSendExchanger removeObjectForKey:threadName];
         [fs cancel];
+        
+        UPan_File *file = [CurPathFile fileWithFileId:fs.mFileId];
+        if (file) {
+            file.exchangingState = EXCHANGE_COM;
+        }
         
         if (_muFileSendExchanger.count > 0) {
             

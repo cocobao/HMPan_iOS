@@ -54,10 +54,18 @@
 #define ptl_pcFilePath @"pcFilePath"
 
 /*Notification*/
+//接收文件百分比通知
 #define kNotificationFileRecvPersent @"kNotificationFileRecvPersent"
+//接收文件成功通知
+#define kNotificationFileRecvFinish @"kNotificationFileRecvFinish"
+//发送文件百分比通知
 #define kNotificationFileSendPersent @"kNotificationFileSendPersent"
+//创建了新文件通知
 #define kNotificationFileCreate @"kNotificationFileCreate"
+//被登出通知
 #define kNotificationLogout @"kNotificationLogout"
+//下一曲音频通知
 #define kNotificationMusicNext @"kNotificationMusicNext"
-
+//删除文件通知
+#define kNotificationDeleteFile @"kNotificationDeleteFile"
 #endif /* comMarcoDefine_h */

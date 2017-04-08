@@ -9,6 +9,7 @@
 #import "pSSAvPlayerViewController.h"
 #import "pSSAudioPlayerView.h"
 #import "pSSAudioListView.h"
+#import "UPan_CurrentPathFileMng.h"
 
 @interface pSSAvPlayerViewController ()<audioListDelegate>
 @property (nonatomic, strong) pSSAudioPlayerView *mPlayerView;
@@ -24,6 +25,7 @@
     if (self) {
         _mDataSource = [NSMutableArray arrayWithCapacity:files.count];
         
+        //数据结构转换为音频数据结构
         NSInteger i = 0;
         for (UPan_File *f in files) {
             pSSAvMode *mode = [[pSSAvMode alloc] initWithFile:f];
@@ -37,6 +39,8 @@
         PSS_AVPLAYER.mAudiosSource = [NSMutableArray arrayWithArray:_mDataSource];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNextAv:) name:kNotificationMusicNext object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvFileFinishNotify:) name:kNotificationFileRecvFinish object:nil];
+
     }
     return self;
 }
@@ -46,6 +50,7 @@
     
     self.mListView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight-NAVBAR_H-CGRectGetHeight(self.mPlayerView.frame));
     
+    //进入页面即开始播放
     [PSS_AVPLAYER startWithMode:_nowPlayIndex];
     [self.mPlayerView playWithMode:[_mDataSource objectAtIndex:_nowPlayIndex]];
 }
@@ -56,9 +61,27 @@
     [self.mPlayerView releaseView];
 }
 
+#pragma mark - notify
 -(void)notifyNextAv:(NSNotification *)notify
 {
     self.mPlayerView.b_NextPlay();
+}
+
+//接收文件通知
+-(void)recvFileFinishNotify:(NSNotification *)notify
+{
+    UPan_File *file = notify.object;
+    if (!file) {
+        return;
+    }
+    if (file.fileType == UPan_FT_Mus) {
+        pSSAvMode *mode = [[pSSAvMode alloc] initWithFile:file];
+        [_mDataSource addObject:mode];
+        WeakSelf(weakSelf);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.mListView reloadData];
+        });
+    }
 }
 
 #pragma mark - audioListDelegate
@@ -67,6 +90,7 @@
     return _mDataSource;
 }
 
+//选择音乐
 -(void)didSelectWithIndex:(NSInteger)index
 {
     if (_nowPlayIndex == index) {
@@ -101,6 +125,7 @@
         _mPlayerView = view;
         
         WeakSelf(weakSelf);
+        //下一曲回调
         view.b_NextPlay = ^(){
             NSInteger index = weakSelf.nowPlayIndex;
             if (index == weakSelf.mDataSource.count - 1) {
@@ -110,6 +135,7 @@
             }
             [weakSelf didSelectWithIndex:index];
         };
+        //上一曲回调
         view.b_previousPlay = ^(){
             NSInteger index = weakSelf.nowPlayIndex;
             if (index == 0) {

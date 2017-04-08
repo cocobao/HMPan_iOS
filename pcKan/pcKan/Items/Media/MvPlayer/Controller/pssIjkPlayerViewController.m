@@ -32,8 +32,8 @@
     [super viewDidLoad];
 
 #ifdef DEBUG
-    [IJKFFMoviePlayerController setLogReport:YES];
-    [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+    [IJKFFMoviePlayerController setLogReport:NO];
+    [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
 #else
     [IJKFFMoviePlayerController setLogReport:NO];
     [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_INFO];
@@ -42,14 +42,14 @@
     [IJKFFMoviePlayerController checkIfFFmpegVersionMatch:YES];
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-//    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_frame" ofCategory:kIJKFFOptionCategoryCodec];
-//    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_loop_filter" ofCategory:kIJKFFOptionCategoryCodec];
-//    [options setOptionIntValue:0 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];
-//    [options setOptionIntValue:60 forKey:@"max-fps" ofCategory:kIJKFFOptionCategoryPlayer];
-//    [options setPlayerOptionIntValue:256 forKey:@"vol"];
+    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_frame" ofCategory:kIJKFFOptionCategoryCodec];
+    [options setOptionIntValue:IJK_AVDISCARD_DEFAULT forKey:@"skip_loop_filter" ofCategory:kIJKFFOptionCategoryCodec];
+    [options setOptionIntValue:0 forKey:@"videotoolbox" ofCategory:kIJKFFOptionCategoryPlayer];
+    [options setOptionIntValue:60 forKey:@"max-fps" ofCategory:kIJKFFOptionCategoryPlayer];
+    [options setPlayerOptionIntValue:256 forKey:@"vol"];
     
     CGFloat width = [[UIScreen mainScreen] bounds].size.width;
-    CGRect playerFrame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);//CGRectMake(0, 0, width, width*9/16+NAVBAR_H);
+    CGRect playerFrame = CGRectMake(0, 0, width, width*9/16+NAVBAR_H);
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:_mURL withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.player.view.frame = playerFrame;
@@ -57,16 +57,16 @@
     self.player.shouldAutoplay = YES;
     self.player.view.backgroundColor = [UIColor blackColor];
     self.player.view.center = CGPointMake(width/2, (kScreenHeight - NAVBAR_H)/2);
-//    self.ctrlView.delegatePlayer = self.player;
-//    self.ctrlView.frame = CGRectMake(0, playerFrame.size.height-40-NAVBAR_H, playerFrame.size.width, 40);
+    self.ctrlView.delegatePlayer = self.player;
+    self.ctrlView.frame = CGRectMake(0, playerFrame.size.height-40-NAVBAR_H, playerFrame.size.width, 40);
     
-//    [self.player.view addSubview:self.ctrlView];
+    [self.player.view addSubview:self.ctrlView];
     [self.view addSubview:self.player.view];
     
-//    _defaultFrame = self.view.frame;
+    _defaultFrame = self.view.frame;
     
-//    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer:)]; 
-//    [self.player.view addGestureRecognizer:gesture];
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer:)]; 
+    [self.player.view addGestureRecognizer:gesture];
 }
 
 - (BOOL)prefersStatusBarHidden{
@@ -80,10 +80,10 @@
     [super viewWillAppear:animated];
     
     [self installMovieNotificationObservers];
-//    [self.ctrlView refreshMediaControl];
+    [self.ctrlView refreshMediaControl];
     [self.player prepareToPlay];
     
-//    [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:3];
+    [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:5];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -101,7 +101,7 @@
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCtrlBar) object:nil];
     if (self.ctrlView.hidden) {
         self.ctrlView.hidden = NO;
-        [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:3];
+        [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:5];
     }else{
         self.ctrlView.hidden = YES;
     }

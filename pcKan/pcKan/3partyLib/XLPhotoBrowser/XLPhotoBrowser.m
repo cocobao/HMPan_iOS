@@ -890,7 +890,7 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(kScreenWidth-50, 50, 40, 40);
-    [btn setImage:[UIImage imageNamed:@"icon_about"] forState:UIControlStateNormal];
+    [btn setImage:[UIImage imageNamed:@"global_img_notification"] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(infoBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:btn];
 }

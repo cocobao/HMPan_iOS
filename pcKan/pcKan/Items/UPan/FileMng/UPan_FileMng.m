@@ -38,6 +38,7 @@
     return NSTemporaryDirectory();
 }
 
+//获取路径下的所有内容
 +(NSArray *)ContentOfPath:(NSString *)path
 {
     path = [path stringByStandardizingPath];

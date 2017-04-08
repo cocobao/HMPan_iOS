@@ -36,12 +36,7 @@
     self.mFileNameLabel.text = mFile.fileName;
     
     self.mPerPersentlabel.text = @"";
-    
-    if (mFile.mIcon) {
-        self.mIcon.image = mFile.mIcon;
-    }else{
-        self.mIcon.image = [UIImage imageNamed:@"file"];
-    }
+    self.mIcon.image = mFile.mIcon;
     
     if (mFile.fileType == UPan_FT_Dir) {
         self.mCreateDateLabel.text = mFile.createDate;
@@ -150,6 +145,8 @@
     if (fileId == self.mFile.fileId) {
         //当前百分比
         CGFloat persent = [dict[ptl_persent] floatValue];
+        MITLog(@"send persent %0.1f", persent);
+        
         //当前速率
         CGFloat speed = [dict[ptl_speed] floatValue];
         if (dict[ptl_seek]) {
@@ -171,15 +168,22 @@
                     weakSelf.mPerPersentlabel.text = [NSString stringWithFormat:@"%0.0f%%  %@/s", persent, sizeperSec];
                 }
             }else{
-                //传输完成,清除进度，百分比，速度等
-                weakSelf.mFile.exchangingState = EXCHANGE_COM;
-                weakSelf.mFile.exchangeInfo = nil;
                 [weakSelf.mFile knowFileType];
-
-                [weakSelf.tableView reloadRowsAtIndexPaths:@[_mIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+                weakSelf.mFile.exchangeInfo = nil;
+                [weakSelf.tableView reloadRowsAtIndexPaths:@[weakSelf.mIndexPath] withRowAnimation:UITableViewRowAnimationNone];
             }
         });
     }
+}
+
+-(void)notifyRecvFileFinish:(NSNotification *)notify
+{
+    [self removePersentLayer];
+    //更新当前的文件大小
+    [self setFileDateAndSize];
+    //更新当前的传输进度条
+    [self updatePersentLine];
+    [self.tableView reloadRowsAtIndexPaths:@[_mIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 //更新文件传输进度
@@ -244,13 +248,17 @@
                                              selector:@selector(notifyLogoutNotify:)
                                                  name:kNotificationLogout
                                                object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(notifyRecvFileFinish:)
+//                                                 name:kNotificationFileRecvFinish
+//                                               object:nil];
 }
 
 -(UIButton *)iBtn
 {
     if (!_iBtn) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(kScreenWidth-60, 0, 45, 25);
+        btn.frame = CGRectMake(kScreenWidth-60, 0, 45, 20);
         btn.center = CGPointMake(btn.center.x, _mMode.cell_height/2-10);
         btn.layer.cornerRadius = 5;
         btn.layer.borderWidth = 1;

@@ -7,6 +7,7 @@
 //
 
 #import "pSSAvPlayerModule.h"
+#import "UPan_CurrentPathFileMng.h"
 
 @implementation pSSAvPlayerModule
 __strong static id sharedInstance = nil;
@@ -35,6 +36,21 @@ __strong static id sharedInstance = nil;
     return self;
 }
 
+-(instancetype)init
+{
+    if (self = [super init]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFileNotify:) name:kNotificationDeleteFile object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvFileFinishNotify:) name:kNotificationFileRecvFinish object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+//播放文件
 -(void)startWithMode:(NSInteger)index
 {
     pSSAvMode *mode = [_mAudiosSource objectAtIndex:index];
@@ -91,14 +107,29 @@ __strong static id sharedInstance = nil;
     return self.audioPlayer.currentTime;
 }
 
+//添加音频文件
 -(void)addAudioFile:(UPan_File *)file
 {
+    if (file.fileType != UPan_FT_Mus || ![self isPlaying]) {
+        return;
+    }
+    for (pSSAvMode *mode in _mAudiosSource) {
+        if (mode.mFile.fileId == file.fileId) {
+            return;
+        }
+    }
     pSSAvMode *mode = [[pSSAvMode alloc] initWithFile:file];
     [_mAudiosSource addObject:mode];
+    
+    MITLog(@"添加了音乐文件, %@", file.fileName);
 }
 
+//删除音频文件
 -(void)removeAudioFile:(UPan_File *)file
 {
+    if (file.fileType != UPan_FT_Mus || ![self isPlaying]) {
+        return;
+    }
     BOOL isFound = NO;
     NSInteger i = 0;
     for (pSSAvMode *mode in _mAudiosSource) {
@@ -109,7 +140,17 @@ __strong static id sharedInstance = nil;
         i++;
     }
     if (YES) {
-        [_mAudiosSource removeObjectAtIndex:i];
+        if (_mAudiosSource.count <= i) {
+            return;
+        }
+        
+        if (i == _currentIndex) {
+            [self stop];
+            [_mAudiosSource removeAllObjects];
+        }else{
+            [_mAudiosSource removeObjectAtIndex:i];
+            MITLog(@"删除了音乐文件, %@", file.fileName);
+        }
     }
 }
 
@@ -136,6 +177,7 @@ __strong static id sharedInstance = nil;
 }
 
 #pragma mark - AVAudioPlayerDelegate
+//播放完毕
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
     _currentIndex++;
@@ -147,5 +189,20 @@ __strong static id sharedInstance = nil;
     [self play];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMusicNext object:nil];
+}
+
+#pragma mark - notify
+//删除文件通知
+-(void)deleteFileNotify:(NSNotification *)notify
+{
+    UPan_File *file = (UPan_File *)notify.object;
+    [self removeAudioFile:file];
+}
+
+//接收文件通知
+-(void)recvFileFinishNotify:(NSNotification *)notify
+{
+    UPan_File *file = notify.object;
+    [self addAudioFile:file];
 }
 @end

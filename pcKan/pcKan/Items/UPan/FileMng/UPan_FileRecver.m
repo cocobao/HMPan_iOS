@@ -141,23 +141,10 @@
     [self saveInfoFile];
     
     if (_seek >= _fileSize) {
-        //传输完毕
         _persent = 100;
-        [self closeFile];
-        [self removeInfoFile];
-        if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didRecvFileFinish:)]) {
-            [self.m_delegate didRecvFileFinish:self.fileId];
-        }
-        usleep(300000);
     }else{
         //设置传输进度
         _persent = ((double)_seek/_fileSize)*100;
-
-        WeakSelf(weakSelf);
-        dispatch_async(_recvQue, ^{
-            usleep(50000);
-            [weakSelf applyFilePart];
-        });
     }
     
     time_t nowTime = time(NULL);
@@ -172,6 +159,23 @@
                                        ptl_persent:@(_persent),
                                        ptl_seek:@(_seek),
                                        ptl_speed:@(speed)}];
+    }
+    
+    if (_persent == 100) {
+        //传输完毕
+        [self closeFile];
+        [self removeInfoFile];
+        usleep(100000);
+        if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didRecvFileFinish:)]) {
+            [self.m_delegate didRecvFileFinish:self.fileId];
+        }
+    }else{
+        WeakSelf(weakSelf);
+        dispatch_async(_recvQue, ^{
+            usleep(50000);
+            //请求接收下一个包
+            [weakSelf applyFilePart];
+        });
     }
 }
 

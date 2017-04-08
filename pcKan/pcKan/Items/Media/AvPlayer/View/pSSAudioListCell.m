@@ -12,6 +12,7 @@
 @interface pSSAudioListCell ()
 @property (nonatomic, strong) UIImageView *mIcon;
 @property (nonatomic, strong) UILabel *mTitle;
+@property (nonatomic, strong) UIView *mLine;
 @end
 
 @implementation pSSAudioListCell
@@ -49,6 +50,16 @@
     
     self.mIcon.image = mMode.mFile.mIcon;
     self.mTitle.text = str;
+}
+
+-(UIView *)mLine
+{
+    if (!_mLine) {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor = Color_Line;
+        _mLine = view;
+    }
+    return _mLine;
 }
 
 -(UILabel *)mTitle

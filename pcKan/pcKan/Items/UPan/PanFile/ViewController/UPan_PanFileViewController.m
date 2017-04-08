@@ -9,7 +9,6 @@
 #import "UPan_PanFileViewController.h"
 #import "UPan_FileTableView.h"
 #import "UPan_FileMng.h"
-#import "UPan_File.h"
 #import "pssLinkObj.h"
 #import "pssLinkObj+Api.h"
 #import "UPan_FileExchanger.h"
@@ -27,14 +26,14 @@
 #import "pSSAvPlayerViewController.h"
 #import "pSSAvPlayerViewController.h"
 #import "pSSAvPlayerModule.h"
-#import "testPlayerViewController.h"
+#import "UPan_CurrentPathFileMng.h"
+#import "UIAlertView+RWBlock.h"
 
 @interface UPan_PanFileViewController ()
 <UPanFileDelegate,
 NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
 @property (nonatomic, strong) NSMutableArray *mDataSource;
-@property (nonatomic, strong) NSMutableArray *mInfoSource;
 @property (nonatomic, strong) NSString *mCurDir;
 @property (nonatomic, strong) UIButton *mLinkBtn;
 @property (nonatomic, strong) UIButton *mCreateFoldBtn;
@@ -55,8 +54,7 @@ NetTcpCallback>
     [super viewDidLoad];
     
     _mDataSource = [NSMutableArray array];
-    _mInfoSource = [NSMutableArray array];
-    
+
     self.mTableView.frame = CGRectMake(0, 0, kScreenWidth, kViewHeight);
     WeakSelf(weakSelf);
     [self.mTableView headerRereshing:YES rereshingBlock:^{
@@ -77,53 +75,29 @@ NetTcpCallback>
 {
     [super viewWillAppear:animated];
     
-    //添加tcp代理
-    [pssLink addTcpDelegate:self];
-    
     //当前的网络状态显示
     tcpConnectState state = [pssLink tcpLinkStatus];
-    if (state == tcpConnect_ConnectOk) {
-        self.mLinkBtn.backgroundColor = [UIColor greenColor];
-    }else{
-        self.mLinkBtn.backgroundColor = [UIColor redColor];
-    }
+    [self setLinkStateImg:state];
     
-    //注册通知接口
-    NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
-    [ntf addObserver:self selector:@selector(ntfCreateNewFile:) name:kNotificationFileCreate object:nil];
-    
-    [FileExchanger setMNowPath:self.mCurDir];
-}
+    if (![CurPathFile.mNowPath isEqualToString:self.mCurDir]) {
+        //添加tcp代理
+        [pssLink addTcpDelegate:self];
 
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    //页面消息的时候，注销tcp代理,以及通知，交给下一个页面
-    [pssLink removeTcpDelegate:self];
-    
-    NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
-    [ntf removeObserver:self];
-}
-
-//读出信息文件
--(void)parseTheInfoFile:(NSString *)filePath
-{
-    NSData *data = [UPan_FileMng readFile:filePath];
-    NSDictionary *dict = [pSSCommodMethod jsonObjectWithJsonData:data];
-    if (!dict) {
-        return;
+        //注册通知接口
+        NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
+        [ntf addObserver:self selector:@selector(ntfCreateNewFile:) name:kNotificationFileCreate object:nil];
+        
+        [FileExchanger setMNowPath:self.mCurDir];
+        CurPathFile.mNowPath = self.mCurDir;
+        CurPathFile.mFileSource = _mDataSource;
     }
-    [_mInfoSource addObject:dict];
 }
 
 //文件资源准备好
 -(void)setupFileSource
 {
     //生成主路径
-    NSString *rootPath = nil;
-    rootPath = self.mCurDir;
-    
-    [_mInfoSource removeAllObjects];
+    NSString *rootPath = self.mCurDir;
     [_mDataSource removeAllObjects];
     
     //获取路径下所有文件
@@ -133,12 +107,14 @@ NetTcpCallback>
         return;
     }
     
+    NSMutableArray *arrInfoSource = [NSMutableArray array];
     //读出传输信息文件
     for (NSString *file in arr) {
         if ([file hasSuffix:@".hmf"]) {
-            
-            NSString *path = [rootPath stringByAppendingPathComponent:file];
-            [self parseTheInfoFile:path];
+            NSData *data = [UPan_FileMng readFile:[rootPath stringByAppendingPathComponent:file]];
+            NSDictionary *dict = [pSSCommodMethod jsonObjectWithJsonData:data];
+            if (dict)
+                [arrInfoSource addObject:dict];
         }
     }
     
@@ -154,7 +130,7 @@ NetTcpCallback>
         UPan_File *uFile = [[UPan_File alloc] initWithPath:path Atts:fileAtts];
         
         //是否有传输信息
-        for (NSDictionary *chanInfoDict in _mInfoSource) {
+        for (NSDictionary *chanInfoDict in arrInfoSource) {
             NSInteger fileId = [chanInfoDict[ptl_fileId] integerValue];
             if (fileId == uFile.fileId) {
                 if ([FileExchanger isFileExchanging:fileId]) {
@@ -188,11 +164,11 @@ NetTcpCallback>
     if (arrO.count > 0) {
         [_mDataSource addObjectsFromArray:arrO];
     }
-    [_mInfoSource removeAllObjects];
+    
     [self.mTableView reloadData];
 }
 
-//通知创建新文件
+//创建了新文件被通知
 -(void)ntfCreateNewFile:(NSNotification *)ntf
 {
     UPan_File *uFile = ntf.object;
@@ -203,29 +179,43 @@ NetTcpCallback>
     [_mDataSource addObject:uFile];
     WeakSelf(weakSelf);
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:weakSelf.mDataSource.count-1 inSection:0];
-        [weakSelf.mTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:weakSelf.mDataSource.count-1 inSection:0];
+//        [weakSelf.mTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [weakSelf.mTableView reloadData];
     });
 }
 
 //请求pc端接收文件
 -(void)applyRecvFile:(UPan_File *)file
 {
-    NSDictionary *dict = @{
-                           ptl_fileName:file.fileName,
-                           ptl_fileSize:@(file.fileSize),
-                           };
-    [pssLink NetApi_ApplyRecvFile:dict block:^(NSDictionary *message, NSError *error) {
-        if (error) {
-            return;
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                    message:[NSString stringWithFormat:@"发送文件%@到电脑", file.fileName]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"取消"
+                                          otherButtonTitles:@"确定", nil];
+    [alert show];
+    [alert setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
+        if (btnIndex == 1) {
+            NSDictionary *dict = @{
+                                   ptl_fileName:file.fileName,
+                                   ptl_fileSize:@(file.fileSize),
+                                   };
+            [pssLink NetApi_ApplyRecvFile:dict block:^(NSDictionary *message, NSError *error) {
+                if (error) {
+                    return;
+                }
+                NSInteger code = [message[ptl_status] integerValue];
+                if (code != _SUCCESS_CODE) {
+                    NSLog(@"%@", message);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [MBProgressHUD showMessage:[NSString stringWithFormat:@"发送失败,%@", message[@"msg"]]];
+                    });
+                    return;
+                }
+                
+                [FileExchanger addSendingFilePath:file];
+            }];
         }
-        NSInteger code = [message[ptl_status] integerValue];
-        if (code != _SUCCESS_CODE) {
-            NSLog(@"%@", message);
-            return;
-        }
-        NSInteger fileId = [message[ptl_fileId] integerValue];
-        [FileExchanger addSendingFilePath:file.filePath fileId:fileId];
     }];
 }
 
@@ -292,17 +282,22 @@ NetTcpCallback>
     };
 }
 
+-(void)setLinkStateImg:(tcpConnectState)state
+{
+    if (state == tcpConnect_ConnectOk) {
+        [self.mLinkBtn setImage:[UIImage imageNamed:@"icon_electrify"] forState:UIControlStateNormal];
+    }else{
+        [self.mLinkBtn setImage:[UIImage imageNamed:@"icon_cutout"] forState:UIControlStateNormal];
+    }
+}
+
 #pragma mark - NetTcpCallback
 //网络状态改变
 - (void)NetStatusChange:(tcpConnectState)state
 {
     WeakSelf(weakSelf);
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (state == tcpConnect_ConnectOk) {
-            weakSelf.mLinkBtn.backgroundColor = [UIColor greenColor];
-        }else{
-            weakSelf.mLinkBtn.backgroundColor = [UIColor redColor];
-        }
+        [weakSelf setLinkStateImg:state];
     });
 }
 
@@ -315,13 +310,16 @@ NetTcpCallback>
 //删除文件
 -(void)didDeleteFile:(UPan_File *)file
 {
-    [FileExchanger removeFileRecver:file.fileId];
+    //删除资源
     [UPan_FileMng deleteFile:file.filePath];
     
     NSString *infoFile = [NSString stringWithFormat:@"%@.hmf", file.filePath];
     [UPan_FileMng deleteFile:infoFile];
     
     [self.mDataSource removeObject:file];
+    
+    //发送通知文件被删除
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationDeleteFile object:file];
 }
 
 //查看文件
@@ -339,7 +337,10 @@ NetTcpCallback>
         {
             //文件夹类型，跳转到下一集目录展示
             vc = [[UPan_PanFileViewController alloc] initWithPath:file.filePath];
-            [self pushVc:vc];
+            
+            //页面消息的时候，注销tcp代理,以及通知，交给下一个页面
+            [pssLink removeTcpDelegate:self];
+            [[NSNotificationCenter defaultCenter] removeObserver:self];
         }
             break;
         case UPan_FT_Img:
@@ -364,8 +365,8 @@ NetTcpCallback>
             
             //本地视频观看testPlayerViewController
 //            vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-//            vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-            vc = [[testPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+//            vc = [[testPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
         }
             break;
         case UPan_FT_Word:
@@ -510,7 +511,7 @@ NetTcpCallback>
 {
     if (!_mLinkBtn) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(60, kTabBarHeight-40, 30, 30);
+        btn.frame = CGRectMake(kScreenWidth-60-30, kTabBarHeight-42, 30, 30);
         _mLinkBtn = btn;
     }
     return _mLinkBtn;
@@ -520,7 +521,7 @@ NetTcpCallback>
 {
     if (!_mCreateFoldBtn) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.backgroundColor = [UIColor orangeColor];
+        [btn setImage:[UIImage imageNamed:@"global_ic_add"] forState:UIControlStateNormal];
         btn.frame = CGRectMake(0, 0, 30, 30);
         [btn addTarget:self action:@selector(createFoldSction:) forControlEvents:UIControlEventTouchUpInside];
         _mCreateFoldBtn = btn;

@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSString *mNowPath;
 + (id)shareInstance;
 
--(void)addSendingFilePath:(NSString *)filePath fileId:(NSInteger)fileId;
+-(void)addSendingFilePath:(UPan_File *)file;
 //添加数据发送者
 -(void)addSendingFileData:(NSData *)fileData fileId:(NSInteger)fileId fileName:(NSString *)fileName;
 

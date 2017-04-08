@@ -51,6 +51,7 @@ MGSwipeTableCellDelegate
 
 -(void)reloadRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
+    //对于单独cell刷新，进行mode重新计算,因为可能有变化
     for (NSIndexPath *index in indexPaths) {
         [_cellModes removeObjectAtIndex:index.row];
         
@@ -122,6 +123,7 @@ MGSwipeTableCellDelegate
     }
 }
 
+//点击accessoryButton处理
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(accessButtonWithIndex:)]){
@@ -142,7 +144,7 @@ MGSwipeTableCellDelegate
         
         [_cellModes removeObjectAtIndex:path.row];
     }
-    
+    //再进行cell刷新
     [self deleteRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationFade];
     [self endUpdates];
     return YES;
