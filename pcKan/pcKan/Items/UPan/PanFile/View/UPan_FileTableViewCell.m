@@ -57,11 +57,11 @@
             [self.iBtn setTitle:@"继续" forState:UIControlStateNormal];
         }
         [self updatePersentLine];
-        
-        [self registerNotifyInterface];
     }
-
+    
     [self removePersentLayer];
+    
+    [self registerNotifyInterface];
 }
 
 -(void)removePersentLayer
@@ -145,7 +145,7 @@
     if (fileId == self.mFile.fileId) {
         //当前百分比
         CGFloat persent = [dict[ptl_persent] floatValue];
-        MITLog(@"send persent %0.1f", persent);
+//        MITLog(@"send persent %0.1f", persent);
         
         //当前速率
         CGFloat speed = [dict[ptl_speed] floatValue];
@@ -169,6 +169,7 @@
                 }
             }else{
                 [weakSelf.mFile knowFileType];
+                weakSelf.mFile.exchangingState = EXCHANGE_COM;
                 weakSelf.mFile.exchangeInfo = nil;
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[weakSelf.mIndexPath] withRowAnimation:UITableViewRowAnimationNone];
             }
@@ -238,11 +239,11 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(filePersentNotify:)
-                                                 name:kNotificationFileRecvPersent
+                                                 name:kNotificationFileSendPersent
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(filePersentNotify:)
-                                                 name:kNotificationFileSendPersent
+                                                 name:kNotificationFileRecvPersent
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(notifyLogoutNotify:)

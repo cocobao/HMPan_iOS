@@ -81,9 +81,9 @@ __strong static id sharedInstance = nil;
 }
 
 //添加文件发送者
--(void)addSendingFilePath:(UPan_File *)file
+-(void)addSendingFilePath:(UPan_File *)file pcFileId:(NSInteger)pcFileId
 {
-    UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFilePath:file.filePath fileId:file.fileId];
+    UPan_FileSender *fs = [[UPan_FileSender alloc] initWithFilePath:file.filePath fileId:pcFileId];
     fs.m_delegate = self;
     self.muFileSendExchanger[fs.threadName] = fs;
     [fs start];

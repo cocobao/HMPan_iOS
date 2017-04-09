@@ -21,7 +21,7 @@
     if (self = [super init]) {
         _filePath = filePath;
         self.mFileId = fileId;
-
+ 
         [self threadWithName:[NSString stringWithFormat:@"mvThread_%zd", self.mFileId]
                        Start:@selector(mvThread:)
                       target:self
@@ -60,7 +60,10 @@
         //通知当前发送进度
         _sendLength = offset;
         CGFloat persent = _sendLength*100/fileSize;
-        [self notifySendInfo:persent offset:offset startTime:startTime fileId:fileId];
+        time_t nowTime = time(NULL);
+        CGFloat speed = (CGFloat)offset/(nowTime - startTime);
+        
+        [self postNotification:persent fileId:fileId speed:speed];
         
 //        NSLog(@"send size:%zd", reData.length);
         usleep(1000000);
@@ -71,15 +74,6 @@
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didSendFinish:)]) {
         [self.m_delegate didSendFinish:fileSender.threadName];
     }
-}
-
--(void)notifySendInfo:(CGFloat)persent offset:(NSInteger)offset startTime:(NSInteger)startTime fileId:(NSInteger)fileId
-{
-    time_t nowTime = time(NULL);
-    CGFloat speed = (CGFloat)offset/(nowTime - startTime);
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationFileSendPersent
-                                                        object:@{ptl_fileId:@(fileId), ptl_persent:@(persent), ptl_speed:@(speed)}];
 }
 
 

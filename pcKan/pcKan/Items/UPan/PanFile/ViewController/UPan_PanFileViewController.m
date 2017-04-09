@@ -212,8 +212,8 @@ NetTcpCallback>
                     });
                     return;
                 }
-                
-                [FileExchanger addSendingFilePath:file];
+                NSInteger fileId = [message[ptl_fileId] integerValue];
+                [FileExchanger addSendingFilePath:file pcFileId:fileId];
             }];
         }
     }];
