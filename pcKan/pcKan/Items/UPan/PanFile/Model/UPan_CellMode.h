@@ -9,6 +9,7 @@
 #import "UPan_File.h"
 
 #define NOR_CELL_HEIGHT MarginW(35)
+
 #define COMMON_CELL @"CommonCell"
 
 @interface UPan_CellMode : NSObject

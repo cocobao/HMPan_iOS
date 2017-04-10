@@ -14,8 +14,8 @@
     //图标
     CGFloat minX = MarginW(16);
     CGFloat minY = 5;
-    CGFloat width = MarginW(35);
-    CGFloat height = MarginW(30);
+    CGFloat width = ICON_WIDTH;
+    CGFloat height = ICON_WIDTH;
     _F_Icon = CGRectMake(minX, minY, width, height);
     
     //文件名

@@ -125,10 +125,12 @@
 
 -(void)notifyLogoutNotify:(NSNotification *)notify
 {
+    if (_mFile.exchangingState != EXCHANGE_ING) {
+        return;
+    }
     WeakSelf(weakSelf);
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.mPerPersentlabel.text = @"";
-        weakSelf.mFile.exchangingState = EXCHANGE_ING;
         [weakSelf iBtnAction:weakSelf.iBtn];
     });
 }

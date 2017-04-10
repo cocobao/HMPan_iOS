@@ -223,14 +223,14 @@
             image = [UIImage imageNamed:@"icon_html"];
             break;
         case UPan_FT_Img:
-            image = [pSSCommodMethod imageShotcutOfPath:_filePath w:MarginW(35) h:MarginW(30)];
+            image = [pSSCommodMethod imageShotcutOfPath:_filePath w:ICON_WIDTH h:ICON_WIDTH];
             break;
         case UPan_FT_Mov:
         {
             NSURL *url = [NSURL fileURLWithPath:_filePath];
             UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
             if (imageTmp != nil) {
-                image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:MarginW(35) h:MarginW(30)];
+                image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:ICON_WIDTH h:ICON_WIDTH];
             }
         }
             break;

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define ICON_WIDTH MarginW(35)
+
 typedef enum : NSUInteger {
     //未知类型
     UPan_FT_Ukn,

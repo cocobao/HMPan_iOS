@@ -50,6 +50,10 @@
                 break;
         };
     };
+    
+#ifdef DEBUG
+    MITLog(@"debug mode");
+#endif
     return YES;
 }
 

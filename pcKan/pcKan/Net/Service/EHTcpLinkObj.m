@@ -61,7 +61,7 @@
     [_mGcdTcpSocket connectToHost:ip onPort:port withTimeout:10 error:&error];
     if (error) {
         _connectState = tcpConnect_ConnectNotOk;
-        NSLog(@"connect fail, error%@", error);
+        MITLog(@"connect fail, error%@", error);
         return NO;
     }
     
@@ -71,7 +71,7 @@
 //主动切断连接
 -(void)cutOffConnection
 {
-    NSLog(@"cut off by mySelf");
+    MITLog(@"cut off by mySelf");
     if (_connectState == tcpConnect_ConnectOk) {
         [_mGcdTcpSocket disconnect];
     }
@@ -89,12 +89,12 @@
     _ip = host;
     _port = port;
     [self setConnectState:tcpConnect_ConnectOk];
-    NSLog(@"connect to host:%@ ok", host);
+    MITLog(@"connect to host:%@ ok", host);
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
-    NSLog(@"did disconnect");
+    MITLog(@"did disconnect");
     for (pssHSMmsg *msg in _mMessageQueue) {
         NSError *error = [NSError errorWithDomain:@"网络错误" code:404 userInfo:nil];
         msg.sendBlock(nil, error);
@@ -107,7 +107,7 @@
 {
     memcpy(pRecvBuf, data.bytes, data.length);
     pRecvBuf += data.length;
-//    NSLog(@"recv data size:%zd", data.length);
+//    MITLog(@"recv data size:%zd", data.length);
 
     [self didReadData];
     [_mGcdTcpSocket readDataWithTimeout:-1 tag:0];
@@ -196,7 +196,7 @@
     [dict setValue:@(head->type) forKey:PSS_CMD_TYPE];
     [dict setValue:@(head->msgId) forKey:ptl_msgId];
     
-    NSLog(@"recv cmd type:%zd", head->type);
+    MITLog(@"recv cmd type:%zd", head->type);
     
     if (head->bodyLength > 0) {
         NSData *jsonData = [[NSData alloc] initWithBytes:body length:head->bodyLength];

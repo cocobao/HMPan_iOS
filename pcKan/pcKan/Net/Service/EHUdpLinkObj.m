@@ -66,7 +66,7 @@
     
     ssize_t ret = sendto(mUdpSocket, data.bytes, data.length, 0, (struct sockaddr *)&addr, sizeof(struct sockaddr));
     if (ret < 0) {
-        NSLog(@"send size:%zd, length:%zd, %s", ret, data.length, strerror(errno));
+        MITLog(@"send size:%zd, length:%zd, %s", ret, data.length, strerror(errno));
     }
 }
 

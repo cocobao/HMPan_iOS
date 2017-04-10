@@ -131,12 +131,12 @@ __strong static id sharedInstance = nil;
 
 -(void)NetLogin
 {
-    NSLog(@"send login");
+    MITLog(@"send login");
     [self NetApi_loginService:^(NSDictionary *message, NSError *error) {
         if (error) {
             return;
         }
-        NSLog(@"login ok");
+        MITLog(@"login ok");
         [UserInfo setUserWithInfo:message];
         UserInfo.isLogin = YES;
     }];
@@ -147,7 +147,7 @@ __strong static id sharedInstance = nil;
     if (state != tcpConnect_ConnectOk) {
         UserInfo.isLogin = NO;
         
-        NSLog(@"logout");
+        MITLog(@"logout");
         NSNotificationCenter *no = [NSNotificationCenter defaultCenter];
         [no postNotificationName:kNotificationLogout object:nil];
     }else{
