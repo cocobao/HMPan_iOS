@@ -167,7 +167,8 @@
             [_fileName hasSuffix:@"rmvb"] ||
             [_fileName hasSuffix:@"RMVB"] ||
             [_fileName hasSuffix:@"MKV"] ||
-            [_fileName hasSuffix:@"mkv"]
+            [_fileName hasSuffix:@"mkv"] ||
+            [_fileName hasSuffix:@"mp4"]
             ) {
             _fileType = UPan_FT_Mov;
             return YES;
@@ -231,6 +232,8 @@
             UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
             if (imageTmp != nil) {
                 image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:ICON_WIDTH h:ICON_WIDTH];
+            }else{
+                image = [UIImage imageNamed:@"mov_icon"];
             }
         }
             break;
@@ -238,6 +241,9 @@
         {
             NSURL *url = [NSURL fileURLWithPath:_filePath];
             image = [pSSCommodMethod musicImageWithMusicURL:url];
+            if (!image) {
+                image = [UIImage imageNamed:@"file"];
+            }
         }
             break;
         default:

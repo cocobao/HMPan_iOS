@@ -9,5 +9,6 @@
 #import "pSSBaseViewController.h"
 
 @interface UPan_MoveToViewController : pSSBaseViewController
-
+-(instancetype)initWithFilePath:(NSString *)filePath;
+@property (nonatomic, copy) void (^didMoveFile)();
 @end

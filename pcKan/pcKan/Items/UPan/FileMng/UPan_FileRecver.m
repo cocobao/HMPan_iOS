@@ -165,7 +165,7 @@
         //传输完毕
         [self closeFile];
         [self removeInfoFile];
-        usleep(100000);
+        usleep(50000);
         if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didRecvFileFinish:)]) {
             [self.m_delegate didRecvFileFinish:self.fileId];
         }

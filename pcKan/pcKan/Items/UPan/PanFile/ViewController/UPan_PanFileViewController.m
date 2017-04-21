@@ -15,7 +15,6 @@
 #import "EHScSetDefendView.h"
 #import "EHSuspensionFrameTextFieldView.h"
 #import "UPan_MoveToViewController.h"
-#import "pssGUIPlayerViewController.h"
 #import "pssDocReaderViewController.h"
 #import "SARUnArchiveANY.h"
 #import "LZMAExtractor.h"
@@ -28,6 +27,7 @@
 #import "pSSAvPlayerModule.h"
 #import "UPan_CurrentPathFileMng.h"
 #import "UIAlertView+RWBlock.h"
+#import "KxMovieViewController.h"
 
 @interface UPan_PanFileViewController ()
 <UPanFileDelegate,
@@ -53,6 +53,12 @@ NetTcpCallback>
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if ([self.mCurDir isEqualToString:[UPan_FileMng hmPath]]) {
+        self.title = @"K盘";
+    }else{
+        self.title = [self.mCurDir lastPathComponent];
+    }
+    
     _mDataSource = [NSMutableArray array];
 
     self.mTableView.frame = CGRectMake(0, 0, kScreenWidth, kViewHeight);
@@ -69,6 +75,11 @@ NetTcpCallback>
     //获取当前路径的文件资源
     [self setupFileSource];
     [self removeHub];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notifyLogoutNotify:)
+                                                 name:kNotificationLogout
+                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -91,6 +102,14 @@ NetTcpCallback>
         CurPathFile.mNowPath = self.mCurDir;
         CurPathFile.mFileSource = _mDataSource;
     }
+}
+
+-(void)notifyLogoutNotify:(NSNotification *)notify
+{
+    WeakSelf(weakSelf);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf setLinkStateImg:[pssLink tcpLinkStatus]];
+    });
 }
 
 //文件资源准备好
@@ -364,9 +383,18 @@ NetTcpCallback>
             }
             
             //本地视频观看testPlayerViewController
-//            vc = [[pssGUIPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-            vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-//            vc = [[testPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            if ([file.fileName hasSuffix:@".mp4"] ||
+                [file.fileName hasSuffix:@".MP4"]) {
+                vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+            }else{
+                NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+                if ([file.filePath.pathExtension isEqualToString:@"wmv"])
+                    parameters[KxMovieParameterMinBufferedDuration] = @(5.0);
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+                    parameters[KxMovieParameterDisableDeinterlacing] = @(YES);
+                
+                vc = [KxMovieViewController movieViewControllerWithContentPath:file.filePath parameters:parameters];
+            }
         }
             break;
         case UPan_FT_Word:
@@ -429,8 +457,11 @@ NetTcpCallback>
             }
             [weakSelf applyRecvFile:file];
         }else if (index == 2){
-            UPan_MoveToViewController *vc = [[UPan_MoveToViewController alloc] init];
+            UPan_MoveToViewController *vc = [[UPan_MoveToViewController alloc] initWithFilePath:file.filePath];
             [weakSelf presentVc:vc];
+            vc.didMoveFile = ^(){
+                [weakSelf setupFileSource];
+            };
         }
     };
 }

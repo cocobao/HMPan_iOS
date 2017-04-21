@@ -32,7 +32,7 @@
     [self.window makeKeyAndVisible];
     
     FileExchanger;
-
+#ifdef DEBUG
     CTCellularData *cellularData = [[CTCellularData alloc]init];
     cellularData.cellularDataRestrictionDidUpdateNotifier =  ^(CTCellularDataRestrictedState state){
         //获取联网状态
@@ -51,7 +51,6 @@
         };
     };
     
-#ifdef DEBUG
     MITLog(@"debug mode");
 #endif
     return YES;

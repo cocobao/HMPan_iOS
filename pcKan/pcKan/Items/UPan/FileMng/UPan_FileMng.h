@@ -54,4 +54,7 @@
 
 //文件重命名
 +(BOOL)renameFileName:(NSString *)oldName toNewName:(NSString *)newName atPath:(NSString *)path;
+
+//移动文件
++(void)moveFile:(NSString *)file toPath:(NSString *)toPath;
 @end

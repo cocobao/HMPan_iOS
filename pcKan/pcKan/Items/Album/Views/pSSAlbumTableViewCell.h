@@ -9,6 +9,8 @@
 #import "pSSBaseTableViewCell.h"
 #import "pSSAlbumModel.h"
 
+#define CELL_HEIGHT 90
+
 @interface pSSAlbumTableViewCell : pSSBaseTableViewCell
 @property (nonatomic,strong) ALAssetsGroup *mAssetGroup;
 @end

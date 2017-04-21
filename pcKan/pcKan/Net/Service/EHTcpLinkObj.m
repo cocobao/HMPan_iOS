@@ -68,6 +68,16 @@
     return YES;
 }
 
+-(void)clearDataBuf
+{
+    pRecvBuf = recvDataBuf;
+    for (pssHSMmsg *msg in _mMessageQueue) {
+        NSError *error = [NSError errorWithDomain:@"网络错误" code:404 userInfo:nil];
+        msg.sendBlock(nil, error);
+    }
+    [_mMessageQueue removeAllObjects];
+}
+
 //主动切断连接
 -(void)cutOffConnection
 {
@@ -100,7 +110,9 @@
         msg.sendBlock(nil, error);
     }
     [_mMessageQueue removeAllObjects];
-    [self setConnectState:tcpConnect_ConnectNotOk];
+    if (_connectState != tcpConnect_ConnectNotOk) {
+        [self setConnectState:tcpConnect_ConnectNotOk];
+    }
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag

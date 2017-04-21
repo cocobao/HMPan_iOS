@@ -50,7 +50,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self addChildViewControllerWithClassName:[UPan_PanFileViewController description] imageName:@"audit" title:@"我的手盘"];
+    [self addChildViewControllerWithClassName:[UPan_PanFileViewController description] imageName:@"audit" title:@"大宝U盘"];
     [self addChildViewControllerWithClassName:[pSSAlbumViewController description] imageName:@"home" title:@"手机相册"];
 }
 

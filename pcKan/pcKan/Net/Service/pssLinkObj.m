@@ -61,12 +61,14 @@ __strong static id sharedInstance = nil;
         _mTimer = [[RCETimmerHandler alloc] initWithFrequency:5 handleBlock:^{
             if (weakSelf.tcpLinkStatus == tcpConnect_ConnectOk) {
                 if (!UserInfo.isLogin) {
+                    [weakSelf.tcp_link clearDataBuf];
                     [weakSelf NetLogin];
                 }
             }else{
                 NSInteger netType = [pssNetCom getCurrentNetTypeForInt];
                 if (netType == 20 || netType == 0) {
                     [weakSelf NetApi_BoardCastIp];
+//                    [_tcp_link socketConnectWithIp:@"192.168.0.101" port:39890];
                 }
             }
             

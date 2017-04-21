@@ -139,5 +139,14 @@
     return result;
 }
 
-
+//移动文件
++(void)moveFile:(NSString *)file toPath:(NSString *)toPath
+{
+    NSError * error = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager moveItemAtPath:file toPath:toPath error:&error];
+    if (error){
+        NSLog(@"移动文件失败：%@", [error localizedDescription]);
+    }
+}
 @end

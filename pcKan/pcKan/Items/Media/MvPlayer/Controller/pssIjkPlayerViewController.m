@@ -11,6 +11,7 @@
 #import "pssMediaControlView.h"
 
 @interface pssIjkPlayerViewController ()
+@property (nonatomic, assign) BOOL isTouching;
 @property (atomic, strong) NSURL *mURL;
 @property(atomic, retain) id<IJKMediaPlayback> player;
 @property (nonatomic, strong) pssMediaControlView *ctrlView;
@@ -49,7 +50,7 @@
     [options setPlayerOptionIntValue:256 forKey:@"vol"];
     
     CGFloat width = [[UIScreen mainScreen] bounds].size.width;
-    CGRect playerFrame = CGRectMake(0, 0, width, width*9/16+NAVBAR_H);
+    CGRect playerFrame = CGRectMake(0, 0, width, width*9/16+NAVBAR_H*2);
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:_mURL withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.player.view.frame = playerFrame;
@@ -83,7 +84,7 @@
     [self.ctrlView refreshMediaControl];
     [self.player prepareToPlay];
     
-    [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:5];
+    [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:10];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -98,10 +99,13 @@
 
 -(void)tapPlayer:(UITapGestureRecognizer *)gesture
 {
+    if (_isTouching) {
+        return;
+    }
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCtrlBar) object:nil];
     if (self.ctrlView.hidden) {
         self.ctrlView.hidden = NO;
-        [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:5];
+        [self performSelector:@selector(hideCtrlBar) withObject:nil afterDelay:10];
     }else{
         self.ctrlView.hidden = YES;
     }
@@ -109,6 +113,9 @@
 
 -(void)hideCtrlBar
 {
+    if (_isTouching) {
+        return;
+    }
     self.ctrlView.hidden = YES;
 }
 
@@ -126,7 +133,8 @@
 
 - (void)didSliderTouchDown
 {
-    [self.player pause];
+    _isTouching = YES;
+//    [self.player pause];
     [self.ctrlView beginDragMediaSlider];
 }
 
@@ -137,6 +145,7 @@
 
 - (void)didSliderTouchUpOutside
 {
+    _isTouching = NO;
     if (!self.ctrlView.playerBtn.selected) {
         [self.player play];
     }
@@ -145,6 +154,7 @@
 
 - (void)didSliderTouchUpInside
 {
+    _isTouching = NO;
     self.player.currentPlaybackTime = self.ctrlView.mediaProgressSlider.value;
     if (!self.ctrlView.playerBtn.selected) {
         [self.player play];
@@ -173,7 +183,7 @@
             
             CGRect frame = _defaultFrame;
             frame.origin = CGPointZero;
-            frame.size.height = frame.size.width*9/16+NAVBAR_H;
+            frame.size.height = frame.size.width*9/16+NAVBAR_H*2;
             
             [self.player.view setFrame:frame];
             self.player.view.center = CGPointMake(frame.size.width/2, (kScreenHeight - NAVBAR_H)/2);
@@ -226,6 +236,8 @@
     } else if ((loadState & IJKMPMovieLoadStateStalled) != 0) {
         NSLog(@"loadStateDidChange: IJKMPMovieLoadStateStalled: %d\n", (int)loadState);
     } else {
+        [self addHub:@"播放媒体失败" hide:YES];
+        [self pop];
         NSLog(@"loadStateDidChange: ???: %d\n", (int)loadState);
     }
 }
@@ -248,6 +260,8 @@
             break;
             
         case IJKMPMovieFinishReasonPlaybackError:
+            [self addHub:@"播放媒体失败" hide:YES];
+            [self pop];
             NSLog(@"playbackStateDidChange: IJKMPMovieFinishReasonPlaybackError: %d\n", reason);
             break;
             
@@ -343,6 +357,7 @@
 {
     if (!_ctrlView) {
         pssMediaControlView *view = [[pssMediaControlView alloc] init];
+        view.mediaProgressSlider.continuous = YES;
         [view.playerBtn addTarget:self action:@selector(onClickPlay:) forControlEvents:UIControlEventTouchUpInside];
         [view.mediaProgressSlider addTarget:self action:@selector(didSliderTouchDown) forControlEvents:UIControlEventTouchDown];
         [view.mediaProgressSlider addTarget:self action:@selector(didSliderTouchCancel) forControlEvents:UIControlEventTouchCancel];

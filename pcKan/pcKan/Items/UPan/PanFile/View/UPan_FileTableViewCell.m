@@ -232,7 +232,7 @@
 -(void)setFileDateAndSize
 {
     CGFloat fileSize = _mFile.fileSize;
-    NSString *muString = [NSString stringWithFormat:@"%@  %@", _mFile.createDate, [pSSCommodMethod exchangeSize:fileSize]];
+    NSString *muString = [NSString stringWithFormat:@"%@ %@", _mFile.createDate, [pSSCommodMethod exchangeSize:fileSize]];
     
     self.mCreateDateLabel.text = muString;
 }
@@ -261,7 +261,7 @@
 {
     if (!_iBtn) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(kScreenWidth-60, 0, 45, 20);
+        btn.frame = CGRectMake(kScreenWidth-60, 0, 45, 30);
         btn.center = CGPointMake(btn.center.x, _mMode.cell_height/2-10);
         btn.layer.cornerRadius = 5;
         btn.layer.borderWidth = 1;
@@ -301,8 +301,9 @@
 {
     if (!_mPerPersentlabel) {
         UILabel *label = [[UILabel alloc] init];
-        label.font = kFont(12);
+        label.font = kFont(10);
         label.textColor = Color_828282;
+        label.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:label];
         _mPerPersentlabel = label;
     }
@@ -324,8 +325,9 @@
 {
     if (!_mCreateDateLabel) {
         UILabel *label = [[UILabel alloc] init];
-        label.font = kFont(12);
+        label.font = kFont(10);
         label.textColor = Color_828282;
+        label.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:label];
         _mCreateDateLabel = label;
     }

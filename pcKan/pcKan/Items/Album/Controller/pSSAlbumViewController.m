@@ -59,7 +59,7 @@
 
 -(CGFloat)eh_cellHeightAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 90;
+    return CELL_HEIGHT;
 }
 
 -(UIEdgeInsets)eh_sepEdgeInsetsAtIndexPath:(NSIndexPath *)indexPath

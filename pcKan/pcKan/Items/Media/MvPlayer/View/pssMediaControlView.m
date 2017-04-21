@@ -21,8 +21,8 @@
     
     self.playerBtn.frame = CGRectMake(0, 0, self.bounds.size.height, self.bounds.size.height);
     self.currentTimeLabel.frame = CGRectMake(CGRectGetMaxX(_playerBtn.frame), 0, 50, self.bounds.size.height);
-    self.fullBtn.frame = CGRectMake(self.bounds.size.width-40, 0, 30, self.bounds.size.height);
-    self.totalDurationLabel.frame = CGRectMake(CGRectGetMinX(_fullBtn.frame)-60, 0, 50, self.bounds.size.height);
+    self.fullBtn.frame = CGRectMake(self.bounds.size.width-40, 0, 40, self.bounds.size.height);
+    self.totalDurationLabel.frame = CGRectMake(CGRectGetMinX(_fullBtn.frame)-60, 0, 60, self.bounds.size.height);
     self.mediaProgressSlider.frame = CGRectMake(CGRectGetMaxX(_currentTimeLabel.frame),
                                                 0,
                                                 CGRectGetMinX(_totalDurationLabel.frame)-CGRectGetMaxX(_currentTimeLabel.frame)-10,
@@ -41,7 +41,9 @@
 
 - (void)continueDragMediaSlider
 {
-    [self refreshMediaControl];
+    if (_delegatePlayer) {
+        [self refreshMediaControl];
+    }
 }
 
 - (void)refreshMediaControl
@@ -138,7 +140,7 @@
     if (!_mediaProgressSlider) {
         UISlider *view = [[UISlider alloc] init];
         view.minimumValue = 0;
-        view.continuous = YES;
+        view.continuous = NO;
         [self addSubview:view];
         _mediaProgressSlider = view;
     }
