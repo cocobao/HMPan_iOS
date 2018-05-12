@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"手机相册";
+    self.title = @"相册";
     [self loadData];
 }
 

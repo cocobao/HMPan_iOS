@@ -50,8 +50,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self addChildViewControllerWithClassName:[UPan_PanFileViewController description] imageName:@"audit" title:@"大宝U盘"];
-    [self addChildViewControllerWithClassName:[pSSAlbumViewController description] imageName:@"home" title:@"手机相册"];
+    [self addChildViewControllerWithClassName:[UPan_PanFileViewController description] imageName:@"audit" title:@"花米"];
+    [self addChildViewControllerWithClassName:[pSSAlbumViewController description] imageName:@"home" title:@"相册"];
 }
 
 //添加tabbar栏子控制器

@@ -54,7 +54,7 @@ NetTcpCallback>
     [super viewDidLoad];
     
     if ([self.mCurDir isEqualToString:[UPan_FileMng hmPath]]) {
-        self.title = @"K盘";
+        self.title = @"主页";
     }else{
         self.title = [self.mCurDir lastPathComponent];
     }

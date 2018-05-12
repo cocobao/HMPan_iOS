@@ -104,8 +104,16 @@ MGSwipeTableCellDelegate
         cell.mIndexPath = indexPath;
         
         UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:indexPath.row];
-        UPan_CellMode *mode = _cellModes[indexPath.row];
-        [cell setMMode:mode file:file];
+        if (_cellModes.count > indexPath.row) {
+            UPan_CellMode *mode = _cellModes[indexPath.row];
+            [cell setMMode:mode file:file];
+        }else{
+            UPan_File *file = [[self.m_delegate UPanFileDataSource] objectAtIndex:indexPath.row];
+            UPan_CellMode *mode = [[UPan_CellMode alloc] init];
+            [mode setupModel:file];
+            [_cellModes addObject:mode];
+            [cell setMMode:mode file:file];
+        }
 
         cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"删除" backgroundColor:[UIColor redColor]]];
         cell.rightSwipeSettings.transition = MGSwipeStateSwipingRightToLeft;
