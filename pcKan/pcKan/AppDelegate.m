@@ -53,6 +53,9 @@
     
     MITLog(@"debug mode");
 #endif
+    
+    MITLog(@"display mode:%@", NSStringFromCGSize([UIScreen mainScreen].currentMode.size));
+    MITLog(@"bound size:%@", NSStringFromCGSize([UIScreen mainScreen].bounds.size));
     return YES;
 }
 

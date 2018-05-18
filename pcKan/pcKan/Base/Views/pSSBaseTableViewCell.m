@@ -13,12 +13,15 @@ UITableViewCellStyle cellStyle;
 
 -(UITableView *)tableView
 {
-    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (version > 7.0) {
-        return (UITableView *)self.superview.superview;
-    }else{
-        return (UITableView *)self.superview;
+    if (_tableView == nil) {
+        float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (version > 7.0) {
+            return (UITableView *)self.superview.superview;
+        }else{
+            return (UITableView *)self.superview;
+        }
     }
+    return _tableView;
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

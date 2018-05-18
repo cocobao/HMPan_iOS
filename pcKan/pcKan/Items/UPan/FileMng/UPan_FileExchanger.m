@@ -15,6 +15,7 @@
 #import "pSSAlbumModel.h"
 #import "UPan_AssetSender.h"
 #import "UPan_CurrentPathFileMng.h"
+#import "utility.h"
 
 @interface UPan_FileExchanger ()<NetTcpCallback, FileRecverDelegate, picFileSenderDelegate>
 @property (nonatomic, strong) NSMutableDictionary *muFileSendExchanger;
@@ -282,37 +283,44 @@ __strong static id sharedInstance = nil;
         NSInteger fileSize = [receData[ptl_fileSize] integerValue];
         NSString *strSize = [pSSCommodMethod exchangeSize:fileSize];
         
-        UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                       message:[NSString stringWithFormat:@"请求接收文件:%@,大小:%@", fileName, strSize]
-                                                      delegate:nil
-                                             cancelButtonTitle:@"取消"
-                                             otherButtonTitles:@"确定", nil];
-        WeakSelf(weakSelf);
-        [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
-            if (btnIndex == 1) {
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    //这里待实现内存空间判断
-                    
-                    //生成文件
-                    UPan_File *uFile = [weakSelf createFile:fileName];
-                    
-                    if (!uFile) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [MBProgressHUD showMessage:@"创建文件失败"];
-                        });
-                        return;
-                    }
-                    //通知新建文件
-                    NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
-                    [ntf postNotificationName:kNotificationFileCreate object:uFile];
-
-                    MITLog(@"create fileId:%zd, fileSize:%zd", uFile.fileId, fileSize);
-                    [weakSelf addFileRecver:uFile fileSize:fileSize pcFilePath:filePath];
-//                    [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
-                });
-            }
-        }];
         dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                           message:[NSString stringWithFormat:@"请求接收文件:%@,大小:%@", fileName, strSize]
+                                                          delegate:nil
+                                                 cancelButtonTitle:@"取消"
+                                                 otherButtonTitles:@"确定", nil];
+            WeakSelf(weakSelf);
+            [view setCompleteBlock:^(UIAlertView *alertView, NSInteger btnIndex) {
+                if (btnIndex == 1) {
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                        //内存空间判断
+                        if (fileSize/1024 > [utility availableMemory]-50) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [MBProgressHUD showMessage:@"内存空间不足"];
+                            });
+                            return;
+                        }
+                        
+                        //生成文件
+                        UPan_File *uFile = [weakSelf createFile:fileName];
+                        
+                        if (!uFile) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [MBProgressHUD showMessage:@"创建文件失败"];
+                            });
+                            return;
+                        }
+                        //通知新建文件
+                        NSNotificationCenter *ntf = [NSNotificationCenter defaultCenter];
+                        [ntf postNotificationName:kNotificationFileCreate object:uFile];
+
+                        MITLog(@"create fileId:%zd, fileSize:%zd", uFile.fileId, fileSize);
+                        [weakSelf addFileRecver:uFile fileSize:fileSize pcFilePath:filePath];
+    //                    [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
+                    });
+                }
+            }];
+        
             [view show];
         });
     }

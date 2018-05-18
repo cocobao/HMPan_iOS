@@ -20,11 +20,11 @@ typedef enum {
 }emPssCmd;
 
 typedef enum {
-    emPssProtocolType_Broadcast,
-    emPssProtocolType_Login,
+    emPssProtocolType_Broadcast, //局域网广播
+    emPssProtocolType_Login,    //登录
     emPssProtocolType_PushDir, //推送
-    emPssProtocolType_OpenFile,
-    emPssProtocolType_OpenDir,
+    emPssProtocolType_OpenFile, //打开文件
+    emPssProtocolType_OpenDir,  //打开目录
     emPssProtocolType_CloseMv,
     emPssProtocolType_VideoInfo,
     emPssProtocolType_ApplySendFile,
@@ -34,6 +34,7 @@ typedef enum {
     emPssProtocolType_RecvFile,
     emPssProtocolType_VideoData,
     emPssProtocolType_AudioData,
+    emPssProtocolType_HeartBeat,
 }emPssProtocolType;
 
 #pragma pack(1)

@@ -22,7 +22,7 @@
 -(void)setMvDataDelegate:(id)obj;
 -(void)removeTcpDelegate:(id)obj;
 -(void)cutoffTcpConnect;
--(pssHSMmsg *)packDataType:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block;
--(pssHSMmsg *)packDataWithMsgId:(int)msgId Type:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block;
--(pssHSMmsg *)setProtocolHead:(NSData *)data type:(NSInteger)type;
+//-(pssHSMmsg *)packDataType:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block;
+//-(pssHSMmsg *)packDataWithMsgId:(int)msgId Type:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block;
+//-(pssHSMmsg *)setProtocolHead:(NSData *)data type:(NSInteger)type;
 @end

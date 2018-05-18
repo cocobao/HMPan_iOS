@@ -196,6 +196,7 @@
 		84F65FBC1E7A7B3A00F643EE /* pSSAlbumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FB51E7A7B3A00F643EE /* pSSAlbumTableViewCell.m */; };
 		84F7989A1E6CFA1600CF871A /* UPan_FileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F798991E6CFA1600CF871A /* UPan_FileTableViewCell.m */; };
 		84F798A31E6D15C800CF871A /* UPan_CellMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F798A21E6D15C800CF871A /* UPan_CellMode.m */; };
+		F53E59ED20AD9CF7000C240F /* utility.m in Sources */ = {isa = PBXBuildFile; fileRef = F53E59EC20AD9CF7000C240F /* utility.m */; };
 		F5D54C1120A696870067CB6E /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C0A20A696870067CB6E /* libavcodec.a */; };
 		F5D54C1220A696870067CB6E /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C0B20A696870067CB6E /* libavdevice.a */; };
 		F5D54C1320A696870067CB6E /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C0C20A696870067CB6E /* libavfilter.a */; };
@@ -204,6 +205,8 @@
 		F5D54C1620A696870067CB6E /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C0F20A696870067CB6E /* libswresample.a */; };
 		F5D54C1720A696870067CB6E /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C1020A696870067CB6E /* libswscale.a */; };
 		F5D54C1920A696980067CB6E /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C1820A696980067CB6E /* IJKMediaFramework.framework */; };
+		F5D54C1F20AC4EAE0067CB6E /* pssMovPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D54C1E20AC4EAE0067CB6E /* pssMovPlayerViewController.m */; };
+		F5D54C2220AC52E70067CB6E /* pssLinkObj+Pack.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D54C2120AC52E70067CB6E /* pssLinkObj+Pack.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -239,8 +242,8 @@
 		8435E7B41E93C76700D72FB3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		845E24B91EA10E18001F5042 /* pssIjkPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssIjkPlayerViewController.h; sourceTree = "<group>"; };
 		845E24BA1EA10E18001F5042 /* pssIjkPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pssIjkPlayerViewController.m; sourceTree = "<group>"; };
-		8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPan_FileMng.h; path = pcKan/Items/UPan/FileMng/UPan_FileMng.h; sourceTree = SOURCE_ROOT; };
-		8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPan_FileMng.m; path = pcKan/Items/UPan/FileMng/UPan_FileMng.m; sourceTree = SOURCE_ROOT; };
+		8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPan_FileMng.h; path = pcKan/utility/UPan_FileMng.h; sourceTree = SOURCE_ROOT; };
+		8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UPan_FileMng.m; path = pcKan/utility/UPan_FileMng.m; sourceTree = SOURCE_ROOT; };
 		847858551E856BDB00CA9497 /* UncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UncaughtExceptionHandler.h; sourceTree = "<group>"; };
 		847858561E856BDB00CA9497 /* UncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UncaughtExceptionHandler.m; sourceTree = "<group>"; };
 		847858591E85701400CA9497 /* pssDocReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pssDocReaderViewController.h; sourceTree = "<group>"; };
@@ -626,6 +629,8 @@
 		84F798991E6CFA1600CF871A /* UPan_FileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileTableViewCell.m; sourceTree = "<group>"; };
 		84F798A11E6D15C800CF871A /* UPan_CellMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_CellMode.h; sourceTree = "<group>"; };
 		84F798A21E6D15C800CF871A /* UPan_CellMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_CellMode.m; sourceTree = "<group>"; };
+		F53E59EB20AD9CF7000C240F /* utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility.h; sourceTree = "<group>"; };
+		F53E59EC20AD9CF7000C240F /* utility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = utility.m; sourceTree = "<group>"; };
 		F5D54C0A20A696870067CB6E /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavcodec.a; sourceTree = "<group>"; };
 		F5D54C0B20A696870067CB6E /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavdevice.a; sourceTree = "<group>"; };
 		F5D54C0C20A696870067CB6E /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavfilter.a; sourceTree = "<group>"; };
@@ -634,6 +639,10 @@
 		F5D54C0F20A696870067CB6E /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswresample.a; sourceTree = "<group>"; };
 		F5D54C1020A696870067CB6E /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
 		F5D54C1820A696980067CB6E /* IJKMediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFramework.framework; sourceTree = "<group>"; };
+		F5D54C1D20AC4EAE0067CB6E /* pssMovPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pssMovPlayerViewController.h; sourceTree = "<group>"; };
+		F5D54C1E20AC4EAE0067CB6E /* pssMovPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pssMovPlayerViewController.m; sourceTree = "<group>"; };
+		F5D54C2020AC52E70067CB6E /* pssLinkObj+Pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "pssLinkObj+Pack.h"; sourceTree = "<group>"; };
+		F5D54C2120AC52E70067CB6E /* pssLinkObj+Pack.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "pssLinkObj+Pack.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -722,8 +731,6 @@
 				8421FF751E695DD00054E8CA /* UPan_File.m */,
 				84F798A11E6D15C800CF871A /* UPan_CellMode.h */,
 				84F798A21E6D15C800CF871A /* UPan_CellMode.m */,
-				8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */,
-				8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -761,6 +768,8 @@
 			children = (
 				845E24B91EA10E18001F5042 /* pssIjkPlayerViewController.h */,
 				845E24BA1EA10E18001F5042 /* pssIjkPlayerViewController.m */,
+				F5D54C1D20AC4EAE0067CB6E /* pssMovPlayerViewController.h */,
+				F5D54C1E20AC4EAE0067CB6E /* pssMovPlayerViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1447,16 +1456,13 @@
 		84A24E5A1E5ABA7500B96A36 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				F5D54C2320AC53000067CB6E /* pssLinkObj */,
 				84A24E5B1E5ABA7500B96A36 /* EHTcpLinkObj.h */,
 				84A24E5C1E5ABA7500B96A36 /* EHTcpLinkObj.m */,
 				84A24E5D1E5ABA7500B96A36 /* EHUdpLinkObj.h */,
 				84A24E5E1E5ABA7500B96A36 /* EHUdpLinkObj.m */,
 				84A24E5F1E5ABA7500B96A36 /* GCDMulticastDelegate.h */,
 				84A24E601E5ABA7500B96A36 /* GCDMulticastDelegate.m */,
-				84A24E611E5ABA7500B96A36 /* pssLinkObj+Api.h */,
-				84A24E621E5ABA7500B96A36 /* pssLinkObj+Api.m */,
-				84A24E631E5ABA7500B96A36 /* pssLinkObj.h */,
-				84A24E641E5ABA7500B96A36 /* pssLinkObj.m */,
 				84A24E651E5ABA7500B96A36 /* pssNetServiceHeaper.h */,
 				84A24E661E5ABA7500B96A36 /* pssProtocolType.h */,
 				84A24E671E5ABA7500B96A36 /* pssProtocolType.m */,
@@ -1469,6 +1475,8 @@
 		84A24E681E5ABA7500B96A36 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				8465B6AE1E7642B400EC0186 /* UPan_FileMng.h */,
+				8465B6AF1E7642B400EC0186 /* UPan_FileMng.m */,
 				847858551E856BDB00CA9497 /* UncaughtExceptionHandler.h */,
 				847858561E856BDB00CA9497 /* UncaughtExceptionHandler.m */,
 				84CB877E1E6FD32A00DCE909 /* UIAlertView+RWBlock.h */,
@@ -1482,6 +1490,8 @@
 				84A24E6F1E5ABA7500B96A36 /* UIFont_Color.h */,
 				84904EFF1E70F92400392FD4 /* HBImageTypeSizeUtil.h */,
 				84904F001E70F92400392FD4 /* HBImageTypeSizeUtil.m */,
+				F53E59EB20AD9CF7000C240F /* utility.h */,
+				F53E59EC20AD9CF7000C240F /* utility.m */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1651,6 +1661,19 @@
 			path = lib;
 			sourceTree = "<group>";
 		};
+		F5D54C2320AC53000067CB6E /* pssLinkObj */ = {
+			isa = PBXGroup;
+			children = (
+				84A24E611E5ABA7500B96A36 /* pssLinkObj+Api.h */,
+				84A24E621E5ABA7500B96A36 /* pssLinkObj+Api.m */,
+				F5D54C2020AC52E70067CB6E /* pssLinkObj+Pack.h */,
+				F5D54C2120AC52E70067CB6E /* pssLinkObj+Pack.m */,
+				84A24E631E5ABA7500B96A36 /* pssLinkObj.h */,
+				84A24E641E5ABA7500B96A36 /* pssLinkObj.m */,
+			);
+			path = pssLinkObj;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1783,12 +1806,14 @@
 				8478585B1E85701400CA9497 /* pssDocReaderViewController.m in Sources */,
 				84A24E9C1E5ABA7500B96A36 /* pSSBaseTableViewCell.m in Sources */,
 				84A24EBE1E5ABA7500B96A36 /* pssLinkObj.m in Sources */,
+				F5D54C2220AC52E70067CB6E /* pssLinkObj+Pack.m in Sources */,
 				848000001E87B2690081C4D7 /* zip.c in Sources */,
 				84A24E7C1E5ABA7500B96A36 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				84D661841EA0FF2D000DF27F /* KxMovieGLView.m in Sources */,
 				848000DC1E87C2720081C4D7 /* SDWebImageCompat.m in Sources */,
 				84A24E7A1E5ABA7500B96A36 /* README.md in Sources */,
 				8480007F1E87B4B10081C4D7 /* Unrar4iOS.mm in Sources */,
+				F53E59ED20AD9CF7000C240F /* utility.m in Sources */,
 				84B7A9981E80013B0021B712 /* FSActionSheet.m in Sources */,
 				84904EFC1E70F1BE00392FD4 /* MGSwipeTableCell.m in Sources */,
 				84A24E851E5ABA7500B96A36 /* README.markdown in Sources */,
@@ -1857,6 +1882,7 @@
 				8480006C1E87B4B10081C4D7 /* 7zBuf2.c in Sources */,
 				848000731E87B4B10081C4D7 /* Delta.c in Sources */,
 				84904F041E71046F00392FD4 /* UPan_FileRecver.m in Sources */,
+				F5D54C1F20AC4EAE0067CB6E /* pssMovPlayerViewController.m in Sources */,
 				8480006B1E87B4B10081C4D7 /* 7zBuf.c in Sources */,
 				546AB9D11E98D11F0064376E /* pssNetCom.m in Sources */,
 				848000D61E87C2720081C4D7 /* MJPhotoLoadingView.m in Sources */,

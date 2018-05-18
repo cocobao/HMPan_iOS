@@ -100,6 +100,7 @@ MGSwipeTableCellDelegate
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UPan_FileTableViewCell *cell = [UPan_FileTableViewCell cellWithTableView:self];
+    cell.tableView = self;
     if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(UPanFileDataSource)]) {
         cell.mIndexPath = indexPath;
         

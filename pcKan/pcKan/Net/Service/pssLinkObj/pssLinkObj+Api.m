@@ -7,6 +7,7 @@
 //
 
 #import "pssLinkObj+Api.h"
+#import "pssLinkObj+Pack.h"
 
 @implementation pssLinkObj(Api)
 //登陆
@@ -83,6 +84,13 @@
 -(void)NetApi_ApplyRecvFile:(NSDictionary *)info block:(msgSendBlock)block
 {
     pssHSMmsg *pack = [self packDataType:emPssProtocolType_ApplyRecvFile body:info block:block];
+    [self.tcp_link sendData:pack];
+}
+
+//心跳
+-(void)NetApit_HeartBeat
+{
+    pssHSMmsg *pack = [self packDataType:emPssProtocolType_HeartBeat body:nil block:nil];
     [self.tcp_link sendData:pack];
 }
 @end

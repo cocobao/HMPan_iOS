@@ -67,28 +67,25 @@
 -(void)removePersentLayer
 {
     if (_mFile.exchangingState == EXCHANGE_COM) {
-        if (_mPersentLayer) {
-            WeakSelf(weakSelf);
-            dispatch_async(dispatch_get_main_queue(), ^{
+        WeakSelf(weakSelf);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (weakSelf.mPersentLayer) {
                 [weakSelf.mPersentLayer removeFromSuperlayer];
                 weakSelf.mPerPersentlabel.text = @"";
                 weakSelf.mPersentLayer = nil;
-            });
-        }
-        
-        if (_mPersentBackLayer) {
-            WeakSelf(weakSelf);
-            dispatch_async(dispatch_get_main_queue(), ^{
+            }
+            
+            if (weakSelf.mPersentBackLayer) {
                 [weakSelf.mPersentBackLayer removeFromSuperlayer];
                 weakSelf.mPerPersentlabel.text = @"";
                 weakSelf.mPersentLayer = nil;
-            });
-        }
-        
-        if (_iBtn) {
-            [_iBtn removeFromSuperview];
-            _iBtn = nil;
-        }
+            }
+            
+            if (weakSelf.iBtn) {
+                [weakSelf.iBtn removeFromSuperview];
+                weakSelf.iBtn = nil;
+            }
+        });
     }
 }
 

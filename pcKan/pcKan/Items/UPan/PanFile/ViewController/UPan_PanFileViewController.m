@@ -27,13 +27,15 @@
 #import "pSSAvPlayerModule.h"
 #import "UPan_CurrentPathFileMng.h"
 #import "UIAlertView+RWBlock.h"
-#import "KxMovieViewController.h"
+//#import "KxMovieViewController.h"
+#import "pssMovPlayerViewController.h"
 
 @interface UPan_PanFileViewController ()
 <UPanFileDelegate,
 NetTcpCallback>
 @property (nonatomic, strong) UPan_FileTableView *mTableView;
 @property (nonatomic, strong) NSMutableArray *mDataSource;
+/*当前路径*/
 @property (nonatomic, strong) NSString *mCurDir;
 @property (nonatomic, strong) UIButton *mLinkBtn;
 @property (nonatomic, strong) UIButton *mCreateFoldBtn;
@@ -301,6 +303,11 @@ NetTcpCallback>
     };
 }
 
+-(void)linkBtnAction:(UIButton *)sender
+{
+    [pssLink NetApi_BoardCastIp];
+}
+
 -(void)setLinkStateImg:(tcpConnectState)state
 {
     if (state == tcpConnect_ConnectOk) {
@@ -383,18 +390,19 @@ NetTcpCallback>
             }
             
             //本地视频观看testPlayerViewController
-            if ([file.fileName hasSuffix:@".mp4"] ||
-                [file.fileName hasSuffix:@".MP4"]) {
-                vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-            }else{
-                NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-                if ([file.filePath.pathExtension isEqualToString:@"wmv"])
-                    parameters[KxMovieParameterMinBufferedDuration] = @(5.0);
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-                    parameters[KxMovieParameterDisableDeinterlacing] = @(YES);
-                
-                vc = [KxMovieViewController movieViewControllerWithContentPath:file.filePath parameters:parameters];
-            }
+//            if ([file.fileName hasSuffix:@".mp4"] ||
+//                [file.fileName hasSuffix:@".MP4"]) {
+//                vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
+//            }else{
+//                NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//                if ([file.filePath.pathExtension isEqualToString:@"wmv"])
+//                    parameters[KxMovieParameterMinBufferedDuration] = @(5.0);
+//                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+//                    parameters[KxMovieParameterDisableDeinterlacing] = @(YES);
+//
+//                vc = [KxMovieViewController movieViewControllerWithContentPath:file.filePath parameters:parameters];
+            vc = [[pssMovPlayerViewController alloc] initWithFilePath:file.filePath];
+//            }
         }
             break;
         case UPan_FT_Word:
@@ -543,6 +551,7 @@ NetTcpCallback>
     if (!_mLinkBtn) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(kScreenWidth-60-30, kTabBarHeight-42, 30, 30);
+        [btn addTarget:self action:@selector(linkBtnAction:) forControlEvents:UIControlEventTouchUpInside];
         _mLinkBtn = btn;
     }
     return _mLinkBtn;

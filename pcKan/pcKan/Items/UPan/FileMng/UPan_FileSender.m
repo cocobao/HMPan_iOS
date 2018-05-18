@@ -66,7 +66,7 @@
         [self postNotification:persent fileId:fileId speed:speed];
         
 //        NSLog(@"send size:%zd", reData.length);
-        usleep(1000000);
+        usleep(100000);
     }
     
     [fileHandle closeFile];

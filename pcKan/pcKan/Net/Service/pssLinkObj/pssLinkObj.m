@@ -8,12 +8,13 @@
 
 #import "pssLinkObj.h"
 #import "pssLinkObj+Api.h"
+#import "pssLinkObj+Pack.h"
 #import "pssUserInfo.h"
 #import "RCETimmerHandler.h"
 #import "UPan_FileExchanger.h"
 #import "pssNetCom.h"
 
-#define PRO_VERSION 1
+
 
 @interface pssLinkObj()<pssUdpLinkDelegate>
 @property (nonatomic, strong) RCETimmerHandler *mTimer;
@@ -58,21 +59,28 @@ __strong static id sharedInstance = nil;
         [_tcp_link addDelegate:self];
         
         WeakSelf(weakSelf);
+        
+        //启动5秒钟定时器
         _mTimer = [[RCETimmerHandler alloc] initWithFrequency:5 handleBlock:^{
-            if (weakSelf.tcpLinkStatus == tcpConnect_ConnectOk) {
-                if (!UserInfo.isLogin) {
-                    [weakSelf.tcp_link clearDataBuf];
-                    [weakSelf NetLogin];
-                }
-            }else{
-                NSInteger netType = [pssNetCom getCurrentNetTypeForInt];
-                if (netType == 20 || netType == 0) {
-                    [weakSelf NetApi_BoardCastIp];
+//            if (weakSelf.tcpLinkStatus == tcpConnect_ConnectOk) {
+//                if (!UserInfo.isLogin) {
+//                    //局域网登录电脑端
+//                    [weakSelf.tcp_link clearDataBuf];
+//                    [weakSelf NetLogin];
+//                }
+//            }else{
+                //获取当前网络类型
+//                NSInteger netType = [pssNetCom getCurrentNetTypeForInt];
+//                if (netType == 20 || netType == 0) {
+//                    [weakSelf NetApi_BoardCastIp];
 //                    [_tcp_link socketConnectWithIp:@"192.168.0.101" port:39890];
-                }
-            }
+//                }
+//            }
             
+            //检测网络超时包
             [weakSelf.tcp_link checkForTimeoutPack];
+            
+            [weakSelf NetApit_HeartBeat];
         } cancelBlock:nil];
         [_mTimer start];
     }
@@ -157,75 +165,5 @@ __strong static id sharedInstance = nil;
     }
 }
 
-//打包
--(pssHSMmsg *)packDataType:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block
-{
-    uint32_t msgId = [pSSCommodMethod getRandomMessageID];
-    
-    if (!body) {
-        body = @{};
-    }
-    
-    NSData *jsonBody = [pSSCommodMethod dictionaryToJsonData:body];
-    
-    NSMutableData *data = [[NSMutableData alloc] initWithLength:(jsonBody.length + sizeof(stPssProtocolHead))];
-    stPssProtocolHead *head = (stPssProtocolHead *)data.bytes;
-    head->head[0] = HEADER_0;
-    head->head[1] = HEADER_1;
-    head->head[2] = HEADER_2;
-    head->head[3] = HEADER_3;
-    head->version = PRO_VERSION;
-    head->msgId = htonl(msgId);
-    head->type = type;
-    head->uid = [UserInfo uid];
-    if (jsonBody.length > 0) {
-        head->bodyLength = htonl(jsonBody.length);
-        memcpy((void *)(data.bytes + sizeof(stPssProtocolHead)), jsonBody.bytes, jsonBody.length);
-    }
-    pssHSMmsg *pack = [[pssHSMmsg alloc] initWithData:data msgId:msgId block:block];
-    return pack;
-}
 
--(pssHSMmsg *)packDataWithMsgId:(int)msgId Type:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block
-{
-    if (!body) {
-        body = @{};
-    }
-    
-    NSData *jsonBody = [pSSCommodMethod dictionaryToJsonData:body];
-    
-    NSMutableData *data = [[NSMutableData alloc] initWithLength:(jsonBody.length + sizeof(stPssProtocolHead))];
-    stPssProtocolHead *head = (stPssProtocolHead *)data.bytes;
-    head->head[0] = HEADER_0;
-    head->head[1] = HEADER_1;
-    head->head[2] = HEADER_2;
-    head->head[3] = HEADER_3;
-    head->version = PRO_VERSION;
-    head->msgId = htonl(msgId);
-    head->type = type;
-    head->uid = [UserInfo uid];
-    if (jsonBody.length > 0) {
-        head->bodyLength = htonl(jsonBody.length);
-        memcpy((void *)(data.bytes + sizeof(stPssProtocolHead)), jsonBody.bytes, jsonBody.length);
-    }
-    pssHSMmsg *pack = [[pssHSMmsg alloc] initWithData:data msgId:msgId block:block];
-    return pack;
-}
-
--(pssHSMmsg *)setProtocolHead:(NSData *)data type:(NSInteger)type
-{
-    stPssProtocolHead *protoHead = (stPssProtocolHead *)data.bytes;
-    protoHead->head[0] = HEADER_0;
-    protoHead->head[1] = HEADER_1;
-    protoHead->head[2] = HEADER_2;
-    protoHead->head[3] = HEADER_3;
-    protoHead->version = PRO_VERSION;
-    protoHead->msgId = 0;
-    protoHead->type = type;
-    protoHead->uid = [UserInfo uid];
-    protoHead->bodyLength = htonl((int)data.length - sizeof(stPssProtocolHead));
-    
-    pssHSMmsg *pack = [[pssHSMmsg alloc] initWithData:data msgId:0 block:nil];
-    return pack;
-}
 @end
