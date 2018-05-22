@@ -169,14 +169,15 @@
         if (self.m_delegate && [self.m_delegate respondsToSelector:@selector(didRecvFileFinish:)]) {
             [self.m_delegate didRecvFileFinish:self.fileId];
         }
-    }else{
-//        WeakSelf(weakSelf);
-//        dispatch_async(_recvQue, ^{
-//            usleep(50000);
-//            //请求接收下一个包
-//            [weakSelf applyFilePart];
-//        });
     }
+    /*else{
+        WeakSelf(weakSelf);
+        dispatch_async(_recvQue, ^{
+            usleep(50000);
+            //请求接收下一个包
+            [weakSelf applyFilePart];
+        });
+    }*/
 }
 
 -(void)closeFile

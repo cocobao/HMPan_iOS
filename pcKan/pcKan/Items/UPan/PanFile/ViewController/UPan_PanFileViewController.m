@@ -21,7 +21,7 @@
 #import "UIImageView+MJWebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
-#import "pssIjkPlayerViewController.h"
+//#import "pssIjkPlayerViewController.h"
 #import "pSSAvPlayerViewController.h"
 #import "pSSAvPlayerViewController.h"
 #import "pSSAvPlayerModule.h"
