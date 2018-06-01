@@ -19,8 +19,10 @@
 + (id)shareInstance;
 -(tcpConnectState)tcpLinkStatus;
 -(void)addTcpDelegate:(id)obj;
+-(void)addUdpDelegate:(id)obj;
 -(void)setMvDataDelegate:(id)obj;
 -(void)removeTcpDelegate:(id)obj;
+-(void)removeUdpDelegate:(id)obj;
 -(void)cutoffTcpConnect;
 //-(pssHSMmsg *)packDataType:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block;
 //-(pssHSMmsg *)packDataWithMsgId:(int)msgId Type:(NSInteger)type body:(NSDictionary *)body block:(msgSendBlock)block;

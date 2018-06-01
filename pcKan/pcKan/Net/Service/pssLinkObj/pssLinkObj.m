@@ -95,6 +95,14 @@ __strong static id sharedInstance = nil;
     [_tcp_link addDelegate:obj];
 }
 
+-(void)addUdpDelegate:(id)obj
+{
+    if (obj == nil) {
+        return;
+    }
+    [_udp_link addDelegate:obj];
+}
+
 -(void)setMvDataDelegate:(id)obj
 {
     _udp_link.m_mvDelegate = obj;
@@ -103,6 +111,11 @@ __strong static id sharedInstance = nil;
 -(void)removeTcpDelegate:(id)obj
 {
     [_tcp_link removeDelegate:obj];
+}
+
+-(void)removeUdpDelegate:(id)obj
+{
+    [_udp_link removeDelegate:obj];
 }
 
 -(void)dealloc{
@@ -132,10 +145,10 @@ __strong static id sharedInstance = nil;
     if (_tcp_link.connectState != tcpConnect_ConnectOk) {
         [_tcp_link socketConnectWithIp:ip port:port];
     }else{
-        [_tcp_link cutOffConnection];
-        _tcp_link.ip = ip;
-        _tcp_link.port = port;
-        [_tcp_link socketConnectWithIp:ip port:port];
+//        [_tcp_link cutOffConnection];
+//        _tcp_link.ip = ip;
+//        _tcp_link.port = port;
+//        [_tcp_link socketConnectWithIp:ip port:port];
     }
 }
 

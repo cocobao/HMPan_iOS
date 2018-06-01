@@ -59,7 +59,7 @@ __strong static id sharedInstance = nil;
         _muFileRecvExchanger = [NSMutableDictionary dictionary];
         _mAssetWaitSendQueue = [NSMutableArray arrayWithCapacity:30];
         [pssLink addTcpDelegate:self];
-        
+        [pssLink addUdpDelegate:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFileNotify:) name:kNotificationDeleteFile object:nil];
     }
     return self;
@@ -78,7 +78,7 @@ __strong static id sharedInstance = nil;
     NSString *key = [NSString stringWithFormat:@"%zd", file.fileId];
     self.muFileRecvExchanger[key] = fr;
     
-    //[fr reApply];
+    [fr reApply];
 }
 
 //添加文件发送者
@@ -273,6 +273,17 @@ __strong static id sharedInstance = nil;
     }
 }
 
+- (void)NetUdpRecvFileData:(NSData *)data fileId:(unsigned long long)fileId
+{
+    NSString *key = [NSString stringWithFormat:@"%zd", fileId];
+    if (self.muFileRecvExchanger[key]) {
+        UPan_FileRecver *fr = self.muFileRecvExchanger[key];
+        [fr writeFileData:data];
+    }else{
+        MITLog(@"file recver has been remove");
+    }
+}
+
 //接收到指令处理
 - (void)NetTcpCallback:(NSDictionary *)receData error:(NSError *)error
 {
@@ -317,7 +328,7 @@ __strong static id sharedInstance = nil;
 
                         MITLog(@"create fileId:%zd, fileSize:%zd", uFile.fileId, fileSize);
                         [weakSelf addFileRecver:uFile fileSize:fileSize pcFilePath:filePath];
-                        [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
+//                        [pssLink NetApi_ApplySendFileAck:filePath fileId:uFile.fileId];
                     });
                 }
             }];

@@ -23,6 +23,12 @@
 -(void)recvAudioData:(NSData*)data;
 @end
 
+@protocol NetUdpCallback
+@optional
+//- (void)NetUdpCallback:(NSDictionary *)receData error:(NSError *)error;
+- (void)NetUdpRecvFileData:(NSData *)data fileId:(unsigned long long)fileId;
+@end
+
 @interface EHUdpLinkObj : NSObject
 @property (nonatomic, weak) id<pssUdpLinkDelegate> m_delegate;
 @property (nonatomic, weak) id<pssMvDelegate> m_mvDelegate;
@@ -30,4 +36,7 @@
 -(void)closeUdpSocket;
 
 -(void)sendData:(NSData *)data toHost:(NSString *)host toPort:(NSInteger)port;
+
+- (void)addDelegate:(id)delegate;
+- (void)removeDelegate:(id)delegate;
 @end

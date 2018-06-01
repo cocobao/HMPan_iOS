@@ -196,6 +196,8 @@
 		84F65FBC1E7A7B3A00F643EE /* pSSAlbumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F65FB51E7A7B3A00F643EE /* pSSAlbumTableViewCell.m */; };
 		84F7989A1E6CFA1600CF871A /* UPan_FileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F798991E6CFA1600CF871A /* UPan_FileTableViewCell.m */; };
 		84F798A31E6D15C800CF871A /* UPan_CellMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F798A21E6D15C800CF871A /* UPan_CellMode.m */; };
+		F51E5CB520B3F80200BF277C /* CamPaiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F51E5CB420B3F80200BF277C /* CamPaiViewController.m */; };
+		F51E5CBA20B3F88500BF277C /* pssSystemAVCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = F51E5CB920B3F88500BF277C /* pssSystemAVCapture.m */; };
 		F53E59ED20AD9CF7000C240F /* utility.m in Sources */ = {isa = PBXBuildFile; fileRef = F53E59EC20AD9CF7000C240F /* utility.m */; };
 		F5D54C1120A696870067CB6E /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C0A20A696870067CB6E /* libavcodec.a */; };
 		F5D54C1220A696870067CB6E /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D54C0B20A696870067CB6E /* libavdevice.a */; };
@@ -629,6 +631,10 @@
 		84F798991E6CFA1600CF871A /* UPan_FileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_FileTableViewCell.m; sourceTree = "<group>"; };
 		84F798A11E6D15C800CF871A /* UPan_CellMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPan_CellMode.h; sourceTree = "<group>"; };
 		84F798A21E6D15C800CF871A /* UPan_CellMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPan_CellMode.m; sourceTree = "<group>"; };
+		F51E5CB320B3F80200BF277C /* CamPaiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CamPaiViewController.h; sourceTree = "<group>"; };
+		F51E5CB420B3F80200BF277C /* CamPaiViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CamPaiViewController.m; sourceTree = "<group>"; };
+		F51E5CB820B3F88500BF277C /* pssSystemAVCapture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pssSystemAVCapture.h; sourceTree = "<group>"; };
+		F51E5CB920B3F88500BF277C /* pssSystemAVCapture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pssSystemAVCapture.m; sourceTree = "<group>"; };
 		F53E59EB20AD9CF7000C240F /* utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility.h; sourceTree = "<group>"; };
 		F53E59EC20AD9CF7000C240F /* utility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = utility.m; sourceTree = "<group>"; };
 		F5D54C0A20A696870067CB6E /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavcodec.a; sourceTree = "<group>"; };
@@ -1420,6 +1426,7 @@
 		84A24E151E5ABA7500B96A36 /* Items */ = {
 			isa = PBXGroup;
 			children = (
+				F51E5CB220B3F7D900BF277C /* CamPai */,
 				849C3FE41E8417EC0048033D /* Media */,
 				84F65FA41E7A7B3A00F643EE /* Album */,
 				8421FF5C1E694F960054E8CA /* UPan */,
@@ -1638,6 +1645,33 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		F51E5CB220B3F7D900BF277C /* CamPai */ = {
+			isa = PBXGroup;
+			children = (
+				F51E5CB620B3F84B00BF277C /* Controller */,
+				F51E5CB720B3F85900BF277C /* View */,
+			);
+			path = CamPai;
+			sourceTree = "<group>";
+		};
+		F51E5CB620B3F84B00BF277C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F51E5CB320B3F80200BF277C /* CamPaiViewController.h */,
+				F51E5CB420B3F80200BF277C /* CamPaiViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F51E5CB720B3F85900BF277C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F51E5CB820B3F88500BF277C /* pssSystemAVCapture.h */,
+				F51E5CB920B3F88500BF277C /* pssSystemAVCapture.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		F5D54BA420A696870067CB6E /* FFmpeg-iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1766,6 +1800,7 @@
 				84A24E741E5ABA7500B96A36 /* AFSecurityPolicy.m in Sources */,
 				848000781E87B4B10081C4D7 /* Ppmd7Dec.c in Sources */,
 				84A24E8F1E5ABA7500B96A36 /* NSObject+MJKeyValue.m in Sources */,
+				F51E5CBA20B3F88500BF277C /* pssSystemAVCapture.m in Sources */,
 				8480006F1E87B4B10081C4D7 /* 7zIn.c in Sources */,
 				84A24E801E5ABA7500B96A36 /* UIProgressView+AFNetworking.m in Sources */,
 				84F65FBB1E7A7B3A00F643EE /* pSSAlbumDetailCollectionViewCell.m in Sources */,
@@ -1820,6 +1855,7 @@
 				8480007B1E87B4B10081C4D7 /* 7zAlloc.c in Sources */,
 				84904F011E70F92400392FD4 /* HBImageTypeSizeUtil.m in Sources */,
 				84A24E811E5ABA7500B96A36 /* UIRefreshControl+AFNetworking.m in Sources */,
+				F51E5CB520B3F80200BF277C /* CamPaiViewController.m in Sources */,
 				84A24E981E5ABA7500B96A36 /* pSSBaseNavgationViewController.m in Sources */,
 				848000741E87B4B10081C4D7 /* Lzma2Dec.c in Sources */,
 				84A24EE41E5ABD0900B96A36 /* pssUserInfo.m in Sources */,
@@ -2068,7 +2104,7 @@
 					"$(PROJECT_DIR)/pcKan/3partyLib/ShareSDK/Support/PlatformSDK/WeChatSDK",
 					"$(PROJECT_DIR)/../../ios_outlib/FFmpeg-iOS/lib",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kPan.cn.com;
+				PRODUCT_BUNDLE_IDENTIFIER = cpkan.cn.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2108,7 +2144,7 @@
 					"$(PROJECT_DIR)/pcKan/3partyLib/ShareSDK/Support/PlatformSDK/WeChatSDK",
 					"$(PROJECT_DIR)/../../ios_outlib/FFmpeg-iOS/lib",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kPan.cn.com;
+				PRODUCT_BUNDLE_IDENTIFIER = cpkan.cn.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;

@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #import "pssProtocolType.h"
+#import "GCDMulticastDelegate.h"
 
 #define BUF_SIZE (1024*1024)
 
@@ -22,12 +23,19 @@
     struct sockaddr_in server;
 }
 @property (nonatomic, strong) NSThread *mThread;
+@property (nonatomic, strong) GCDMulticastDelegate <NetUdpCallback> *multicastDelegate;
+@property (nonatomic, strong) dispatch_queue_t mSocketQueue;
+@property (nonatomic, assign) void *RecvQueueTag;
 @end
 
 @implementation EHUdpLinkObj
 -(instancetype)init
 {
     if (self = [super init]) {
+        _mSocketQueue = dispatch_queue_create("mSocketQueue", nil);
+        dispatch_queue_set_specific(_mSocketQueue, _RecvQueueTag, _RecvQueueTag, NULL);
+        _multicastDelegate = (GCDMulticastDelegate <NetUdpCallback> *)[[GCDMulticastDelegate alloc] init];
+        
         [self setupUdpSpcket];
     }
     return self;
@@ -114,17 +122,26 @@
                        addr:addr];
     }
     else{
-        NSData *frameData = [[NSData alloc] initWithBytes:data+sizeof(stPssProtocolHead)
-                                                   length:(int)size-sizeof(stPssProtocolHead)];
-
+        char *body = (char *)data + sizeof(stPssProtocolHead);
+        int bodylen = (int)size-sizeof(stPssProtocolHead);
+        
         if (head->type == emPssProtocolType_VideoData) {
             if (_m_mvDelegate && [_m_mvDelegate respondsToSelector:@selector(recvVideoData:)]) {
+                NSData *frameData = [[NSData alloc] initWithBytes:body length:bodylen];
                 [_m_mvDelegate recvVideoData:frameData];
             }
         }else if (head->type == emPssProtocolType_AudioData){
             if (_m_mvDelegate && [_m_mvDelegate respondsToSelector:@selector(recvAudioData:)]) {
+                NSData *frameData = [[NSData alloc] initWithBytes:body length:bodylen];
                 [_m_mvDelegate recvAudioData:frameData];
             }
+        }else if (head->type == emPssProtocolType_SendFile) {
+            int sizeSpace = sizeof(unsigned long long);
+            NSData *fileData = [NSData dataWithBytes:body+sizeSpace length:(bodylen-sizeSpace)];
+            unsigned long long fileId = 0;
+            memcpy(&fileId, body, sizeSpace);
+            [_multicastDelegate NetUdpRecvFileData:fileData fileId:fileId];
+            return;
         }
     }
 }
@@ -152,4 +169,40 @@
     isRun = NO;
 }
 
+#pragma mark - GCDMulticastDelegate
+- (void)addDelegate:(id)delegate
+{
+    dispatch_block_t block = ^{
+        [_multicastDelegate addDelegate:delegate delegateQueue:_mSocketQueue];
+    };
+    
+    if (dispatch_get_specific(_RecvQueueTag))
+        block();
+    else
+        dispatch_async(_mSocketQueue, block);
+}
+
+- (void)removeDelegate:(id)delegate delegateQueue:(dispatch_queue_t)delegateQueue
+{
+    dispatch_block_t block = ^{
+        [_multicastDelegate removeDelegate:delegate delegateQueue:delegateQueue];
+    };
+    
+    if (dispatch_get_specific(_RecvQueueTag))
+        block();
+    else
+        dispatch_sync(_mSocketQueue, block);
+}
+
+- (void)removeDelegate:(id)delegate
+{
+    dispatch_block_t block = ^{
+        [_multicastDelegate removeDelegate:delegate];
+    };
+    
+    if (dispatch_get_specific(_RecvQueueTag))
+        block();
+    else
+        dispatch_sync(_mSocketQueue, block);
+}
 @end
