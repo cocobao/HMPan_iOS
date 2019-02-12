@@ -172,7 +172,7 @@
     }else{
         WeakSelf(weakSelf);
         dispatch_async(_recvQue, ^{
-//            usleep(50000);
+            usleep(10000);
 //            请求接收下一个包
             [weakSelf applyFilePart];
         });

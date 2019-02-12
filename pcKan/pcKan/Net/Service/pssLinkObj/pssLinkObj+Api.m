@@ -49,12 +49,12 @@
 }
 
 //广播
--(void)NetApi_BoardCastIp
+-(void)NetApi_BoardCastIp:(NSString *)hostIP
 {
     NSDictionary *dic = @{@"hello":@"mosimosi"};
     NSData *jsonBody = [pSSCommodMethod dictionaryToJsonData:dic];
 //    NSLog(@"board cast %@", dic);
-    [self.udp_link sendData:jsonBody toHost:BROUADCAST_IP toPort:BROUADCAST_PORT];
+    [self.udp_link sendData:jsonBody toHost:hostIP toPort:BROUADCAST_PORT];
 }
 
 //请求文件部分

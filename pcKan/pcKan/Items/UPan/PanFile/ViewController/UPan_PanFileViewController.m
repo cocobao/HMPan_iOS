@@ -305,7 +305,14 @@ NetTcpCallback>
 
 -(void)linkBtnAction:(UIButton *)sender
 {
-    [pssLink NetApi_BoardCastIp];
+    EHSuspensionFrameTextFieldView *view = [[EHSuspensionFrameTextFieldView alloc] initWithTitle:@"输入IP地址" placeholder:@"192.168."];
+    [view show];
+    
+    view.didSelectButton = ^(NSInteger index, NSString *text){
+        if (index == 1 && text.length > 0) {
+            [pssLink NetApi_BoardCastIp:text];
+        }
+    };
 }
 
 -(void)setLinkStateImg:(tcpConnectState)state

@@ -10,6 +10,7 @@
 #import "pSSMainTabbarViewController.h"
 #import "UPan_FileExchanger.h"
 #import "UncaughtExceptionHandler.h"
+#import "DBNetModule.h"
 
 @import CoreTelephony;
 
@@ -31,6 +32,7 @@
     self.window.rootViewController = tabbar;
     [self.window makeKeyAndVisible];
     
+    NetModule;
     FileExchanger;
 #ifdef DEBUG
     CTCellularData *cellularData = [[CTCellularData alloc]init];

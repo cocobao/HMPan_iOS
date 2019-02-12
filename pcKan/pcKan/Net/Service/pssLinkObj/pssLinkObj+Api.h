@@ -14,7 +14,7 @@
 -(void)NetApi_OpenDir:(NSString *)file block:(msgSendBlock)block;
 -(void)NetApi_CloseMv;
 -(void)NetApi_VideoInfoAckWithMsgId:(int)msgId;
--(void)NetApi_BoardCastIp;
+-(void)NetApi_BoardCastIp:(NSString *)hostIP;
 -(void)NetApi_ApplySendFileAck:(NSString *)filePath fileId:(NSInteger)fileId;
 -(void)NetApi_ApplyRecvFile:(NSDictionary *)info block:(msgSendBlock)block;
 -(void)NetApi_FilePartWithFileId:(NSInteger)fileId pcFilePath:(NSString *)pcFilePath seek:(uint64_t)seek block:(msgSendBlock)block;

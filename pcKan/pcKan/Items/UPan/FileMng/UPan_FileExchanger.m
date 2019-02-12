@@ -305,13 +305,13 @@ __strong static id sharedInstance = nil;
                 if (btnIndex == 1) {
                     dispatch_async(dispatch_get_global_queue(0, 0), ^{
                         //内存空间判断
-                        /*CGFloat fs = (CGFloat)fileSize/1024;
-                        if (fs > [utility availableMemory]-50) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [MBProgressHUD showMessage:@"内存空间不足"];
-                            });
-                            return;
-                        }*/
+//                        CGFloat fs = (CGFloat)fileSize/1024;
+//                        if (fs > [utility availableMemory]-50) {
+//                            dispatch_async(dispatch_get_main_queue(), ^{
+//                                [MBProgressHUD showMessage:@"内存空间不足"];
+//                            });
+//                            return;
+//                        }
                         
                         //生成文件
                         UPan_File *uFile = [weakSelf createFile:fileName];
