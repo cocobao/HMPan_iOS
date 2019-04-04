@@ -37,6 +37,7 @@ typedef enum : NSUInteger {
     //压缩类型
     UPan_FT_Zip,
     UPan_FT_Rar,
+    UPan_FT_Tar,
 } UPan_FileType;
 
 typedef enum : NSUInteger {

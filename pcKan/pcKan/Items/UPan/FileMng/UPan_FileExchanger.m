@@ -264,7 +264,7 @@ __strong static id sharedInstance = nil;
 - (void)NetRecvFileData:(NSData *)data fileId:(unsigned long long)fileId
 {
 //    MITLog(@"file size:%zd, fileId:%zd", data.length, fileId);
-    NSString *key = [NSString stringWithFormat:@"%zd", fileId];
+    NSString *key = [NSString stringWithFormat:@"%llu", fileId];
     if (self.muFileRecvExchanger[key]) {
         UPan_FileRecver *fr = self.muFileRecvExchanger[key];
         [fr writeFileData:data];
@@ -275,7 +275,7 @@ __strong static id sharedInstance = nil;
 
 - (void)NetUdpRecvFileData:(NSData *)data fileId:(unsigned long long)fileId
 {
-    NSString *key = [NSString stringWithFormat:@"%zd", fileId];
+    NSString *key = [NSString stringWithFormat:@"%llu", fileId];
     if (self.muFileRecvExchanger[key]) {
         UPan_FileRecver *fr = self.muFileRecvExchanger[key];
         [fr writeFileData:data];

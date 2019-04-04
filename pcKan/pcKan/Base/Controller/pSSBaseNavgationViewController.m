@@ -22,7 +22,7 @@
     [UINavigationBar appearance].barTintColor = Color_Main;
     //设置导航栏标题文字颜色
     NSMutableDictionary *color = [NSMutableDictionary dictionary];
-    color[NSFontAttributeName] = [UIFont systemFontOfSize:17.f];
+//    color[NSFontAttributeName] = [UIFont systemFontOfSize:17.f];
     color[NSForegroundColorAttributeName] = DEFAULT_NAV_TINTCOLOR;
     [[UINavigationBar appearance] setTitleTextAttributes:color];
     

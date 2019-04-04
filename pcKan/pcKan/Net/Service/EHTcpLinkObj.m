@@ -10,7 +10,7 @@
 #import "GCDAsyncSocket.h"
 #import "GCDMulticastDelegate.h"
 
-#define MAX_BUF_SIZE (1024*1024*10)
+#define MAX_BUF_SIZE (1024*1024*10+1024)
 
 @interface EHTcpLinkObj ()<GCDAsyncSocketDelegate>
 {
@@ -181,10 +181,7 @@
         head->bodyLength = msgLen;
         head->msgId = ntohl(head->msgId);
         if (head->version == 0x1) {
-            WeakSelf(weakSelf);
-            dispatch_async(_mSocketQueue, ^{
-                [weakSelf packHandlerVer1:pack];
-            });
+            [self packHandlerVer1:pack];
         }
     }
 }
@@ -208,7 +205,7 @@
     [dict setValue:@(head->type) forKey:PSS_CMD_TYPE];
     [dict setValue:@(head->msgId) forKey:ptl_msgId];
     
-    MITLog(@"recv cmd type:%zd", head->type);
+    MITLog(@"recv cmd type:%c", head->type);
     
     if (head->bodyLength > 0) {
         NSData *jsonData = [[NSData alloc] initWithBytes:body length:head->bodyLength];

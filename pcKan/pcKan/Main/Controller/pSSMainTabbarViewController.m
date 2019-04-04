@@ -11,6 +11,7 @@
 #import "pSSAlbumViewController.h"
 #import "UPan_PanFileViewController.h"
 #import "CamPaiViewController.h"
+#import "pSSAvPlayerViewController.h"
 
 @interface pSSMainTabbarViewController ()
 
@@ -51,9 +52,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self addChildViewControllerWithClassName:[UPan_PanFileViewController description] imageName:@"audit" title:@"花米"];
+    [self addChildViewControllerWithClassName:[UPan_PanFileViewController description] imageName:@"audit" title:@"文件"];
     [self addChildViewControllerWithClassName:[pSSAlbumViewController description] imageName:@"home" title:@"相册"];
-    [self addChildViewControllerWithClassName:[CamPaiViewController description] imageName:@"" title:@"Cam"];
+//    [self addChildViewControllerWithClassName:[CamPaiViewController description] imageName:@"" title:@"Cam"];
 }
 
 //添加tabbar栏子控制器

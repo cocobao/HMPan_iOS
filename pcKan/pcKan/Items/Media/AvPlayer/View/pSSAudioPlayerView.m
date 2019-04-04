@@ -70,7 +70,7 @@
     CGFloat width = MaxWidth-40;
     CGFloat height = 30;
     self.playPrograss.frame = CGRectMake(0, 0, width, height);
-    self.playPrograss.center = CGPointMake(MaxWidth/2, MaxHeight/2);
+    self.playPrograss.center = CGPointMake(MaxWidth/2, MaxHeight/2-10);
 //    self.playControlPrograss.frame = self.playPrograss.frame;
     
     minX = 10;
@@ -88,9 +88,9 @@
     width = 40;
     height = width;
     minX = 0;
-    minY = MaxHeight-height-10;
+    minY = 0;
     self.playBtn.frame = CGRectMake(minX, minY, width, height);
-    self.playBtn.center = CGPointMake(MaxWidth/2, _playBtn.center.y);
+    self.playBtn.center = CGPointMake(MaxWidth/2, MaxHeight/2+30);
     
     minX = CGRectGetMinX(_playPrograss.frame);
     minY = CGRectGetMaxY(_playPrograss.frame);

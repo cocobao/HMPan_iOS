@@ -11,6 +11,7 @@
 #import "UPan_FileExchanger.h"
 #import "UncaughtExceptionHandler.h"
 #import "DBNetModule.h"
+#import "UPan_PanFileViewController.h"
 
 @import CoreTelephony;
 
@@ -34,27 +35,6 @@
     
     NetModule;
     FileExchanger;
-#ifdef DEBUG
-    CTCellularData *cellularData = [[CTCellularData alloc]init];
-    cellularData.cellularDataRestrictionDidUpdateNotifier =  ^(CTCellularDataRestrictedState state){
-        //获取联网状态
-        switch (state) {
-            case kCTCellularDataRestricted:
-                NSLog(@"Restricrted");
-                break;
-            case kCTCellularDataNotRestricted:
-                NSLog(@"Not Restricted");
-                break;
-            case kCTCellularDataRestrictedStateUnknown:
-                NSLog(@"Unknown");
-                break;
-            default:
-                break;
-        };
-    };
-    
-    MITLog(@"debug mode");
-#endif
     
     MITLog(@"display mode:%@", NSStringFromCGSize([UIScreen mainScreen].currentMode.size));
     MITLog(@"bound size:%@", NSStringFromCGSize([UIScreen mainScreen].bounds.size));

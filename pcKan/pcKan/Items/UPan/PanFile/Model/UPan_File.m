@@ -118,7 +118,7 @@
 {
     if (_fileSize > 10) {
         if ([_fileName hasSuffix:@".rar"] ||
-            [_fileName hasSuffix:@".zip"]) {
+            [_fileName hasSuffix:@".zip"] ) {
             NSString *extend = [pSSCommodMethod fileHeadTypeWithFile:_filePath];
             
             if ([extend isEqualToString:@"rar"]) {
@@ -128,6 +128,12 @@
             
             if ([extend isEqualToString:@"zip"]) {
                 _fileType = UPan_FT_Rar;
+                return YES;
+            }
+        }else{
+            if ([_fileName hasSuffix:@".tar"]||
+                [_fileName hasSuffix:@".tar.gz"]) {
+                _fileType = UPan_FT_Tar;
                 return YES;
             }
         }
@@ -202,8 +208,13 @@
             image = [UIImage imageNamed:@"icon_psd"];
             break;
         case UPan_FT_Zip:
+            image = [UIImage imageNamed:@"icon_zip"];
+            break;
         case UPan_FT_Rar:
-            image = [UIImage imageNamed:@"icon_compress"];
+            image = [UIImage imageNamed:@"icon_rar"];
+            break;
+        case UPan_FT_Tar:
+            image = [UIImage imageNamed:@"icon_tar"];
             break;
         case UPan_FT_Pdf:
             image = [UIImage imageNamed:@"icon_pdf"];
@@ -212,7 +223,7 @@
             image = [UIImage imageNamed:@"icon_word"];
             break;
         case UPan_FT_Ppt:
-            image = [UIImage imageNamed:@"UPan_FT_Ppt"];
+            image = [UIImage imageNamed:@"icon_ppt"];
             break;
         case UPan_FT_Xls:
             image = [UIImage imageNamed:@"icon_xls"];
@@ -242,7 +253,7 @@
             NSURL *url = [NSURL fileURLWithPath:_filePath];
             image = [pSSCommodMethod musicImageWithMusicURL:url];
             if (!image) {
-                image = [UIImage imageNamed:@"file"];
+                image = [UIImage imageNamed:@"icon_audio"];
             }
         }
             break;

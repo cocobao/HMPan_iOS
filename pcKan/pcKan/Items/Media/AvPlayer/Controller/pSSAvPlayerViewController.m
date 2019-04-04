@@ -19,6 +19,7 @@
 @end
 
 @implementation pSSAvPlayerViewController
+
 -(instancetype)initWithFiles:(NSArray *)files playFile:(UPan_File *)playFile
 {
     self = [super init];
@@ -118,8 +119,8 @@
 -(pSSAudioPlayerView *)mPlayerView
 {
     if (!_mPlayerView) {
-        CGFloat height = 150;
-        CGRect frame = CGRectMake(-0.5, kScreenHeight-NAVBAR_H-height, kScreenWidth+1, height);
+        CGFloat height = 200;
+        CGRect frame = CGRectMake(0, kScreenHeight-NAVBAR_H-height, kScreenWidth, height);
         pSSAudioPlayerView *view = [[pSSAudioPlayerView alloc] initWithFrame:frame];
         [self.view addSubview:view];
         _mPlayerView = view;

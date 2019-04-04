@@ -21,14 +21,14 @@
 #import "UIImageView+MJWebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
-//#import "pssIjkPlayerViewController.h"
+
 #import "pSSAvPlayerViewController.h"
 #import "pSSAvPlayerViewController.h"
 #import "pSSAvPlayerModule.h"
 #import "UPan_CurrentPathFileMng.h"
 #import "UIAlertView+RWBlock.h"
-//#import "KxMovieViewController.h"
 #import "pssMovPlayerViewController.h"
+#import "pssVLCPlayerViewController.h"
 
 @interface UPan_PanFileViewController ()
 <UPanFileDelegate,
@@ -56,14 +56,14 @@ NetTcpCallback>
     [super viewDidLoad];
     
     if ([self.mCurDir isEqualToString:[UPan_FileMng hmPath]]) {
-        self.title = @"主页";
+        self.title = @"文件";
     }else{
         self.title = [self.mCurDir lastPathComponent];
     }
     
     _mDataSource = [NSMutableArray array];
 
-    self.mTableView.frame = CGRectMake(0, 0, kScreenWidth, kViewHeight);
+    self.mTableView.frame = CGRectMake(0, 0, kScreenWidth, kViewHeight-NAVBAR_H);
     WeakSelf(weakSelf);
     [self.mTableView headerRereshing:YES rereshingBlock:^{
         [weakSelf setupFileSource];
@@ -305,14 +305,15 @@ NetTcpCallback>
 
 -(void)linkBtnAction:(UIButton *)sender
 {
-    EHSuspensionFrameTextFieldView *view = [[EHSuspensionFrameTextFieldView alloc] initWithTitle:@"输入IP地址" placeholder:@"192.168."];
-    [view show];
-    
-    view.didSelectButton = ^(NSInteger index, NSString *text){
-        if (index == 1 && text.length > 0) {
-            [pssLink NetApi_BoardCastIp:text];
-        }
-    };
+//    EHSuspensionFrameTextFieldView *view = [[EHSuspensionFrameTextFieldView alloc] initWithTitle:@"输入IP地址" placeholder:@"192.168."];
+//    [view show];
+//
+//    view.didSelectButton = ^(NSInteger index, NSString *text){
+//        if (index == 1 && text.length > 0) {
+//            [pssLink NetApi_BoardCastIp:text];
+//        }
+//    };
+    [pssLink NetApi_BoardCastIp:@"255.255.255.255"];
 }
 
 -(void)setLinkStateImg:(tcpConnectState)state
@@ -396,20 +397,9 @@ NetTcpCallback>
                 [PSS_AVPLAYER stop];
             }
             
-            //本地视频观看testPlayerViewController
-//            if ([file.fileName hasSuffix:@".mp4"] ||
-//                [file.fileName hasSuffix:@".MP4"]) {
-//                vc = [[pssIjkPlayerViewController alloc] initWithUrl:[NSURL fileURLWithPath:file.filePath]];
-//            }else{
-//                NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-//                if ([file.filePath.pathExtension isEqualToString:@"wmv"])
-//                    parameters[KxMovieParameterMinBufferedDuration] = @(5.0);
-//                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-//                    parameters[KxMovieParameterDisableDeinterlacing] = @(YES);
-//
-//                vc = [KxMovieViewController movieViewControllerWithContentPath:file.filePath parameters:parameters];
-            vc = [[pssMovPlayerViewController alloc] initWithFilePath:file.filePath];
-//            }
+            //本地视频观看
+//            vc = [[pssMovPlayerViewController alloc] initWithFilePath:file.filePath];
+            vc = [[pssVLCPlayerViewController alloc] initWithFilePath:file.filePath];
         }
             break;
         case UPan_FT_Word:
