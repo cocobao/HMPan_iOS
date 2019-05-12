@@ -51,12 +51,12 @@ static const NSTimeInterval kVideoPlayerAnimationTimeinterval = 0.3f;
     
     [view addSubview:self];
     
-    self.alpha = 0.0;
-    [UIView animateWithDuration:kVideoPlayerAnimationTimeinterval animations:^{
-        self.alpha = 1.0;
-    } completion:^(BOOL finished) {
+//    self.alpha = 0.0;
+//    [UIView animateWithDuration:kVideoPlayerAnimationTimeinterval animations:^{
+//        self.alpha = 1.0;
+//    } completion:^(BOOL finished) {
         [self play];
-    }];
+//    }];
 }
 
 - (void)dismiss {
@@ -89,7 +89,7 @@ static const NSTimeInterval kVideoPlayerAnimationTimeinterval = 0.3f;
     //添加控制界面的监听方法
     [self.controlView.playButton addTarget:self action:@selector(playButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.controlView.pauseButton addTarget:self action:@selector(pauseButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.controlView.closeButton addTarget:self action:@selector(closeButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self.controlView.closeButton addTarget:self action:@selector(closeButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.controlView.fullScreenButton addTarget:self action:@selector(fullScreenButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.controlView.shrinkScreenButton addTarget:self action:@selector(shrinkScreenButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.controlView.progressSlider addTarget:self action:@selector(progressClick) forControlEvents:UIControlEventTouchUpInside];

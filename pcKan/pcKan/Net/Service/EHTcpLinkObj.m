@@ -10,7 +10,7 @@
 #import "GCDAsyncSocket.h"
 #import "GCDMulticastDelegate.h"
 
-#define MAX_BUF_SIZE (1024*1024*10+1024)
+#define MAX_BUF_SIZE (1024*1024*2+1024)
 
 @interface EHTcpLinkObj ()<GCDAsyncSocketDelegate>
 {

@@ -27,7 +27,6 @@
 #import "pSSAvPlayerModule.h"
 #import "UPan_CurrentPathFileMng.h"
 #import "UIAlertView+RWBlock.h"
-#import "pssMovPlayerViewController.h"
 #import "pssVLCPlayerViewController.h"
 
 @interface UPan_PanFileViewController ()
@@ -398,7 +397,6 @@ NetTcpCallback>
             }
             
             //本地视频观看
-//            vc = [[pssMovPlayerViewController alloc] initWithFilePath:file.filePath];
             vc = [[pssVLCPlayerViewController alloc] initWithFilePath:file.filePath];
         }
             break;

@@ -135,6 +135,7 @@
 {
     [_fileHandle seekToEndOfFile];
     [_fileHandle writeData:data];
+    [_fileHandle synchronizeFile];
     
     _seek += data.length;
     lastCalSize += data.length;

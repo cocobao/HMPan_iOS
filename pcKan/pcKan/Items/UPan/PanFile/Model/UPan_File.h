@@ -69,6 +69,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *exchangeInfo;
 //文件属性
 @property (nonatomic, assign) NSFileAttributeType attsFileType;
+//原文件大小
+@property (nonatomic, assign) NSInteger srcFileSize;
 
 -(instancetype)initWithPath:(NSString *)path Atts:(NSDictionary *)atts;
 

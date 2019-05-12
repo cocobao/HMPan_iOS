@@ -19,7 +19,7 @@ const char NHBaseVcNavLeftItemHandleKey;
 @implementation pSSBaseViewController
 
 - (void)viewWillAppear:(BOOL)animated {
-    self.view.backgroundColor = Color_BackGround;
+//    self.view.backgroundColor = Color_BackGround;
     [super viewWillAppear:animated];
     [UIView setAnimationsEnabled:YES];
     [self.navigationController setNavigationBarHidden:NO animated:YES];

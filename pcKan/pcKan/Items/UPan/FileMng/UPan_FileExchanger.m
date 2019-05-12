@@ -315,6 +315,7 @@ __strong static id sharedInstance = nil;
                         
                         //生成文件
                         UPan_File *uFile = [weakSelf createFile:fileName];
+                        uFile.srcFileSize = fileSize;
                         
                         if (!uFile) {
                             dispatch_async(dispatch_get_main_queue(), ^{

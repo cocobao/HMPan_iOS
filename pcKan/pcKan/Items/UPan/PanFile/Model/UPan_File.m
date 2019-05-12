@@ -239,13 +239,13 @@
             break;
         case UPan_FT_Mov:
         {
-            NSURL *url = [NSURL fileURLWithPath:_filePath];
-            UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
-            if (imageTmp != nil) {
-                image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:ICON_WIDTH h:ICON_WIDTH];
-            }else{
+//            NSURL *url = [NSURL fileURLWithPath:_filePath];
+//            UIImage *imageTmp = [pSSCommodMethod thumbnailImageForVideo:url];
+//            if (imageTmp != nil) {
+//                image = [pSSCommodMethod imageShotcutOfImage:imageTmp w:ICON_WIDTH h:ICON_WIDTH];
+//            }else{
                 image = [UIImage imageNamed:@"mov_icon"];
-            }
+//            }
         }
             break;
         case UPan_FT_Mus:
