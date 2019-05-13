@@ -14,12 +14,14 @@
 
 @implementation pssVLCControlView
 
-- (void)layoutSubviews
+-(void)drawRect:(CGRect)rect
 {
     [super layoutSubviews];
     self.backgroundColor = Color_Line;
     self.playBtn.frame = CGRectMake(0, 0, 28, 32);
-    self.fullScreen.frame = CGRectMake(self.frame.size.width-25, 0, 22, 18);
+    self.fullScreen.frame = CGRectMake(self.frame.size.width-28, 0, 25, 25);
+    self.playBtn.center = CGPointMake(self.playBtn.center.x, rect.size.height/2);
+    self.fullScreen.center = CGPointMake(self.fullScreen.center.x, rect.size.height/2);
 }
 
 -(void)setIsPlay:(BOOL)isPlay
@@ -54,7 +56,7 @@
 
 -(UIButton *)fullScreen
 {
-    if (_fullScreen) {
+    if (!_fullScreen) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self addSubview:btn];
         _fullScreen = btn;

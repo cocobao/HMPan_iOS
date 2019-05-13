@@ -62,7 +62,7 @@ NetTcpCallback>
     
     _mDataSource = [NSMutableArray array];
 
-    self.mTableView.frame = CGRectMake(0, 0, kScreenWidth, kViewHeight-NAVBAR_H);
+    self.mTableView.frame = CGRectMake(0, 0, kScreenWidth, kViewHeight);
     WeakSelf(weakSelf);
     [self.mTableView headerRereshing:YES rereshingBlock:^{
         [weakSelf setupFileSource];
