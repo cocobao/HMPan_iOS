@@ -128,10 +128,10 @@
 -(void)sendData:(pssHSMmsg *)pack
 {
     WeakSelf(weakSelf);
-    dispatch_async(_mSocketQueue, ^{
+//    dispatch_async(_mSocketQueue, ^{
         [weakSelf.mGcdTcpSocket writeData:pack.sendData withTimeout:10 tag:0];
         [weakSelf.mGcdTcpSocket readDataWithTimeout:-1 tag:0];
-    });
+//    });
     if (pack.sendBlock) {
         [_mMessageQueue addObject:pack];
     }

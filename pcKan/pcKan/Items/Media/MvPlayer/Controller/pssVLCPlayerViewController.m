@@ -30,12 +30,12 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = Color_BackGround;
     _playerView = [[pssVlCPlayerView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenWidth*9/16)];
     _playerView.center = CGPointMake(kScreenWidth/2, kScreenHeight/2-NAVBAR_H);
     [self.view addSubview:_playerView];
     
-    [_playerView play:_filePath];
+//    [_playerView play:_filePath];
     
 //    self.ctrlView.frame = CGRectMake(0, kScreenHeight-40-NAVBAR_H, kScreenWidth, 40);
 //    [self.ctrlView setIsPlay:YES];

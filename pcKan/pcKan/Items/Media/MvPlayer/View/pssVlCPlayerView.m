@@ -13,26 +13,46 @@
 @interface pssVlCPlayerView()<VLCMediaPlayerDelegate,MRVideoControlViewDelegate>
 @property (strong, nonatomic) VLCMediaPlayer *player;
 @property (strong, nonatomic) pssVLCControlView *ctrlView;
+@property (assign, nonatomic) CGRect _sframe;
 @end
 
 @implementation pssVlCPlayerView
 
 -(instancetype)initWithFrame:(CGRect)frame
 {
+    __sframe = frame;
     self = [super initWithFrame:frame];
     if (self) {
-        self.ctrlView.frame = CGRectMake(0, 0, kScreenWidth, 40);
+        self.backgroundColor = [UIColor blackColor];
+        self.ctrlView.frame = CGRectMake(0, frame.size.height-40, kScreenWidth, 40);
         [self.ctrlView setIsPlay:YES];
         [self.ctrlView setIsFullScreen:NO];
-    
         [self.ctrlView.playBtn addTarget:self action:@selector(playClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.ctrlView.fullScreen addTarget:self action:@selector(fullScreenClick:) forControlEvents:UIControlEventTouchUpInside];
     
         _player = [[VLCMediaPlayer alloc] init];
         _player.delegate = self;
         [_player setDrawable:self];
+        
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+        [self addGestureRecognizer:singleTap];
     }
     return self;
+}
+
+-(void)handleSingleTap:(UIGestureRecognizer *)gest
+{
+    self.ctrlView.hidden = !self.ctrlView.hidden;
+}
+
+-(pssVLCControlView *)ctrlView
+{
+    if (!_ctrlView) {
+        _ctrlView = [[pssVLCControlView alloc] init];
+        _ctrlView.hidden = YES;
+        [self addSubview:_ctrlView];
+    }
+    return _ctrlView;
 }
 
 -(void)play:(NSString *)filePath
@@ -55,22 +75,13 @@
 {
     [self.ctrlView setIsFullScreen:!self.ctrlView.isFullScreen];
     if (self.ctrlView.isFullScreen) {
-        [self forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
+        self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+        self.transform = CGAffineTransformMakeRotation(M_PI_2);
     } else {
-        [self forceChangeOrientation:UIInterfaceOrientationPortrait];
+        self.transform = CGAffineTransformIdentity;
+        self.frame = __sframe;
     }
 }
 
-- (void)forceChangeOrientation:(UIInterfaceOrientation)orientation
-{
-    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-        SEL selector = NSSelectorFromString(@"setOrientation:");
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
-        [invocation setSelector:selector];
-        [invocation setTarget:[UIDevice currentDevice]];
-        int val = orientation;
-        [invocation setArgument:&val atIndex:2];
-        [invocation invoke];
-    }
-}
+
 @end
